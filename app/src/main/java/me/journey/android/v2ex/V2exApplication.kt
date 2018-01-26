@@ -6,4 +6,4 @@ import android.app.Application
  * Created by journey on 2018/1/26.
  */
 
-class MyApplication : Application()
+class V2exApplication : Application()
