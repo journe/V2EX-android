@@ -1,4 +1,4 @@
-package me.journey.android.v2ex
+package me.journey.android.v2ex.bean
 
 /**
  * Created by journey on 2017/12/29.
