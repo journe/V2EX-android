@@ -5,11 +5,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "me.journey.android.v2ex"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -23,12 +23,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.10'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.21'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'

@@ -27,7 +27,8 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicList>,
         holder.mUsernameView.text = mValues[position].member?.username ?: ""
         holder.mCommentCountView.text = mValues[position].replies.toString()
 //        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
-        ImageLoader.displayImage(view, mValues[position].member?.avatar_normal ?: "", holder.mUserAvatarNormalView)
+        ImageLoader.displayImage(view, "http:" + mValues[position].member?.avatar_normal,
+                holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {
             mListener?.onListFragmentInteraction(holder.mItem!!)
         }

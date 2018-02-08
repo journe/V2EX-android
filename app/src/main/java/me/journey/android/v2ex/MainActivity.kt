@@ -7,11 +7,12 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import me.journey.android.v2ex.bean.TopicList
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,TopicListFragment.OnListFragmentInteractionListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -83,7 +84,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onListFragmentInteraction(item: TopicList) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, item.content, Toast.LENGTH_SHORT).show()
     }
 
 }
