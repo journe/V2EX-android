@@ -9,16 +9,19 @@
 
     <TextView
         android:id="@+id/topic_username_item_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:maxLines="1"
+        android:gravity="center"
         android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topic_useravatar_item_iv"
-        tools:text="android"/>
+        tools:text="calm"/>
 
     <TextView
         android:id="@+id/topic_title_item_tv"

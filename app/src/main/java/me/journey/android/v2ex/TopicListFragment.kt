@@ -3,13 +3,20 @@ package me.journey.android.v2ex
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.journey.android.v2ex.bean.Lastest
+import com.orhanobut.logger.Logger
+import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.utils.Constants
+import me.journey.android.v2ex.utils.GetAPIService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * A fragment representing a list of Items.
@@ -23,31 +30,22 @@ import me.journey.android.v2ex.bean.Lastest
  * fragment (e.g. upon screen orientation changes).
  */
 class TopicListFragment : Fragment() {
-    // TODO: Customize parameters
-    private var mColumnCount = 1
     private var mListener: OnListFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (arguments != null) {
-            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
+//            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_topic_item_list, container, false)
-
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()
-            if (mColumnCount <= 1) {
-                view.layoutManager = LinearLayoutManager(context)
-            } else {
-                view.layoutManager = GridLayoutManager(context, mColumnCount)
-            }
-//            view.adapter = MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener)
+            view.layoutManager = LinearLayoutManager(context)
+            getHotTopics(view)
         }
         return view
     }
@@ -67,6 +65,26 @@ class TopicListFragment : Fragment() {
         mListener = null
     }
 
+    fun getHotTopics(view: RecyclerView) {
+        //https://www.v2ex.com/api/topics/hot.json
+        val retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        val service = retrofit.create(GetAPIService::class.java)
+        val call = service.listLastest()
+        call.enqueue(object : Callback<ArrayList<TopicList>> {
+            override fun onResponse(call: Call<ArrayList<TopicList>>, response: Response<ArrayList<TopicList>>) {
+                view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
+            }
+
+            override fun onFailure(call: Call<ArrayList<TopicList>>, t: Throwable) {
+                print(t.message)
+            }
+        })
+        Logger.d(call)
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -78,19 +96,16 @@ class TopicListFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: Lastest)
+        fun onListFragmentInteraction(item: TopicList)
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
-        private val ARG_COLUMN_COUNT = "column-count"
 
         // TODO: Customize parameter initialization
         fun newInstance(columnCount: Int): TopicListFragment {
             val fragment = TopicListFragment()
             val args = Bundle()
-            args.putInt(ARG_COLUMN_COUNT, columnCount)
+//            args.putInt(ARG_COLUMN_COUNT, columnCount)
             fragment.arguments = args
             return fragment
         }

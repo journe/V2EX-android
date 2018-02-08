@@ -4,7 +4,7 @@ package me.journey.android.v2ex.bean
  * Created by journey on 2018/1/23.
  */
 
-class Lastest {
+class TopicList {
 
     /**
      * id : 425341
