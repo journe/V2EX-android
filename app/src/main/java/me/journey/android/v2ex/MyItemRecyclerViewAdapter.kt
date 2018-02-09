@@ -1,16 +1,18 @@
 package me.journey.android.v2ex
 
 import android.support.v7.widget.RecyclerView
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import me.journey.android.v2ex.TopicListFragment.OnListFragmentInteractionListener
-import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.ImageLoader
 
-class MyItemRecyclerViewAdapter(private val mValues: List<TopicList>,
+
+class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
                                 private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var view: View;
@@ -26,6 +28,8 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicList>,
         holder.mTopicTagView.text = mValues[position].node?.name ?: ""
         holder.mUsernameView.text = mValues[position].member?.username ?: ""
         holder.mCommentCountView.text = mValues[position].replies.toString()
+        holder.mTopicReplyTimeView.text = caculateTime(mValues[position].last_modified.toLong())
+
 //        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
         ImageLoader.displayImage(view, "http:" + mValues[position].member?.avatar_normal,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
@@ -38,20 +42,34 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicList>,
         return mValues.size
     }
 
+    fun caculateTime(ts: Long): String {
+        val created = ts * 1000
+        val now = System.currentTimeMillis()
+        val difference = now - created
+        val text = if (difference >= 0 && difference <= DateUtils.MINUTE_IN_MILLIS)
+            "刚刚"
+        else
+            DateUtils.getRelativeTimeSpanString(created, now, DateUtils.MINUTE_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_RELATIVE)
+        return text.toString()
+    }
+
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mUsernameView: TextView
         val mUserAvatarNormalView: ImageView
         val mTitleView: TextView
         val mCommentCountView: TextView
         val mTopicTagView: TextView
-        var mItem: TopicList? = null
+        val mTopicReplyTimeView: TextView
+        var mItem: TopicListBean? = null
 
         init {
-            mTitleView = mView.findViewById(R.id.topic_title_item_tv)
             mUsernameView = mView.findViewById(R.id.topic_username_item_tv)
+            mUserAvatarNormalView = mView.findViewById(R.id.topic_useravatar_item_iv)
+            mTitleView = mView.findViewById(R.id.topic_title_item_tv)
             mCommentCountView = mView.findViewById(R.id.topic_replies_item_tv)
             mTopicTagView = mView.findViewById(R.id.topic_node_item_tv)
-            mUserAvatarNormalView = mView.findViewById(R.id.topic_useravatar_item_iv)
+            mTopicReplyTimeView = mView.findViewById(R.id.topic_reply_time_item_tv)
         }
 
         override fun toString(): String {

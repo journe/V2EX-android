@@ -3,13 +3,14 @@ package me.journey.android.v2ex
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
 import me.journey.android.v2ex.utils.GetAPIService
 import retrofit2.Call
@@ -17,6 +18,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+
 
 /**
  * A fragment representing a list of Items.
@@ -73,12 +76,13 @@ class TopicListFragment : Fragment() {
                 .build()
         val service = retrofit.create(GetAPIService::class.java)
         val call = service.listLastest()
-        call.enqueue(object : Callback<ArrayList<TopicList>> {
-            override fun onResponse(call: Call<ArrayList<TopicList>>, response: Response<ArrayList<TopicList>>) {
+        call.enqueue(object : Callback<ArrayList<TopicListBean>> {
+            override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
                 view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
+                view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
             }
 
-            override fun onFailure(call: Call<ArrayList<TopicList>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
                 print(t.message)
             }
         })
@@ -96,7 +100,7 @@ class TopicListFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: TopicList)
+        fun onListFragmentInteraction(item: TopicListBean)
     }
 
     companion object {

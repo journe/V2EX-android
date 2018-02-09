@@ -10,7 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.bean.TopicListBean
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,8 +83,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    override fun onListFragmentInteraction(item: TopicList) {
-        Toast.makeText(this, item.content, Toast.LENGTH_SHORT).show()
+    override fun onListFragmentInteraction(item: TopicListBean) {
+        Toast.makeText(this, item.content, Toast.LENGTH_LONG).show()
     }
 
 }

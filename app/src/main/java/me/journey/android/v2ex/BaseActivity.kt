@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
 import me.journey.android.v2ex.utils.GetAPIService
 import retrofit2.Call
@@ -34,15 +34,15 @@ open class BaseActivity : AppCompatActivity() {
 
         val call = service.listLastest()
 
-        call.enqueue(object : Callback<ArrayList<TopicList>> {
-            override fun onResponse(call: Call<ArrayList<TopicList>>, response: Response<ArrayList<TopicList>>) {
+        call.enqueue(object : Callback<ArrayList<TopicListBean>> {
+            override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
                 Logger.d(call.toString())
                 for (item in response.body()!!) {
                     Logger.d(item)
                 }
             }
 
-            override fun onFailure(call: Call<ArrayList<TopicList>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
                 print(t.message)
             }
         })

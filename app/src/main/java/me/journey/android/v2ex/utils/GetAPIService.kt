@@ -1,6 +1,6 @@
 package me.journey.android.v2ex.utils
 
-import me.journey.android.v2ex.bean.TopicList
+import me.journey.android.v2ex.bean.TopicListBean
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,14 +10,14 @@ import retrofit2.http.Path
  */
 interface GetAPIService {
     @GET("topics/{user}.json")
-    fun listRepos(@Path("user") user: String): Call<List<TopicList>>
+    fun listRepos(@Path("user") user: String): Call<List<TopicListBean>>
 
     @GET(Constants.HOT)
-    fun listRepos(): Call<ArrayList<TopicList>>
+    fun listRepos(): Call<ArrayList<TopicListBean>>
 
     @GET(Constants.LASTEST)
-    fun listLastest(): Call<ArrayList<TopicList>>
+    fun listLastest(): Call<ArrayList<TopicListBean>>
 
     @GET("topics/hot.json")
-    fun repo(): Call<TopicList>
+    fun repo(): Call<TopicListBean>
 }
