@@ -52,15 +52,18 @@
 
     <TextView
         android:id="@+id/topic_replies_item_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:background="@drawable/shape_backround_reply_count"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="15"/>
+        tools:text="115"/>
 
     <TextView
         android:id="@+id/topic_node_item_tv"

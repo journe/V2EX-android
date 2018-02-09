@@ -25,13 +25,13 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = mValues[position]
         holder.mTitleView.text = mValues[position].title
-        holder.mTopicTagView.text = mValues[position].node?.name ?: ""
+        holder.mTopicNodeView.text = mValues[position].node?.title ?: ""
         holder.mUsernameView.text = mValues[position].member?.username ?: ""
         holder.mCommentCountView.text = mValues[position].replies.toString()
         holder.mTopicReplyTimeView.text = caculateTime(mValues[position].last_modified.toLong())
 
 //        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
-        ImageLoader.displayImage(view, "http:" + mValues[position].member?.avatar_normal,
+        ImageLoader.displayImage(view, "http:" + mValues[position].member?.avatar_large,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {
             mListener?.onListFragmentInteraction(holder.mItem!!)
@@ -59,7 +59,7 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
         val mUserAvatarNormalView: ImageView
         val mTitleView: TextView
         val mCommentCountView: TextView
-        val mTopicTagView: TextView
+        val mTopicNodeView: TextView
         val mTopicReplyTimeView: TextView
         var mItem: TopicListBean? = null
 
@@ -68,7 +68,7 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
             mUserAvatarNormalView = mView.findViewById(R.id.topic_useravatar_item_iv)
             mTitleView = mView.findViewById(R.id.topic_title_item_tv)
             mCommentCountView = mView.findViewById(R.id.topic_replies_item_tv)
-            mTopicTagView = mView.findViewById(R.id.topic_node_item_tv)
+            mTopicNodeView = mView.findViewById(R.id.topic_node_item_tv)
             mTopicReplyTimeView = mView.findViewById(R.id.topic_reply_time_item_tv)
         }
 
