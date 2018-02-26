@@ -2,16 +2,18 @@ package me.journey.android.v2ex.ui
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
+
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +21,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -30,6 +32,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        initViewPager()
+    }
+
+    private fun initViewPager() {
+        val myPagerAdapter = MainPagerAdapter(supportFragmentManager)
+        val fragments = ArrayList<Fragment>()
+        fragments.add(TopicListFragment.newInstance(0))
+        fragments.add(TopicListFragment.newInstance(1))
+        myPagerAdapter.setFragments(fragments)
+        main_viewpager.adapter = myPagerAdapter
+        main_tab.addTab(main_tab.newTab())
+        main_tab.setupWithViewPager(main_viewpager)
+
+        // TabLayout指示器添加文本
+        main_tab.getTabAt(0)?.setText("最新")
+        main_tab.getTabAt(1)?.setText("热门")
     }
 
     override fun onBackPressed() {
@@ -61,7 +80,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (item.itemId) {
             R.id.nav_camera -> {
                 // Handle the camera action
-                getHotTopics()
             }
             R.id.nav_gallery -> {
 
@@ -85,7 +103,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onListFragmentInteraction(item: TopicListBean) {
-        Toast.makeText(this, item.content, Toast.LENGTH_LONG).show()
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        private var mFragmentList: List<Fragment>? = null
+
+        fun setFragments(fragments: ArrayList<Fragment>) {
+            mFragmentList = fragments
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return mFragmentList!![position]
+        }
+
+        override fun getCount(): Int {
+            return mFragmentList!!.size
+        }
+    }
 }

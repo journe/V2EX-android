@@ -13,10 +13,10 @@ interface GetAPIService {
     fun listRepos(@Path("user") user: String): Call<List<TopicListBean>>
 
     @GET(Constants.HOT)
-    fun listRepos(): Call<ArrayList<TopicListBean>>
+    fun listHotTopics(): Call<ArrayList<TopicListBean>>
 
     @GET(Constants.LASTEST)
-    fun listLastest(): Call<ArrayList<TopicListBean>>
+    fun listLastestTopics(): Call<ArrayList<TopicListBean>>
 
     @GET("topics/hot.json")
     fun repo(): Call<TopicListBean>

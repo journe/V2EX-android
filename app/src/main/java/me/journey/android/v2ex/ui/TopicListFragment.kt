@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.orhanobut.logger.Logger
 import me.journey.android.v2ex.MyItemRecyclerViewAdapter
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
@@ -20,7 +19,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 
 /**
@@ -37,10 +35,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class TopicListFragment : Fragment() {
     private var mListener: OnListFragmentInteractionListener? = null
 
+    private var mTopicType: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-//            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
+            mTopicType = arguments!!.getInt(TOPIC_TYPE)
         }
     }
 
@@ -50,7 +50,7 @@ class TopicListFragment : Fragment() {
         if (view is RecyclerView) {
             val context = view.getContext()
             view.layoutManager = LinearLayoutManager(context)
-            getHotTopics(view)
+            getTopics(view)
         }
         return view
     }
@@ -70,14 +70,19 @@ class TopicListFragment : Fragment() {
         mListener = null
     }
 
-    fun getHotTopics(view: RecyclerView) {
+    fun getTopics(view: RecyclerView) {
         //https://www.v2ex.com/api/topics/hot.json
         val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         val service = retrofit.create(GetAPIService::class.java)
-        val call = service.listLastest()
+
+        val call = when (mTopicType) {
+            0 -> service.listLastestTopics()
+            1 -> service.listHotTopics()
+            else -> service.listLastestTopics()
+        }
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
             override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
                 view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
@@ -88,7 +93,6 @@ class TopicListFragment : Fragment() {
                 print(t.message)
             }
         })
-        Logger.d(call)
     }
 
     /**
@@ -107,11 +111,12 @@ class TopicListFragment : Fragment() {
 
     companion object {
 
-        // TODO: Customize parameter initialization
-        fun newInstance(columnCount: Int): TopicListFragment {
+        private val TOPIC_TYPE = "TOPIC_TYPE"
+
+        fun newInstance(topicType: Int): TopicListFragment {
             val fragment = TopicListFragment()
             val args = Bundle()
-//            args.putInt(ARG_COLUMN_COUNT, columnCount)
+            args.putInt(TOPIC_TYPE, topicType)
             fragment.arguments = args
             return fragment
         }
