@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import me.journey.android.v2ex.MyItemRecyclerViewAdapter
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
@@ -46,15 +46,17 @@ class TopicListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_topic_item_list, container, false)
-        // Set the adapter
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            view.layoutManager = LinearLayoutManager(context)
-            getTopics(view)
-        }
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        topic_list_recycleview.layoutManager = LinearLayoutManager(context)
+        getTopics()
+        topic_list_refreshview.setOnRefreshListener {
+            getTopics()
+        }
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -70,7 +72,7 @@ class TopicListFragment : Fragment() {
         mListener = null
     }
 
-    fun getTopics(view: RecyclerView) {
+    fun getTopics() {
         //https://www.v2ex.com/api/topics/hot.json
         val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -85,12 +87,14 @@ class TopicListFragment : Fragment() {
         }
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
             override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
-                view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
-                view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+                topic_list_recycleview.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
+                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+                topic_list_refreshview.isRefreshing = false
             }
 
             override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
                 print(t.message)
+                topic_list_refreshview.isRefreshing = false
             }
         })
     }
