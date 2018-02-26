@@ -1,15 +1,15 @@
-package me.journey.android.v2ex
+package me.journey.android.v2ex.ui
 
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.orhanobut.logger.Logger
+import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
 import me.journey.android.v2ex.utils.GetAPIService
@@ -19,21 +19,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-
-/**
- * A fragment representing a list of Items.
- *
- *
- * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
- * interface.
- */
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class TopicListFragment : Fragment() {
-    private var mListener: OnListFragmentInteractionListener? = null
+class TopicFragment : Fragment() {
+    private var mListener: OnTopFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +34,7 @@ class TopicListFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_topic_item_list, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_topic, container, false)
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()
@@ -56,7 +47,7 @@ class TopicListFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
+        if (context is OnTopFragmentInteractionListener) {
             mListener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnListFragmentInteractionListener")
@@ -78,8 +69,8 @@ class TopicListFragment : Fragment() {
         val call = service.listLastest()
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
             override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
-                view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
-                view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+//                view.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
+//                view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
             }
 
             override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
@@ -98,16 +89,16 @@ class TopicListFragment : Fragment() {
      *
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
-    interface OnListFragmentInteractionListener {
+    interface OnTopFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: TopicListBean)
+        fun OnTopFragmentInteractionListener(item: TopicListBean)
     }
 
     companion object {
 
         // TODO: Customize parameter initialization
-        fun newInstance(columnCount: Int): TopicListFragment {
-            val fragment = TopicListFragment()
+        fun newInstance(columnCount: Int): TopicFragment {
+            val fragment = TopicFragment()
             val args = Bundle()
 //            args.putInt(ARG_COLUMN_COUNT, columnCount)
             fragment.arguments = args

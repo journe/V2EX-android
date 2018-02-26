@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import me.journey.android.v2ex.TopicListFragment.OnListFragmentInteractionListener
+import me.journey.android.v2ex.ui.TopicListFragment.OnListFragmentInteractionListener
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.ImageLoader
 

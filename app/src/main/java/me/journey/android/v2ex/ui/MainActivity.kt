@@ -1,4 +1,4 @@
-package me.journey.android.v2ex
+package me.journey.android.v2ex.ui
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
