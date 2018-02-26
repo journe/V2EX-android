@@ -3,6 +3,7 @@
           package="me.journey.android.v2ex">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".V2exApplication"
         android:allowBackup="true"
@@ -20,6 +21,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.TopicDetailActivity">
         </activity>
     </application>
 

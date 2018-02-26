@@ -1,10 +1,13 @@
 package me.journey.android.v2ex.bean
 
+import android.os.Parcel
+import android.os.Parcelable
+
 /**
  * Created by journey on 2018/1/23.
  */
 
-class TopicListBean {
+class TopicListBean() : Parcelable {
 
     /**
      * id : 425341
@@ -30,7 +33,18 @@ class TopicListBean {
     var last_modified: Int = 0
     var last_touched: Int = 0
 
-    class MemberBean {
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readInt()
+        title = parcel.readString()
+        url = parcel.readString()
+        content = parcel.readString()
+        replies = parcel.readInt()
+        created = parcel.readInt()
+        last_modified = parcel.readInt()
+        last_touched = parcel.readInt()
+    }
+
+    class MemberBean() :Parcelable{
         /**
          * id : 276089
          * username : lnh2017
@@ -46,6 +60,38 @@ class TopicListBean {
         var avatar_mini: String? = null
         var avatar_normal: String? = null
         var avatar_large: String? = null
+
+        constructor(parcel: Parcel) : this() {
+            id = parcel.readInt()
+            username = parcel.readString()
+            tagline = parcel.readString()
+            avatar_mini = parcel.readString()
+            avatar_normal = parcel.readString()
+            avatar_large = parcel.readString()
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeInt(id)
+            parcel.writeString(username)
+            parcel.writeString(tagline)
+            parcel.writeString(avatar_mini)
+            parcel.writeString(avatar_normal)
+            parcel.writeString(avatar_large)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<MemberBean> {
+            override fun createFromParcel(parcel: Parcel): MemberBean {
+                return MemberBean(parcel)
+            }
+
+            override fun newArray(size: Int): Array<MemberBean?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 
     class NodeBean {
@@ -70,5 +116,30 @@ class TopicListBean {
         var avatar_mini: String? = null
         var avatar_normal: String? = null
         var avatar_large: String? = null
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(title)
+        parcel.writeString(url)
+        parcel.writeString(content)
+        parcel.writeInt(replies)
+        parcel.writeInt(created)
+        parcel.writeInt(last_modified)
+        parcel.writeInt(last_touched)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<TopicListBean> {
+        override fun createFromParcel(parcel: Parcel): TopicListBean {
+            return TopicListBean(parcel)
+        }
+
+        override fun newArray(size: Int): Array<TopicListBean?> {
+            return arrayOfNulls(size)
+        }
     }
 }
