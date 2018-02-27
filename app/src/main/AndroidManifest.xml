@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".ui.TopicDetailActivity">
         </activity>
+        <activity android:name=".ui.MemberInfoActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
-import me.journey.android.v2ex.MyItemRecyclerViewAdapter
 import me.journey.android.v2ex.R
+import me.journey.android.v2ex.TopicItemRecyclerViewAdapter
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
 import me.journey.android.v2ex.utils.GetAPIService
@@ -52,6 +52,7 @@ class TopicListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         topic_list_recycleview.layoutManager = LinearLayoutManager(context)
+        topic_list_refreshview.isRefreshing = true
         getTopics()
         topic_list_refreshview.setOnRefreshListener {
             getTopics()
@@ -73,7 +74,6 @@ class TopicListFragment : Fragment() {
     }
 
     fun getTopics() {
-        //https://www.v2ex.com/api/topics/hot.json
         val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -87,7 +87,7 @@ class TopicListFragment : Fragment() {
         }
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
             override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
-                topic_list_recycleview.adapter = MyItemRecyclerViewAdapter(response.body()!!, mListener)
+                topic_list_recycleview.adapter = TopicItemRecyclerViewAdapter(response.body()!!, mListener)
                 topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }

@@ -8,6 +8,7 @@ object Constants {
     const val BASE_URL = "https://www.v2ex.com/api/"
     const val HOT = "topics/hot.json"
     const val LASTEST = "topics/latest.json"
-    const val SHOW = "topics/show.json"
+    const val NODES = "nodes/show.json"
+    const val MEMBERS = "members/show.json"
 }
 

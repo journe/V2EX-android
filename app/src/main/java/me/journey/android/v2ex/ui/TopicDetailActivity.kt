@@ -29,7 +29,7 @@ class TopicDetailActivity : AppCompatActivity() {
         topic_detail_title_tv.text = topicListBean.title
         topic_detail_content_tv.text = topicListBean.content
         topic_detail_menber_name_tv.text = memberBean.username
-        ImageLoader.displayImage(view, "http:" + memberBean?.avatar_large,
+        ImageLoader.displayImage(view, memberBean?.avatar_large,
                 topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
     }
 

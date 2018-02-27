@@ -29,13 +29,13 @@ class ImageLoader {
             Glide.with(view).load(uri).apply(options).into(imageView)
         }
 
-        fun displayImage(view: View, uri: String, imageView: ImageView, placeholder: Int, radius: Int) {
+        fun displayImage(view: View, uri: String?, imageView: ImageView, placeholder: Int, radius: Int) {
             val options = RequestOptions()
             if (placeholder != 0) {
                 options.placeholder(placeholder)
             }
             options.transform(GlideRoundTransform(view.context, radius))
-            Glide.with(view).load(uri).apply(options).into(imageView)
+            Glide.with(view).load("http:" + uri).apply(options).into(imageView)
         }
     }
 

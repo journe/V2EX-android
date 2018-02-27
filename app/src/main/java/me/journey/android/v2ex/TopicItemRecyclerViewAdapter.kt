@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import me.journey.android.v2ex.ui.TopicListFragment.OnListFragmentInteractionListener
 import me.journey.android.v2ex.bean.TopicListBean
+import me.journey.android.v2ex.ui.MemberInfoActivity
+import me.journey.android.v2ex.ui.TopicListFragment.OnListFragmentInteractionListener
 import me.journey.android.v2ex.utils.ImageLoader
 
 
-class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
-                                private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+class TopicItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
+                                   private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<TopicItemRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var view: View;
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,10 +32,13 @@ class MyItemRecyclerViewAdapter(private val mValues: List<TopicListBean>,
         holder.mTopicReplyTimeView.text = caculateTime(mValues[position].last_modified.toLong())
 
 //        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
-        ImageLoader.displayImage(view, "http:" + mValues[position].member?.avatar_large,
+        ImageLoader.displayImage(view, mValues[position].member?.avatar_large,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {
             mListener?.onListFragmentInteraction(holder.mItem!!)
+        }
+        holder.mUserAvatarNormalView.setOnClickListener {
+            MemberInfoActivity.start(holder.mItem!!.member!!.id , holder.mView.context)
         }
     }
 
