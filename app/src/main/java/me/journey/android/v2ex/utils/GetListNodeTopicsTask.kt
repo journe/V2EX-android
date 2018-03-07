@@ -29,7 +29,7 @@ class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
                 .select("tr")
         val topicList: ArrayList<JsoupTopicListBean> = ArrayList<JsoupTopicListBean>()
         for (element in content) {
-            Logger.d(element.toString())
+//            Logger.d(element.toString())
             val td = element.select("td")
             val jsTopicListBean: JsoupTopicListBean = JsoupTopicListBean()
             jsTopicListBean.member_name = td[0].select("a").attr("href")
@@ -37,14 +37,14 @@ class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
             jsTopicListBean.url = td[2].select(".item_title").select("a").attr("href")
             jsTopicListBean.title = td[2].select(".item_title").select("a").text()
             jsTopicListBean.node = td[2].select(".fade").select(".node").text()
-            jsTopicListBean.replies = td[3].select("a").text().toInt()
+            jsTopicListBean.replies = td[3].select("a").text()
             var strList: List<String> = td[2].select(".fade").text().split(" • ")
             if (strList.size > 2) {
                 jsTopicListBean.last_modified = strList[2]
             } else {
                 jsTopicListBean.last_modified = ""
             }
-            
+
             topicList.add(jsTopicListBean)
             Logger.d(jsTopicListBean.member_name + "\n" +
                     jsTopicListBean.member_avatar + "\n" +
