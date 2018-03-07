@@ -3,16 +3,26 @@ package me.journey.android.v2ex.utils
 import me.journey.android.v2ex.bean.MemberInfoBean
 import me.journey.android.v2ex.bean.TopicListBean
 import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
  * Created by journey on 2017/12/29.
  */
 interface GetAPIService {
-    @GET("topics/{user}.json")
-    fun listRepos(@Path("user") user: String): Call<List<TopicListBean>>
+
+    companion object {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        val service = retrofit.create(GetAPIService::class.java)
+        fun getInstance(): GetAPIService {
+            return service
+        }
+    }
 
     @GET(Constants.HOT)
     fun listHotTopics(): Call<ArrayList<TopicListBean>>
@@ -23,5 +33,4 @@ interface GetAPIService {
     @GET(Constants.MEMBERS)
     fun getMemberInfo(@Query("id") id: Int): Call<MemberInfoBean>
 
-    //https://www.v2ex.com/api/members/show.json?id=1
 }

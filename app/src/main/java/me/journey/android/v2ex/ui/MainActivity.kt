@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
+import me.journey.android.v2ex.utils.GetListNodeTopicsTask
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
@@ -79,7 +80,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_camera -> {
-                // Handle the camera action
+                listNodeTopics()
             }
             R.id.nav_gallery -> {
 
@@ -102,8 +103,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
+    private fun listNodeTopics() {
+        val getListNodeTopicsTask = GetListNodeTopicsTask()
+        getListNodeTopicsTask.execute("")
+    }
+
+
     override fun onListFragmentInteraction(item: TopicListBean) {
-        TopicDetailActivity.start(item,item.member!!, this)
+        TopicDetailActivity.start(item, item.member!!, this)
     }
 
     inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

@@ -3,10 +3,6 @@ package me.journey.android.v2ex.bean
 import android.os.Parcel
 import android.os.Parcelable
 
-/**
- * Created by journey on 2018/1/23.
- */
-
 class TopicListBean() : Parcelable {
 
     /**
