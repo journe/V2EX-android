@@ -1,24 +1,26 @@
 package me.journey.android.v2ex.utils
 
 import android.os.AsyncTask
-import com.orhanobut.logger.Logger
 import me.journey.android.v2ex.bean.JsoupTopicListBean
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 
-class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
+abstract class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
+    override fun onPreExecute() {
+        super.onPreExecute()
+        onStart()
+    }
+
+    abstract fun onStart()
+
     override fun doInBackground(vararg strings: String): Document? {
-        val doc = Jsoup.connect("https://www.v2ex.com/?tab=deals").get()
-//        val title = doc.title()
-//        Logger.d(title)
-//        Logger.d(doc.body())
+        val doc = Jsoup.connect("https://www.v2ex.com/?tab=" + strings).get()
         return doc
     }
 
     override fun onPostExecute(document: Document?) {
         super.onPostExecute(document)
-//        Logger.d(document?.body().toString())
         val content = document!!.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
@@ -29,9 +31,8 @@ class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
                 .select("tr")
         val topicList: ArrayList<JsoupTopicListBean> = ArrayList<JsoupTopicListBean>()
         for (element in content) {
-//            Logger.d(element.toString())
             val td = element.select("td")
-            val jsTopicListBean: JsoupTopicListBean = JsoupTopicListBean()
+            val jsTopicListBean = JsoupTopicListBean()
             jsTopicListBean.member_name = td[0].select("a").attr("href")
             jsTopicListBean.member_avatar = td[0].select("a").select("img").attr("src")
             jsTopicListBean.url = td[2].select(".item_title").select("a").attr("href")
@@ -46,15 +47,17 @@ class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
             }
 
             topicList.add(jsTopicListBean)
-            Logger.d(jsTopicListBean.member_name + "\n" +
-                    jsTopicListBean.member_avatar + "\n" +
-                    jsTopicListBean.title + "\n" +
-                    jsTopicListBean.node + "\n" +
-                    jsTopicListBean.last_modified + "\n" +
-                    jsTopicListBean.replies + "\n" +
-                    jsTopicListBean.url)
+//            Logger.d(jsTopicListBean.member_name + "\n" +
+//                    jsTopicListBean.member_avatar + "\n" +
+//                    jsTopicListBean.title + "\n" +
+//                    jsTopicListBean.node + "\n" +
+//                    jsTopicListBean.last_modified + "\n" +
+//                    jsTopicListBean.replies + "\n" +
+//                    jsTopicListBean.url)
         }
-
+        onFinish(topicList)
     }
+
+    abstract fun onFinish(topicList: ArrayList<JsoupTopicListBean>)
 
 }

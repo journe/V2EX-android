@@ -13,10 +13,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.utils.GetListNodeTopicsTask
 
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TopicListFragment.OnListFragmentInteractionListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
+        TopicListFragment.OnListFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,6 +42,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val fragments = ArrayList<Fragment>()
         fragments.add(TopicListFragment.newInstance(0))
         fragments.add(TopicListFragment.newInstance(1))
+        fragments.add(JsoupTopicListFragment.newInstance(0))
         myPagerAdapter.setFragments(fragments)
         main_viewpager.adapter = myPagerAdapter
         main_tab.addTab(main_tab.newTab())
@@ -50,6 +51,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // TabLayout指示器添加文本
         main_tab.getTabAt(0)?.setText("最新")
         main_tab.getTabAt(1)?.setText("热门")
+        main_tab.getTabAt(2)?.setText("交易")
     }
 
     override fun onBackPressed() {
@@ -80,7 +82,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_camera -> {
-                listNodeTopics()
+
             }
             R.id.nav_gallery -> {
 
@@ -102,12 +104,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
-
-    private fun listNodeTopics() {
-        val getListNodeTopicsTask = GetListNodeTopicsTask()
-        getListNodeTopicsTask.execute("")
-    }
-
 
     override fun onListFragmentInteraction(item: TopicListBean) {
         TopicDetailActivity.start(item, item.member!!, this)
