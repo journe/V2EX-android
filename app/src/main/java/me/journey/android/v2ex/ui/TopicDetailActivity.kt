@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
+import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.TopicListBean
@@ -27,7 +28,13 @@ class TopicDetailActivity : AppCompatActivity() {
 
     private fun initView(view: View) {
         topic_detail_title_tv.text = topicListBean.title
-        topic_detail_content_tv.text = topicListBean.content
+        RichText.fromMarkdown(topicListBean.content)
+//                .errorImage(object : DrawableGetter {
+//                    override fun getDrawable(holder: ImageHolder?, config: RichTextConfig?, textView: TextView?): Drawable {
+//                        return getDrawable(R.drawable.ic_image_error)
+//                    }
+//                })
+                .into(topic_detail_content_tv)
         topic_detail_menber_name_tv.text = memberBean.username
         ImageLoader.displayImage(view, memberBean?.avatar_large,
                 topic_detail_avatar, R.mipmap.ic_launcher_round, 4)

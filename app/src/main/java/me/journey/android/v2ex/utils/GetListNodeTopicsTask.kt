@@ -33,7 +33,7 @@ abstract class GetListNodeTopicsTask : AsyncTask<String, Any, Document>() {
         for (element in content) {
             val td = element.select("td")
             val jsTopicListBean = JsoupTopicListBean()
-            jsTopicListBean.member_name = td[0].select("a").attr("href")
+            jsTopicListBean.member_name = td[0].select("a").attr("href").substringAfterLast("/")
             jsTopicListBean.member_avatar = td[0].select("a").select("img").attr("src")
             jsTopicListBean.url = td[2].select(".item_title").select("a").attr("href")
             jsTopicListBean.title = td[2].select(".item_title").select("a").text()
