@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 import me.journey.android.v2ex.R
+import me.journey.android.v2ex.bean.JsoupTopicListBean
 import me.journey.android.v2ex.bean.TopicListBean
+import me.journey.android.v2ex.utils.GetTopicDetailTask
 import me.journey.android.v2ex.utils.ImageLoader
 
 class TopicDetailActivity : AppCompatActivity() {
@@ -38,6 +40,18 @@ class TopicDetailActivity : AppCompatActivity() {
         topic_detail_menber_name_tv.text = memberBean.username
         ImageLoader.displayImage(view, memberBean?.avatar_large,
                 topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
+        val topicsDetailTask = object : GetTopicDetailTask() {
+            override fun onStart() {
+            }
+
+            override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
+//                topic_list_recycleview.adapter = JsoupTopicItemAdapter(topicList!!, mListener)
+//                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+//                topic_list_refreshview.isRefreshing = false
+            }
+
+        }
+        topicsDetailTask.execute("226226")
     }
 
     companion object {

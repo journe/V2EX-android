@@ -13,7 +13,7 @@ import me.journey.android.v2ex.JsoupTopicItemAdapter
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.JsoupTopicListBean
 import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.utils.GetListNodeTopicsTask
+import me.journey.android.v2ex.utils.GetNodeTopicListTask
 
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,7 +61,7 @@ class JsoupTopicListFragment : Fragment() {
     }
 
     fun getTopics() {
-        val getListNodeTopicsTask = object : GetListNodeTopicsTask() {
+        val getListNodeTopicsTask = object : GetNodeTopicListTask() {
             override fun onStart() {
             }
 
