@@ -51,7 +51,8 @@ class TopicDetailActivity : AppCompatActivity() {
             }
 
         }
-        topicsDetailTask.execute("226226")
+        topicsDetailTask.execute("241746")
+//        topicsDetailTask.execute("440474")
     }
 
     companion object {

@@ -15,7 +15,7 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, Document>() {
     abstract fun onStart()
 
     override fun doInBackground(vararg strings: String): Document? {
-        val doc = Jsoup.connect("https://www.v2ex.com/?tab=" + strings).get()
+        val doc = Jsoup.connect("https://www.v2ex.com/?tab=" + strings[0]).get()
         return doc
     }
 

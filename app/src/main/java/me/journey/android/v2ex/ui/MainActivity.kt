@@ -52,7 +52,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // TabLayout指示器添加文本
         main_tab.getTabAt(0)?.setText("最新")
         main_tab.getTabAt(1)?.setText("热门")
-        main_tab.getTabAt(2)?.setText("交易")
+        main_tab.getTabAt(2)?.setText("苹果")
     }
 
     override fun onBackPressed() {
