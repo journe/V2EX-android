@@ -2,11 +2,10 @@ package me.journey.android.v2ex.utils
 
 import android.os.AsyncTask
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.bean.JsoupTopicDetailBean
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 
-abstract class GetTopicDetailTask : AsyncTask<String, Any, Document>() {
+abstract class GetTopicDetailTask : AsyncTask<String, Any, ArrayList<JsoupTopicDetailBean>>() {
     override fun onPreExecute() {
         super.onPreExecute()
         onStart()
@@ -14,15 +13,18 @@ abstract class GetTopicDetailTask : AsyncTask<String, Any, Document>() {
 
     abstract fun onStart()
 
-    override fun doInBackground(vararg strings: String): Document? {
+    override fun doInBackground(vararg strings: String): ArrayList<JsoupTopicDetailBean> {
         val url = "https://www.v2ex.com/t/" + strings[0]
         val doc = Jsoup.connect(url).get()
-        return doc
+        Logger.d(doc!!.body().toString())
+        val topicDetails: ArrayList<JsoupTopicDetailBean> = ArrayList<JsoupTopicDetailBean>()
+
+        return topicDetails
     }
 
-    override fun onPostExecute(document: Document?) {
-        super.onPostExecute(document)
-        Logger.d(document!!.body().toString())
+    override fun onPostExecute(topicDetails: ArrayList<JsoupTopicDetailBean>) {
+        super.onPostExecute(topicDetails)
+
 //        val content = document!!.body().selectFirst("#Wrapper")
 //                .selectFirst(".content")
 //                .selectFirst("#Main")
@@ -50,9 +52,9 @@ abstract class GetTopicDetailTask : AsyncTask<String, Any, Document>() {
 //
 //            topicList.add(jsTopicListBean)
 //        }
-//        onFinish(topicList)
+        onFinish(topicDetails)
     }
 
-    abstract fun onFinish(topicList: ArrayList<JsoupTopicListBean>)
+    abstract fun onFinish(topicList: ArrayList<JsoupTopicDetailBean>)
 
 }

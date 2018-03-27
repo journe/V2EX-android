@@ -3,10 +3,9 @@ package me.journey.android.v2ex.utils
 import android.os.AsyncTask
 import me.journey.android.v2ex.bean.JsoupTopicListBean
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 
 
-abstract class GetNodeTopicListTask : AsyncTask<String, Any, Document>() {
+abstract class GetNodeTopicListTask : AsyncTask<String, Any, ArrayList<JsoupTopicListBean>>() {
     override fun onPreExecute() {
         super.onPreExecute()
         onStart()
@@ -14,14 +13,9 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, Document>() {
 
     abstract fun onStart()
 
-    override fun doInBackground(vararg strings: String): Document? {
+    override fun doInBackground(vararg strings: String): ArrayList<JsoupTopicListBean> {
         val doc = Jsoup.connect("https://www.v2ex.com/?tab=" + strings[0]).get()
-        return doc
-    }
-
-    override fun onPostExecute(document: Document?) {
-        super.onPostExecute(document)
-        val content = document!!.body().selectFirst("#Wrapper")
+        val content = doc!!.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
                 .select(".box")
@@ -45,7 +39,6 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, Document>() {
             } else {
                 jsTopicListBean.last_modified = ""
             }
-
             topicList.add(jsTopicListBean)
 //            Logger.d(jsTopicListBean.member_name + "\n" +
 //                    jsTopicListBean.member_avatar + "\n" +
@@ -55,6 +48,11 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, Document>() {
 //                    jsTopicListBean.replies + "\n" +
 //                    jsTopicListBean.url)
         }
+        return topicList
+    }
+
+    override fun onPostExecute(topicList: ArrayList<JsoupTopicListBean>) {
+        super.onPostExecute(topicList)
         onFinish(topicList)
     }
 

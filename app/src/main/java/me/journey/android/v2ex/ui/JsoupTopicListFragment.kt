@@ -39,7 +39,6 @@ class JsoupTopicListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         topic_list_recycleview.layoutManager = LinearLayoutManager(context)
-        topic_list_refreshview.isRefreshing = true
         getTopics()
         topic_list_refreshview.setOnRefreshListener {
             getTopics()
@@ -63,6 +62,7 @@ class JsoupTopicListFragment : Fragment() {
     fun getTopics() {
         val getListNodeTopicsTask = object : GetNodeTopicListTask() {
             override fun onStart() {
+                topic_list_refreshview.isRefreshing = true
             }
 
             override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
@@ -73,29 +73,6 @@ class JsoupTopicListFragment : Fragment() {
 
         }
         getListNodeTopicsTask.execute("apple")
-//        val retrofit = Retrofit.Builder()
-//                .baseUrl(Constants.BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build()
-//        val service = retrofit.create(GetAPIService::class.java)
-//
-//        val call = when (mTopicType) {
-//            0 -> service.listLastestTopics()
-//            1 -> service.listHotTopics()
-//            else -> service.listLastestTopics()
-//        }
-//        call.enqueue(object : Callback<ArrayList<TopicListBean>> {
-//            override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
-//                topic_list_recycleview.adapter = JsoupTopicItemAdapter(response.body()!!, mListener)
-//                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
-//                topic_list_refreshview.isRefreshing = false
-//            }
-//
-//            override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
-//                print(t.message)
-//                topic_list_refreshview.isRefreshing = false
-//            }
-//        })
     }
 
     /**

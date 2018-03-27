@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 import me.journey.android.v2ex.R
-import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.bean.JsoupTopicDetailBean
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.GetTopicDetailTask
 import me.journey.android.v2ex.utils.ImageLoader
@@ -44,7 +44,7 @@ class TopicDetailActivity : AppCompatActivity() {
             override fun onStart() {
             }
 
-            override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
+            override fun onFinish(topicList: ArrayList<JsoupTopicDetailBean>) {
 //                topic_list_recycleview.adapter = JsoupTopicItemAdapter(topicList!!, mListener)
 //                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 //                topic_list_refreshview.isRefreshing = false
