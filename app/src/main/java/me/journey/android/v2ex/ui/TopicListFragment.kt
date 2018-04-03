@@ -110,7 +110,7 @@ class TopicListFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: TopicListBean)
+        fun onListFragmentInteraction(id: Int)
     }
 
     companion object {

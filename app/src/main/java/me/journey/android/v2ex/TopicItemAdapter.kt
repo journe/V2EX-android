@@ -35,7 +35,7 @@ class TopicItemAdapter(private val mValues: List<TopicListBean>,
         ImageLoader.displayImage(view, mValues[position].member?.avatar_large,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {
-            mListener?.onListFragmentInteraction(holder.mItem!!)
+            mListener?.onListFragmentInteraction(holder.mItem!!.id)
         }
         holder.mUserAvatarNormalView.setOnClickListener {
             MemberInfoActivity.start(holder.mItem!!.member!!.id , holder.mView.context)

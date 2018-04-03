@@ -1,6 +1,7 @@
 package me.journey.android.v2ex.utils
 
 import me.journey.android.v2ex.bean.JsoupTopicDetailBean
+import me.journey.android.v2ex.bean.MemberBean
 import org.jsoup.nodes.Document
 
 /**
@@ -22,18 +23,27 @@ object TopicDetailParser {
     private val PATTERN_NUMBERS = "\\d+".toRegex()
 
     @JvmStatic
-    fun parseTopicContent(doc: Document): JsoupTopicDetailBean {
+    fun parseTopicDetail(doc: Document): JsoupTopicDetailBean {
         val mainContent = doc.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
                 .select(".box")
         val topic = mainContent[0]
-        val comments = mainContent[1]
+        if (mainContent.size > 1) {
+            val comments = mainContent[1]
+        }
+
         var bean = JsoupTopicDetailBean()
-        bean.mTitle = topic.selectFirst(".header").selectFirst("h1").text()
-        bean.mContent = topic.selectFirst(".cell").selectFirst(".topic_content").html()
-//        Logger.d(bean.mTitle)
-//        Logger.d(bean.mContent)
+        bean.title = topic.selectFirst(".header").selectFirst("h1").text()
+        if (topic.selectFirst(".cell").selectFirst(".topic_content") != null) {
+            bean.content = topic.selectFirst(".cell").selectFirst(".topic_content").html()
+        }
+
+        val username = topic.selectFirst(".header").selectFirst(".fr").select("a").attr("href").substringAfterLast("/")
+        val avatar = topic.selectFirst(".header").selectFirst(".fr").select("img").attr("src")
+        bean.memberBean = MemberBean(username, avatar)
+//        Logger.d(bean.title)
+//        Logger.d(bean.content)
         return bean
     }
 

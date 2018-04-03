@@ -10,57 +10,49 @@ import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.JsoupTopicDetailBean
-import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.GetTopicDetailTask
 import me.journey.android.v2ex.utils.ImageLoader
 
 class TopicDetailActivity : AppCompatActivity() {
 
-    private lateinit var topicListBean: TopicListBean
-    private lateinit var memberBean: TopicListBean.MemberBean
+    private var topicId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val view = this.layoutInflater.inflate(R.layout.activity_topic_detail, null as ViewGroup?, false)
         setContentView(R.layout.activity_topic_detail)
-        topicListBean = intent.extras[TOPICLISTBEAN] as TopicListBean
-        memberBean = intent.extras[MEMBERBEAN] as TopicListBean.MemberBean
+        topicId = intent.extras[TOPICLISTBEAN] as Int
         initView(view)
     }
 
     private fun initView(view: View) {
-        topic_detail_title_tv.text = topicListBean.title
-        RichText.fromMarkdown(topicListBean.content)
+        object : GetTopicDetailTask() {
+            override fun onStart() {
+            }
+
+            override fun onFinish(topicDetail: JsoupTopicDetailBean) {
+                topic_detail_title_tv.text = topicDetail.title
+                RichText.fromHtml(topicDetail.content)
 //                .errorImage(object : DrawableGetter {
 //                    override fun getDrawable(holder: ImageHolder?, config: RichTextConfig?, textView: TextView?): Drawable {
 //                        return getDrawable(R.drawable.ic_image_error)
 //                    }
 //                })
-                .into(topic_detail_content_tv)
-        topic_detail_menber_name_tv.text = memberBean.username
-        ImageLoader.displayImage(view, memberBean?.avatar_large,
-                topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
-        object : GetTopicDetailTask() {
-            override fun onStart() {
+                        .into(topic_detail_content_tv)
+                topic_detail_menber_name_tv.text = topicDetail.memberBean?.username
+                ImageLoader.displayImage(view, topicDetail.memberBean?.avatar,
+                        topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
             }
 
-            override fun onFinish(topicList: ArrayList<JsoupTopicDetailBean>) {
-//                topic_list_recycleview.adapter = JsoupTopicItemAdapter(topicList!!, mListener)
-//                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
-//                topic_list_refreshview.isRefreshing = false
-            }
-
-        }.execute("241746")
-//        topicsDetailTask.execute("440474")
+        }.execute(topicId.toString())
+//        topicsDetailTask.execute("440474")241746
     }
 
     companion object {
         val TOPICLISTBEAN = "topiclistbean"
-        val MEMBERBEAN = "memberbean"
-        fun start(topicListBean: TopicListBean, member: TopicListBean.MemberBean, context: Context) {
+        fun start(id: Int, context: Context) {
             val intent = Intent(context, TopicDetailActivity::class.java)
-            intent.putExtra(TOPICLISTBEAN, topicListBean)
-            intent.putExtra(MEMBERBEAN, member)
+            intent.putExtra(TOPICLISTBEAN, id)
             context.startActivity(intent)
         }
     }

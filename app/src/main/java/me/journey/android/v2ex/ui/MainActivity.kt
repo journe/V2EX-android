@@ -111,8 +111,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         RichText.recycle()
     }
 
-    override fun onListFragmentInteraction(item: TopicListBean) {
-        TopicDetailActivity.start(item, item.member!!, this)
+    override fun onListFragmentInteraction(id: Int) {
+        TopicDetailActivity.start(id, this)
     }
 
     inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
