@@ -13,5 +13,6 @@ class JsoupTopicDetailBean {
     var content: String = ""
     var replies: Int = 0
     var replyTime: String = ""
-    var memberBean: MemberBean? = null
+    var memberBean: MemberBean = MemberBean("", "")
+    var comments: ArrayList<CommentBean>? = null
 }

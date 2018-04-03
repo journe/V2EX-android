@@ -1,8 +1,10 @@
 package me.journey.android.v2ex.utils
 
+import me.journey.android.v2ex.bean.CommentBean
 import me.journey.android.v2ex.bean.JsoupTopicDetailBean
 import me.journey.android.v2ex.bean.MemberBean
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * Selector选择器概述
@@ -30,11 +32,15 @@ object TopicDetailParser {
                 .select(".box")
         val topic = mainContent[0]
         if (mainContent.size > 1) {
-            val comments = mainContent[1]
+            parseComments(mainContent[1])
         }
 
         var bean = JsoupTopicDetailBean()
-        bean.title = topic.selectFirst(".header").selectFirst("h1").text()
+        if (topic.selectFirst(".header") == null) {
+            return bean
+        } else {
+            bean.title = topic.selectFirst(".header").selectFirst("h1").text()
+        }
         if (topic.selectFirst(".cell").selectFirst(".topic_content") != null) {
             bean.content = topic.selectFirst(".cell").selectFirst(".topic_content").html()
         }
@@ -45,6 +51,23 @@ object TopicDetailParser {
 //        Logger.d(bean.title)
 //        Logger.d(bean.content)
         return bean
+    }
+
+    private fun parseComments(element: Element) {
+        val comments = element.select(".cell")
+        for (comment in comments) {
+            if (comment.selectFirst("table") == null) {
+                continue
+            }
+            var commentBean = CommentBean()
+            commentBean.id = comment.attr("id")
+            commentBean.content = comment.selectFirst("table")
+                    .selectFirst("tbody")
+                    .selectFirst("tr")
+                    .selectFirst("td[align = left]")
+                    .selectFirst(".reply_content")
+                    .html()
+        }
     }
 
 

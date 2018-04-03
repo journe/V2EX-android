@@ -21,7 +21,7 @@ class TopicDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val view = this.layoutInflater.inflate(R.layout.activity_topic_detail, null as ViewGroup?, false)
         setContentView(R.layout.activity_topic_detail)
-        topicId = intent.extras[TOPICLISTBEAN] as Int
+        topicId = intent.extras[TOPIC_ID] as Int
         initView(view)
     }
 
@@ -39,20 +39,19 @@ class TopicDetailActivity : AppCompatActivity() {
 //                    }
 //                })
                         .into(topic_detail_content_tv)
-                topic_detail_menber_name_tv.text = topicDetail.memberBean?.username
-                ImageLoader.displayImage(view, topicDetail.memberBean?.avatar,
+                topic_detail_menber_name_tv.text = topicDetail.memberBean.username
+                ImageLoader.displayImage(view, topicDetail.memberBean.avatar,
                         topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
             }
 
         }.execute(topicId.toString())
-//        topicsDetailTask.execute("440474")241746
     }
 
     companion object {
-        val TOPICLISTBEAN = "topiclistbean"
+        val TOPIC_ID = "topic_id"
         fun start(id: Int, context: Context) {
             val intent = Intent(context, TopicDetailActivity::class.java)
-            intent.putExtra(TOPICLISTBEAN, id)
+            intent.putExtra(TOPIC_ID, id)
             context.startActivity(intent)
         }
     }
