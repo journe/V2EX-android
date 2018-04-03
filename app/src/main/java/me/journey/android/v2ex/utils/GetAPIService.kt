@@ -1,6 +1,6 @@
 package me.journey.android.v2ex.utils
 
-import me.journey.android.v2ex.bean.MemberInfoBean
+import me.journey.android.v2ex.bean.MemberInfoDetailBean
 import me.journey.android.v2ex.bean.TopicListBean
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -31,6 +31,6 @@ interface GetAPIService {
     fun listLastestTopics(): Call<ArrayList<TopicListBean>>
 
     @GET(Constants.MEMBERS)
-    fun getMemberInfo(@Query("id") id: Int): Call<MemberInfoBean>
+    fun getMemberInfo(@Query("id") id: Int): Call<MemberInfoDetailBean>
 
 }

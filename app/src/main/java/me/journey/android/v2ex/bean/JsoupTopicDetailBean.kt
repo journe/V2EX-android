@@ -8,12 +8,9 @@ class JsoupTopicDetailBean {
     private val PATTERN_POSTSCRIPT = "·\\s+(.+)".toRegex()
     private val PATTERN_NUMBERS = "\\d+".toRegex()
 
-    private val mId: Int = 0
-    private val mTitle: String = ""
-    private val mContent: String = ""
-    private val mReplies: Int = 0
-    private val mReplyTime: String = ""
-    private val mHasInfo: Boolean = false
-    private val mFavored: Boolean = false
-    @Transient private var mHasRead: Boolean = false
+    var mId: Int = 0
+    var mTitle: String = ""
+    var mContent: String = ""
+    var mReplies: Int = 0
+    var mReplyTime: String = ""
 }

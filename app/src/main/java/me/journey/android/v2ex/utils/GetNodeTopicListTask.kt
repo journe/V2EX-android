@@ -15,7 +15,7 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, ArrayList<JsoupTopi
 
     override fun doInBackground(vararg strings: String): ArrayList<JsoupTopicListBean> {
         val doc = Jsoup.connect("https://www.v2ex.com/?tab=" + strings[0]).get()
-        val content = doc!!.body().selectFirst("#Wrapper")
+        val content = doc.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
                 .select(".box")

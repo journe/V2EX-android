@@ -40,7 +40,7 @@ class TopicDetailActivity : AppCompatActivity() {
         topic_detail_menber_name_tv.text = memberBean.username
         ImageLoader.displayImage(view, memberBean?.avatar_large,
                 topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
-        val topicsDetailTask = object : GetTopicDetailTask() {
+        object : GetTopicDetailTask() {
             override fun onStart() {
             }
 
@@ -50,8 +50,7 @@ class TopicDetailActivity : AppCompatActivity() {
 //                topic_list_refreshview.isRefreshing = false
             }
 
-        }
-        topicsDetailTask.execute("241746")
+        }.execute("241746")
 //        topicsDetailTask.execute("440474")
     }
 
