@@ -47,7 +47,7 @@
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
     <TextView
-        android:id="@+id/topic_comment_item_replies_tv"
+        android:id="@+id/topic_comment_item_floor_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

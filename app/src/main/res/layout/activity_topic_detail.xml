@@ -21,6 +21,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll"
             android:layout_height="match_parent">
 
             <TextView
@@ -109,6 +110,7 @@
             android:id="@+id/topic_detail_content_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
@@ -122,6 +124,7 @@
         android:id="@+id/topic_detail_comments_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/activity_topic_comment_item"/>
 
 </android.support.design.widget.CoordinatorLayout>
