@@ -21,6 +21,8 @@ class TopicDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val view = this.layoutInflater.inflate(R.layout.activity_topic_detail, null as ViewGroup?, false)
         setContentView(R.layout.activity_topic_detail)
+        setSupportActionBar(topic_detail_toolbar)
+
         topicId = intent.extras[TOPIC_ID] as Int
         initView(view)
     }
