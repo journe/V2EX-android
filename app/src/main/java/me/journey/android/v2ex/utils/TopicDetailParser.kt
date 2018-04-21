@@ -1,5 +1,6 @@
 package me.journey.android.v2ex.utils
 
+import com.orhanobut.logger.Logger
 import me.journey.android.v2ex.bean.CommentBean
 import me.journey.android.v2ex.bean.JsoupTopicDetailBean
 import me.journey.android.v2ex.bean.MemberBean
@@ -68,6 +69,50 @@ object TopicDetailParser {
      *  </div>
      * </div>
      */
+
+    /** 需要登录的情况
+     *  <div class="box">
+     *      <div class="header">
+     *          <a href="/">V2EX</a>
+     *          <span class="chevron">&nbsp;›&nbsp;</span> 登录 &nbsp;
+     *          <li class="fa fa-lock"></li>
+     *      </div>
+     *      <div class="message" onclick="$(this).slideUp('fast');">
+     *          <li class="fa fa-exclamation-triangle"></li>&nbsp; 查看本主题需要登录
+     *      </div>
+     *      <div class="cell">
+     *          <form method="post" action="/signin">
+     *          <table cellpadding="5" cellspacing="0" border="0" width="100%">
+     *              <tbody>
+     *                  <tr>
+     *                      <td width="120" align="right">用户名</td>
+     *                      <td width="auto" align="left"><input type="text" class="sl" name="3e52a2506d125fc7269b9b6d3327fdd30455654e4f2cf25a5f943331d069c3db" value="" autofocus autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="用户名或电子邮箱地址"></td>
+     *                  </tr>
+     *                  <tr>
+     *                      <td width="120" align="right">密码</td>
+     *                      <td width="auto" align="left"><input type="password" class="sl" name="150d7439f7d0420257b5d4617a71ce70641918821367dfb8ee74fb530962c174" value="" autocorrect="off" spellcheck="false" autocapitalize="off"></td>
+     *                  </tr>
+     *                  <tr>
+     *                      <td width="120" align="right">你是机器人么？</td>
+     *                      <td width="auto" align="left">
+     *                          <div style="background-image: url('/_captcha?once=91585'); background-repeat: no-repeat; width: 320px; height: 80px; border-radius: 3px; border: 1px solid #ccc;"></div>
+     *                          <div class="sep10"></div><input type="text" class="sl" name="ca3de72757cc71e38ffbfb7c1793e2d6127917bd3561c52b962d5a1b4380dbea" value="" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="请输入上图中的验证码"></td>
+     *                  </tr>
+     *                  <tr>
+     *                      <td width="120" align="right"></td>
+     *                      <td width="auto" align="left"><input type="hidden" value="91585" name="once"><input type="submit" class="super normal button" value="登录"></td>
+     *                  </tr>
+     *                  <tr>
+     *                      <td width="120" align="right"></td>
+     *                      <td width="auto" align="left"><a href="/forgot">我忘记密码了</a></td>
+     *                  </tr>
+     *              </tbody>
+     *          </table>
+     *          <input type="hidden" value="/t/448567" name="next">
+     *          </form>
+     *      </div>
+     *  </div>
+     */
     @JvmStatic
     fun parseTopicDetail(doc: Document): JsoupTopicDetailBean {
         val mainContent = doc.body().selectFirst("#Wrapper")
@@ -76,10 +121,17 @@ object TopicDetailParser {
                 .select(".box")
         val topic = mainContent[0]
         var topicDetailBean = JsoupTopicDetailBean()
+        Logger.d(topic.toString())
         if (topic.selectFirst(".header") == null) {
             return topicDetailBean
         } else {
-            topicDetailBean.title = topic.selectFirst(".header").selectFirst("h1").text()
+            val title = topic.selectFirst(".header")?.selectFirst("h1")
+            if (title == null) {
+                topicDetailBean.title = "需要登录"
+                return topicDetailBean
+            } else {
+                topicDetailBean.title = title.text()
+            }
         }
         if (topic.selectFirst(".cell").selectFirst(".topic_content") != null) {
             topicDetailBean.content = topic.selectFirst(".cell").selectFirst(".topic_content").html()
