@@ -182,7 +182,8 @@ object TopicDetailParser {
         val comments = element.select(".cell")
         var commentBeanList = ArrayList<CommentBean>()
         for (item in comments) {
-            if (item.selectFirst("table") == null) {
+            if (item.selectFirst("table") == null
+                    || item.attr("id").isNullOrEmpty()) {
                 continue
             }
             val comment = item.selectFirst("table")

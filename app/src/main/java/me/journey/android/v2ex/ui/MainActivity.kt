@@ -1,5 +1,6 @@
 package me.journey.android.v2ex.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -13,7 +14,6 @@ import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import me.journey.android.v2ex.R
-import me.journey.android.v2ex.bean.TopicListBean
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -34,6 +34,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        nav_view.getHeaderView(0)
+                .setOnClickListener {
+                    startActivity(Intent(this, LoginActivity::class.java))
+                }
 
         initViewPager()
     }
