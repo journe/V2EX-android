@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.journey.android.v2ex.R
-import me.journey.android.v2ex.utils.TopicItemAdapter
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
 import me.journey.android.v2ex.net.GetAPIService
@@ -19,7 +19,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
-
+import com.zhy.adapter.recyclerview.CommonAdapter
+import com.zhy.adapter.recyclerview.base.ViewHolder
+import me.journey.android.v2ex.utils.ImageLoader
 
 
 /**
@@ -87,8 +89,9 @@ class TopicListFragment : Fragment() {
             else -> service.listLastestTopics()
         }
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
-            override fun onResponse(call: Call<ArrayList<TopicListBean>>, response: Response<ArrayList<TopicListBean>>) {
-                topic_list_recycleview.adapter = TopicItemAdapter(response.body()!!, mListener)
+            override fun onResponse(call: Call<ArrayList<TopicListBean>>,
+                                    response: Response<ArrayList<TopicListBean>>) {
+                topic_list_recycleview.adapter = genTopicListAdapter(response)
                 topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }
@@ -98,6 +101,42 @@ class TopicListFragment : Fragment() {
                 topic_list_refreshview.isRefreshing = false
             }
         })
+    }
+
+    private fun genTopicListAdapter(response: Response<ArrayList<TopicListBean>>): CommonAdapter<TopicListBean> {
+        return object : CommonAdapter<TopicListBean>(activity,
+                R.layout.fragment_topic_item, response.body()!!) {
+            override fun convert(holder: ViewHolder?, t: TopicListBean?, position: Int) {
+                holder!!.setText(R.id.topic_title_item_tv, t?.title)
+                holder!!.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
+                holder!!.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
+                holder!!.setText(R.id.topic_replies_item_tv, t?.replies.toString())
+                holder!!.setText(R.id.topic_reply_time_item_tv, caculateTime(t?.last_modified!!.toLong()))
+
+                ImageLoader.displayImage(holder!!.convertView, t?.member?.avatar_large,
+                        holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4)
+
+                holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
+                    MemberInfoActivity.start(t!!.member!!.id, holder.convertView.context)
+                })
+
+                holder.convertView.setOnClickListener {
+                    mListener?.onListFragmentInteraction(t!!.id)
+                }
+            }
+        }
+    }
+    
+    private fun caculateTime(ts: Long): String {
+        val created = ts * 1000
+        val now = System.currentTimeMillis()
+        val difference = now - created
+        val text = if (difference >= 0 && difference <= DateUtils.MINUTE_IN_MILLIS)
+            "刚刚"
+        else
+            DateUtils.getRelativeTimeSpanString(created, now, DateUtils.MINUTE_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_RELATIVE)
+        return text.toString()
     }
 
     /**
