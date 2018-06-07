@@ -19,104 +19,109 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"/>
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll"
-            android:layout_height="match_parent">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_scrollFlags="scroll">
 
-            <TextView
-                android:id="@+id/topic_detail_title_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:maxLines="3"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/topic_detail_avatar"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了"/>
+                    <TextView
+                        android:id="@+id/topic_detail_title_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:maxLines="3"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/topic_detail_avatar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了"/>
 
-            <ImageView
-                android:id="@+id/topic_detail_avatar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ic_launcher"/>
+                    <ImageView
+                        android:id="@+id/topic_detail_avatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@mipmap/ic_launcher"/>
 
-            <TextView
-                android:id="@+id/topic_detail_menber_name_tv"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:maxLines="1"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/tpgl1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topic_detail_avatar"
-                tools:text="andorid"/>
+                    <TextView
+                        android:id="@+id/topic_detail_menber_name_tv"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tpgl1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/topic_detail_avatar"
+                        tools:text="andorid"/>
 
-            <android.support.constraint.Guideline
-                android:id="@+id/tpgl1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="64dp"/>
+                    <android.support.constraint.Guideline
+                        android:id="@+id/tpgl1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="64dp"/>
 
-            <android.support.constraint.Guideline
-                android:id="@+id/tpgl2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="88dp"/>
+                    <android.support.constraint.Guideline
+                        android:id="@+id/tpgl2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_begin="88dp"/>
 
-            <TextView
-                android:id="@+id/topic_detail_node_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:text=""
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
-                tools:text="全球工单系统"/>
+                    <TextView
+                        android:id="@+id/topic_detail_node_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+                        tools:text="全球工单系统"/>
 
-            <TextView
-                android:id="@+id/topic_detail_create_time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:text=""
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/topic_detail_node_tv"
-                app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
-                tools:text="1小时3分钟前"/>
-        </android.support.constraint.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/topic_detail_create_time_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/topic_detail_node_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+                        tools:text="1小时3分钟前"/>
 
-        <TextView
-            android:id="@+id/topic_detail_content_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text=""
-            tools:text="文章来源：www.oldboyedu.com 10000+，开启逆袭模式，冲击年薪 40 万，做一名新时代不被淘汰的运维工程师！"/>
+                    <TextView
+                        android:id="@+id/topic_detail_content_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="32dp"
+                        android:text=""
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+                        app:layout_scrollFlags="scroll"
+                        tools:text="文章来源：www.oldboyedu.com 10000+，开启逆袭模式，冲击年薪 40 万，做一名新时代不被淘汰的运维工程师！"/>
+
+                </android.support.constraint.ConstraintLayout>
 
     </android.support.design.widget.AppBarLayout>
 

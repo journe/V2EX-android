@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_member_info.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.MemberInfoDetailBean
-import me.journey.android.v2ex.utils.GetAPIService
+import me.journey.android.v2ex.net.GetAPIService
 import me.journey.android.v2ex.utils.ImageLoader
+import kotlinx.android.synthetic.main.activity_member_info.*
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +32,7 @@ class MemberInfoActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        ImageLoader.displayImage(mView, mMemberInfoDetailBean?.avatar_large,
+        ImageLoader.displayImage(mView, mMemberInfoDetailBean.avatar_large,
                 member_info_avatar_iv, R.mipmap.ic_launcher_round, 4)
         member_info_username_tv.text = mMemberInfoDetailBean.username
         member_info_tagline_tv.text = mMemberInfoDetailBean.tagline

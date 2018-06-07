@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.utils
+package me.journey.android.v2ex.net
 
 import android.os.AsyncTask
 import me.journey.android.v2ex.bean.JsoupTopicListBean

@@ -1,7 +1,8 @@
-package me.journey.android.v2ex.utils
+package me.journey.android.v2ex.net
 
 import me.journey.android.v2ex.bean.MemberInfoDetailBean
 import me.journey.android.v2ex.bean.TopicListBean
+import me.journey.android.v2ex.utils.Constants
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

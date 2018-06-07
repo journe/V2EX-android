@@ -28,14 +28,15 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:maxLines="2"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/topic_comment_item_username_tv"
-        tools:text="最新的 ubuntu 18 在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?"/>
+        tools:text="最新的 ubuntu 18 在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?最新的
+        ubuntu 18 在哪里能下载到?最新的 ubuntu 18
+        在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?"/>
 
     <ImageView
         android:id="@+id/topic_comment_item_useravatar_iv"

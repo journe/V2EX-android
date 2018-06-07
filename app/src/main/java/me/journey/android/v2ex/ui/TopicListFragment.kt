@@ -8,17 +8,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import me.journey.android.v2ex.R
-import me.journey.android.v2ex.TopicItemAdapter
+import me.journey.android.v2ex.utils.TopicItemAdapter
 import me.journey.android.v2ex.bean.TopicListBean
 import me.journey.android.v2ex.utils.Constants
-import me.journey.android.v2ex.utils.GetAPIService
+import me.journey.android.v2ex.net.GetAPIService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.android.synthetic.main.fragment_topic_item_list.*
+
 
 
 /**
@@ -45,7 +46,7 @@ class TopicListFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_topic_item_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_topic_item_list, container, false)
         return view
     }
 

@@ -9,12 +9,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewGroup
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_topic_detail.*
 import me.journey.android.v2ex.R
-import me.journey.android.v2ex.TopicCommentItemAdapter
+import me.journey.android.v2ex.utils.TopicCommentItemAdapter
 import me.journey.android.v2ex.bean.JsoupTopicDetailBean
-import me.journey.android.v2ex.utils.GetTopicDetailTask
+import me.journey.android.v2ex.net.GetTopicDetailTask
 import me.journey.android.v2ex.utils.ImageLoader
+import kotlinx.android.synthetic.main.activity_topic_detail.*
+
 
 class TopicDetailActivity : AppCompatActivity() {
 
@@ -37,20 +38,20 @@ class TopicDetailActivity : AppCompatActivity() {
             override fun onStart() {
             }
 
-            override fun onFinish(topicDetail: JsoupTopicDetailBean) {
-                topic_detail_title_tv.text = topicDetail.title
-                RichText.fromHtml(topicDetail.content)
+            override fun onFinish(jsoupTopicDetailBean: JsoupTopicDetailBean) {
+                topic_detail_title_tv.text = jsoupTopicDetailBean.title
+                RichText.fromHtml(jsoupTopicDetailBean.content)
 //                .errorImage(object : DrawableGetter {
 //                    override fun getDrawable(holder: ImageHolder?, config: RichTextConfig?, textView: TextView?): Drawable {
 //                        return getDrawable(R.drawable.ic_image_error)
 //                    }
 //                })
                         .into(topic_detail_content_tv)
-                topic_detail_menber_name_tv.text = topicDetail.memberBean.username
-                ImageLoader.displayImage(view, topicDetail.memberBean.avatar,
+                topic_detail_menber_name_tv.text = jsoupTopicDetailBean.memberBean.username
+                ImageLoader.displayImage(view, jsoupTopicDetailBean.memberBean.avatar,
                         topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
 
-                topic_detail_comments_list.adapter = TopicCommentItemAdapter(topicDetail.comments)
+                topic_detail_comments_list.adapter = TopicCommentItemAdapter(jsoupTopicDetailBean.comments)
             }
 
         }.execute(topicId.toString())

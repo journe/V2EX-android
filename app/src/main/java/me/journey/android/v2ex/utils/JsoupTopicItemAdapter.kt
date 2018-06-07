@@ -1,4 +1,4 @@
-package me.journey.android.v2ex
+package me.journey.android.v2ex.utils
 
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.ui.MemberInfoActivity
-import me.journey.android.v2ex.ui.TopicListFragment.OnListFragmentInteractionListener
-import me.journey.android.v2ex.utils.ImageLoader
+import me.journey.android.v2ex.R
+import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.ui.JsoupTopicListFragment
 
-
-class TopicItemAdapter(private val mValues: List<TopicListBean>,
-                       private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<TopicItemAdapter.ViewHolder>() {
+class JsoupTopicItemAdapter(private val mValues: List<JsoupTopicListBean>,
+                            private val mListener: JsoupTopicListFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<JsoupTopicItemAdapter.ViewHolder>() {
 
     lateinit var view: View;
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,19 +24,22 @@ class TopicItemAdapter(private val mValues: List<TopicListBean>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = mValues[position]
         holder.mTitleView.text = mValues[position].title
-        holder.mTopicNodeView.text = mValues[position].node?.title ?: ""
-        holder.mUsernameView.text = mValues[position].member?.username ?: ""
-        holder.mCommentCountView.text = mValues[position].replies.toString()
-        holder.mTopicReplyTimeView.text = caculateTime(mValues[position].last_modified.toLong())
+        holder.mTopicNodeView.text = mValues[position].node
+        holder.mUsernameView.text = mValues[position].member_name
+        holder.mCommentCountView.text = mValues[position].replies
+        if (holder.mCommentCountView.text.isEmpty()) {
+            holder.mCommentCountView.text = "0"
+        }
+        holder.mTopicReplyTimeView.text = mValues[position].last_modified
 
 //        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
-        ImageLoader.displayImage(view, mValues[position].member?.avatar_large,
+        ImageLoader.displayImage(view, mValues[position].member_avatar,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {
-            mListener?.onListFragmentInteraction(holder.mItem!!.id)
+//            mListener?.onListFragmentInteraction(holder.mItem!!)
         }
         holder.mUserAvatarNormalView.setOnClickListener {
-            MemberInfoActivity.start(holder.mItem!!.member!!.id , holder.mView.context)
+//            MemberInfoActivity.start(holder.mItem!!.member!!.id, holder.mView.context)
         }
     }
 
@@ -65,7 +66,7 @@ class TopicItemAdapter(private val mValues: List<TopicListBean>,
         val mCommentCountView: TextView
         val mTopicNodeView: TextView
         val mTopicReplyTimeView: TextView
-        var mItem: TopicListBean? = null
+        var mItem: JsoupTopicListBean? = null
 
         init {
             mUsernameView = mView.findViewById(R.id.topic_username_item_tv)

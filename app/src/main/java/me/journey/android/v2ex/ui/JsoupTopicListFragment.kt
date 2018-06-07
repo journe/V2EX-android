@@ -8,12 +8,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_topic_item_list.*
-import me.journey.android.v2ex.JsoupTopicItemAdapter
+import me.journey.android.v2ex.utils.JsoupTopicItemAdapter
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.JsoupTopicListBean
 import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.utils.GetNodeTopicListTask
+import me.journey.android.v2ex.net.GetNodeTopicListTask
+import kotlinx.android.synthetic.main.fragment_topic_item_list.*
+
 
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
@@ -32,7 +33,7 @@ class JsoupTopicListFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_topic_item_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_topic_item_list, container, false)
         return view
     }
 
@@ -66,7 +67,7 @@ class JsoupTopicListFragment : Fragment() {
             }
 
             override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
-                topic_list_recycleview.adapter = JsoupTopicItemAdapter(topicList!!, mListener)
+                topic_list_recycleview.adapter = JsoupTopicItemAdapter(topicList, mListener)
                 topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }

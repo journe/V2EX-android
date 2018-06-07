@@ -1,4 +1,4 @@
-package me.journey.android.v2ex
+package me.journey.android.v2ex.utils
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.zzhoujay.richtext.RichText
+import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.CommentBean
-import me.journey.android.v2ex.utils.ImageLoader
 
 
 class TopicCommentItemAdapter(private val mValues: ArrayList<CommentBean>?) : RecyclerView.Adapter<TopicCommentItemAdapter.ViewHolder>() {
