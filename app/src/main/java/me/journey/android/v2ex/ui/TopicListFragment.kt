@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
+import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.net.GetNodeTopicListTask
 import me.journey.android.v2ex.utils.ImageLoader
+import me.journey.android.v2ex.utils.JsoupTopicItemAdapter
 
 
 /**
@@ -43,7 +47,7 @@ class TopicListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mTopicType = arguments!!.getInt(TOPIC_TYPE)
+            mTopicType = arguments!!.getInt(TOPIC_NODE)
         }
     }
 
@@ -77,15 +81,22 @@ class TopicListFragment : Fragment() {
     }
 
     fun getTopics() {
+        if (mTopicType == TOPIC_NODE_TEST) {
+            getJsTopics()
+        } else {
+            getApiTopics()
+        }
+    }
+
+    fun getApiTopics() {
         val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         val service = retrofit.create(GetAPIService::class.java)
-
         val call = when (mTopicType) {
-            0 -> service.listLastestTopics()
-            1 -> service.listHotTopics()
+            TOPIC_NODE_LAST -> service.listLastestTopics()
+            TOPIC_NODE_HOT -> service.listHotTopics()
             else -> service.listLastestTopics()
         }
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
@@ -101,6 +112,46 @@ class TopicListFragment : Fragment() {
                 topic_list_refreshview.isRefreshing = false
             }
         })
+    }
+
+    fun getJsTopics() {
+        val getListNodeTopicsTask = object : GetNodeTopicListTask() {
+            override fun onStart() {
+                topic_list_refreshview.isRefreshing = true
+            }
+
+            override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
+                topic_list_recycleview.adapter = genJsTopicListAdapter(topicList)
+                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+                topic_list_refreshview.isRefreshing = false
+            }
+
+        }
+        getListNodeTopicsTask.execute("apple")
+    }
+
+    private fun genJsTopicListAdapter(topicList: ArrayList<JsoupTopicListBean>): CommonAdapter<JsoupTopicListBean> {
+        return object : CommonAdapter<JsoupTopicListBean>(activity,
+                R.layout.fragment_topic_item, topicList!!) {
+            override fun convert(holder: ViewHolder?, t: JsoupTopicListBean?, position: Int) {
+//                holder!!.setText(R.id.topic_title_item_tv, t?.title)
+//                holder!!.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
+//                holder!!.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
+//                holder!!.setText(R.id.topic_replies_item_tv, t?.replies.toString())
+//                holder!!.setText(R.id.topic_reply_time_item_tv, caculateTime(t?.last_modified!!.toLong()))
+//
+//                ImageLoader.displayImage(holder!!.convertView, t?.member?.avatar_large,
+//                        holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4)
+//
+//                holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
+//                    MemberInfoActivity.start(t!!.member!!.id, holder.convertView.context)
+//                })
+//
+//                holder.convertView.setOnClickListener {
+//                    mListener?.onListFragmentInteraction(t!!.id)
+//                }
+            }
+        }
     }
 
     private fun genTopicListAdapter(response: Response<ArrayList<TopicListBean>>): CommonAdapter<TopicListBean> {
@@ -126,7 +177,7 @@ class TopicListFragment : Fragment() {
             }
         }
     }
-    
+
     private fun caculateTime(ts: Long): String {
         val created = ts * 1000
         val now = System.currentTimeMillis()
@@ -155,12 +206,15 @@ class TopicListFragment : Fragment() {
 
     companion object {
 
-        private val TOPIC_TYPE = "TOPIC_TYPE"
+        private val TOPIC_NODE = "TOPIC_NODE"
+        val TOPIC_NODE_LAST = 0
+        val TOPIC_NODE_HOT = 1
+        val TOPIC_NODE_TEST = 2
 
         fun newInstance(topicType: Int): TopicListFragment {
             val fragment = TopicListFragment()
             val args = Bundle()
-            args.putInt(TOPIC_TYPE, topicType)
+            args.putInt(TOPIC_NODE, topicType)
             fragment.arguments = args
             return fragment
         }

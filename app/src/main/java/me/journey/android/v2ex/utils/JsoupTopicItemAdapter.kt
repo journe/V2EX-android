@@ -32,7 +32,6 @@ class JsoupTopicItemAdapter(private val mValues: List<JsoupTopicListBean>,
         }
         holder.mTopicReplyTimeView.text = mValues[position].last_modified
 
-//        Glide.with(view).load(mValues[position].member?.avatar_normal ?: "").into(holder.mUserAvatarNormalView)
         ImageLoader.displayImage(view, mValues[position].member_avatar,
                 holder.mUserAvatarNormalView, R.mipmap.ic_launcher_round, 4)
         holder.mView.setOnClickListener {

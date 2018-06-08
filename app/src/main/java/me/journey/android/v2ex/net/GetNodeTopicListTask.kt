@@ -2,6 +2,7 @@ package me.journey.android.v2ex.net
 
 import android.os.AsyncTask
 import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.bean.TopicListBean
 import org.jsoup.Jsoup
 
 
@@ -26,6 +27,18 @@ abstract class GetNodeTopicListTask : AsyncTask<String, Any, ArrayList<JsoupTopi
         val topicList: ArrayList<JsoupTopicListBean> = ArrayList<JsoupTopicListBean>()
         for (element in content) {
             val td = element.select("td")
+            val topicListBean = TopicListBean()
+            topicListBean.member!!.username = td[0].select("a").attr("href").substringAfterLast("/")
+            topicListBean.member!!.avatar_large = td[0].select("a").select("img").attr("src")
+            topicListBean.url = td[2].select(".item_title").select("a").attr("href")
+            topicListBean.title = td[2].select(".item_title").select("a").text()
+            topicListBean.node!!.title = td[2].select(".fade").select(".node").text()
+            val replies = td[3].select("a").text()
+            if (replies.isEmpty()){
+                topicListBean.replies = 0
+            }else{
+                topicListBean.replies = td[3].select("a").text().toInt()
+            }
             val jsTopicListBean = JsoupTopicListBean()
             jsTopicListBean.member_name = td[0].select("a").attr("href").substringAfterLast("/")
             jsTopicListBean.member_avatar = td[0].select("a").select("img").attr("src")

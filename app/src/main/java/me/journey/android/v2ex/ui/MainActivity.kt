@@ -46,9 +46,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun initViewPager() {
         val myPagerAdapter = MainPagerAdapter(supportFragmentManager)
         val fragments = ArrayList<Fragment>()
-        fragments.add(TopicListFragment.newInstance(0))
-        fragments.add(TopicListFragment.newInstance(1))
-        fragments.add(JsoupTopicListFragment.newInstance(0))
+        fragments.add(TopicListFragment.newInstance(TopicListFragment.TOPIC_NODE_LAST))
+        fragments.add(TopicListFragment.newInstance(TopicListFragment.TOPIC_NODE_HOT))
+        fragments.add(TopicListFragment.newInstance(TopicListFragment.TOPIC_NODE_TEST))
         myPagerAdapter.setFragments(fragments)
         main_viewpager.adapter = myPagerAdapter
         main_tab.addTab(main_tab.newTab())

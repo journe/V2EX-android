@@ -20,8 +20,8 @@ class TopicListBean() {
     var url: String? = null
     var content: String? = null
     var replies: Int = 0
-    var member: MemberBean? = null
-    var node: NodeBean? = null
+    var member: MemberBean? = MemberBean()
+    var node: NodeBean? = NodeBean()
     var created: Int = 0
     var last_modified: Int = 0
     var last_touched: Int = 0

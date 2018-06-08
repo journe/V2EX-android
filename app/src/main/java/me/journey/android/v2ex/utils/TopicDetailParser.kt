@@ -133,7 +133,8 @@ object TopicDetailParser {
                 topicDetailBean.title = title.text()
             }
         }
-        if (topic.selectFirst(".cell").selectFirst(".topic_content") != null) {
+        if (topic.selectFirst(".cell") != null
+                && topic.selectFirst(".cell").selectFirst(".topic_content") != null) {
             topicDetailBean.content = topic.selectFirst(".cell").selectFirst(".topic_content").html()
         }
 
