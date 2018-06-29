@@ -15,6 +15,7 @@ import me.journey.android.v2ex.bean.JsoupTopicDetailBean
 import me.journey.android.v2ex.net.GetTopicDetailTask
 import me.journey.android.v2ex.utils.ImageLoader
 import kotlinx.android.synthetic.main.activity_topic_detail.*
+import me.journey.android.v2ex.R.id.*
 
 
 class TopicDetailActivity : AppCompatActivity() {

@@ -24,6 +24,7 @@ class TopicListBean() {
     var node: NodeBean? = NodeBean()
     var created: Int = 0
     var last_modified: Int = 0
+    var last_modified_str: String? = null
     var last_touched: Int = 0
 
 

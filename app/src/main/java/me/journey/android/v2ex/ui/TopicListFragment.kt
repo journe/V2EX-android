@@ -22,10 +22,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import me.journey.android.v2ex.bean.JsoupTopicListBean
+import me.journey.android.v2ex.R.id.topic_list_recycleview
+import me.journey.android.v2ex.R.id.topic_list_refreshview
 import me.journey.android.v2ex.net.GetNodeTopicListTask
 import me.journey.android.v2ex.utils.ImageLoader
-import me.journey.android.v2ex.utils.JsoupTopicItemAdapter
 
 
 /**
@@ -102,8 +102,9 @@ class TopicListFragment : Fragment() {
         call.enqueue(object : Callback<ArrayList<TopicListBean>> {
             override fun onResponse(call: Call<ArrayList<TopicListBean>>,
                                     response: Response<ArrayList<TopicListBean>>) {
-                topic_list_recycleview.adapter = genTopicListAdapter(response)
-                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+                topic_list_recycleview.adapter = genTopicListAdapter(response.body()!!)
+                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity,
+                        DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }
 
@@ -120,9 +121,10 @@ class TopicListFragment : Fragment() {
                 topic_list_refreshview.isRefreshing = true
             }
 
-            override fun onFinish(topicList: ArrayList<JsoupTopicListBean>) {
-                topic_list_recycleview.adapter = genJsTopicListAdapter(topicList)
-                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+            override fun onFinish(topicList: ArrayList<TopicListBean>) {
+                topic_list_recycleview.adapter = genTopicListAdapter(topicList)
+                topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity,
+                        DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }
 
@@ -130,39 +132,22 @@ class TopicListFragment : Fragment() {
         getListNodeTopicsTask.execute("apple")
     }
 
-    private fun genJsTopicListAdapter(topicList: ArrayList<JsoupTopicListBean>): CommonAdapter<JsoupTopicListBean> {
-        return object : CommonAdapter<JsoupTopicListBean>(activity,
-                R.layout.fragment_topic_item, topicList!!) {
-            override fun convert(holder: ViewHolder?, t: JsoupTopicListBean?, position: Int) {
-//                holder!!.setText(R.id.topic_title_item_tv, t?.title)
-//                holder!!.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
-//                holder!!.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
-//                holder!!.setText(R.id.topic_replies_item_tv, t?.replies.toString())
-//                holder!!.setText(R.id.topic_reply_time_item_tv, caculateTime(t?.last_modified!!.toLong()))
-//
-//                ImageLoader.displayImage(holder!!.convertView, t?.member?.avatar_large,
-//                        holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4)
-//
-//                holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
-//                    MemberInfoActivity.start(t!!.member!!.id, holder.convertView.context)
-//                })
-//
-//                holder.convertView.setOnClickListener {
-//                    mListener?.onListFragmentInteraction(t!!.id)
-//                }
-            }
-        }
-    }
-
-    private fun genTopicListAdapter(response: Response<ArrayList<TopicListBean>>): CommonAdapter<TopicListBean> {
+    private fun genTopicListAdapter(topicList: ArrayList<TopicListBean>): CommonAdapter<TopicListBean> {
         return object : CommonAdapter<TopicListBean>(activity,
-                R.layout.fragment_topic_item, response.body()!!) {
+                R.layout.fragment_topic_item, topicList) {
             override fun convert(holder: ViewHolder?, t: TopicListBean?, position: Int) {
-                holder!!.setText(R.id.topic_title_item_tv, t?.title)
-                holder!!.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
-                holder!!.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
-                holder!!.setText(R.id.topic_replies_item_tv, t?.replies.toString())
-                holder!!.setText(R.id.topic_reply_time_item_tv, caculateTime(t?.last_modified!!.toLong()))
+                holder?.setText(R.id.topic_title_item_tv, t?.title)
+                holder?.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
+                holder?.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
+                holder?.setText(R.id.topic_replies_item_tv, t?.replies.toString())
+                if (t?.last_modified != 0) {
+                    t?.last_modified_str = caculateTime(t?.last_modified!!.toLong())
+                }
+                if (t?.last_modified_str.isNullOrEmpty()) {
+                    holder?.setText(R.id.topic_reply_time_item_tv, "")
+                } else {
+                    holder?.setText(R.id.topic_reply_time_item_tv, t?.last_modified_str)
+                }
 
                 ImageLoader.displayImage(holder!!.convertView, t?.member?.avatar_large,
                         holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4)

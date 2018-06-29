@@ -11,6 +11,7 @@ import me.journey.android.v2ex.bean.MemberInfoDetailBean
 import me.journey.android.v2ex.net.GetAPIService
 import me.journey.android.v2ex.utils.ImageLoader
 import kotlinx.android.synthetic.main.activity_member_info.*
+import me.journey.android.v2ex.R.id.*
 
 import retrofit2.Call
 import retrofit2.Callback
