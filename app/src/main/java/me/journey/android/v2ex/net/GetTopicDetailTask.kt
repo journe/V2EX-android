@@ -1,11 +1,11 @@
 package me.journey.android.v2ex.net
 
 import android.os.AsyncTask
-import me.journey.android.v2ex.bean.JsoupTopicDetailBean
+import me.journey.android.v2ex.bean.TopicDetailBean
 import me.journey.android.v2ex.utils.TopicDetailParser
 import org.jsoup.Jsoup
 
-abstract class GetTopicDetailTask : AsyncTask<String, Any, JsoupTopicDetailBean>() {
+abstract class GetTopicDetailTask : AsyncTask<String, Any, TopicDetailBean>() {
     override fun onPreExecute() {
         super.onPreExecute()
         onStart()
@@ -13,17 +13,17 @@ abstract class GetTopicDetailTask : AsyncTask<String, Any, JsoupTopicDetailBean>
 
     abstract fun onStart()
 
-    override fun doInBackground(vararg strings: String): JsoupTopicDetailBean {
+    override fun doInBackground(vararg strings: String): TopicDetailBean {
         val url = "https://www.v2ex.com/t/" + strings[0]
         val doc = Jsoup.connect(url).get()
         return TopicDetailParser.parseTopicDetail(doc)
     }
 
-    override fun onPostExecute(topicDetails: JsoupTopicDetailBean) {
+    override fun onPostExecute(topicDetails: TopicDetailBean) {
         super.onPostExecute(topicDetails)
         onFinish(topicDetails)
     }
 
-    abstract fun onFinish(topicList: JsoupTopicDetailBean)
+    abstract fun onFinish(topicList: TopicDetailBean)
 
 }

@@ -1,8 +1,8 @@
 package me.journey.android.v2ex.utils
 
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.CommentBean
-import me.journey.android.v2ex.bean.JsoupTopicDetailBean
+import me.journey.android.v2ex.bean.TopicCommentBean
+import me.journey.android.v2ex.bean.TopicDetailBean
 import me.journey.android.v2ex.bean.MemberBean
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -114,13 +114,13 @@ object TopicDetailParser {
      *  </div>
      */
     @JvmStatic
-    fun parseTopicDetail(doc: Document): JsoupTopicDetailBean {
+    fun parseTopicDetail(doc: Document): TopicDetailBean {
         val mainContent = doc.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
                 .select(".box")
         val topic = mainContent[0]
-        var topicDetailBean = JsoupTopicDetailBean()
+        var topicDetailBean = TopicDetailBean()
         Logger.d(topic.toString())
         if (topic.selectFirst(".header") == null) {
             return topicDetailBean
@@ -149,7 +149,7 @@ object TopicDetailParser {
         topicDetailBean.memberBean = MemberBean(username, avatar)
 
         if (mainContent.size > 1) {
-            topicDetailBean.comments = parseComments(mainContent[1])
+            topicDetailBean.topicComments = parseComments(mainContent[1])
         }
         return topicDetailBean
     }
@@ -179,9 +179,9 @@ object TopicDetailParser {
      *   </table>
      * </div>
      */
-    private fun parseComments(element: Element): ArrayList<CommentBean> {
+    private fun parseComments(element: Element): ArrayList<TopicCommentBean> {
         val comments = element.select(".cell")
-        var commentBeanList = ArrayList<CommentBean>()
+        var commentBeanList = ArrayList<TopicCommentBean>()
         for (item in comments) {
             if (item.selectFirst("table") == null
                     || item.attr("id").isNullOrEmpty()) {
@@ -190,7 +190,7 @@ object TopicDetailParser {
             val comment = item.selectFirst("table")
                     .selectFirst("tbody")
                     .selectFirst("tr")
-            var commentBean = CommentBean()
+            var commentBean = TopicCommentBean()
             commentBean.id = comment.attr("id")
             commentBean.content = comment
                     .selectFirst("td[align = left]")

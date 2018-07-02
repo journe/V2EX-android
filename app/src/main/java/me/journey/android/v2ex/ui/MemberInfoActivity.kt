@@ -3,21 +3,18 @@ package me.journey.android.v2ex.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.activity_member_info.*
 import me.journey.android.v2ex.R
 import me.journey.android.v2ex.bean.MemberInfoDetailBean
 import me.journey.android.v2ex.net.GetAPIService
 import me.journey.android.v2ex.utils.ImageLoader
-import kotlinx.android.synthetic.main.activity_member_info.*
-import me.journey.android.v2ex.R.id.*
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MemberInfoActivity : AppCompatActivity() {
+class MemberInfoActivity : BaseActivity() {
 
     private lateinit var mMemberInfoDetailBean: MemberInfoDetailBean
     private var mUserId = 0

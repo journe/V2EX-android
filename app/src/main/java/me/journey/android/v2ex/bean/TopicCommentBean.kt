@@ -1,6 +1,6 @@
 package me.journey.android.v2ex.bean
 
-class CommentBean {
+class TopicCommentBean {
     var id: String = ""
     var content: String = ""
     var member: MemberBean = MemberBean("", "")

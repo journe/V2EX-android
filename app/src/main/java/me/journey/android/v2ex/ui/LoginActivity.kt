@@ -15,7 +15,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -28,7 +27,7 @@ import java.util.*
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor> {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
