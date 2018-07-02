@@ -18,6 +18,8 @@ import org.jsoup.nodes.Document
  *   *: 这个符号将匹配所有元素
  */
 object TopicListParser {
+    private val PATTERN_NUMBERS = "\\d+".toRegex()
+
     /**
      *  <tr>
      *   <td width="48" valign="top" align="center">
@@ -61,8 +63,10 @@ object TopicListParser {
             val topicListBean = TopicListBean()
             topicListBean.member!!.username = td[0].select("a").attr("href")
                     .substringAfterLast("/")
-            topicListBean.member!!.avatar_large = td[0].select("a").select("img").attr("src")
+            topicListBean.member!!.avatar_large = td[0].select("a").select("img")
+                    .attr("src")
             topicListBean.url = td[2].select(".item_title").select("a").attr("href")
+            topicListBean.id = PATTERN_NUMBERS.find(topicListBean.url!!)!!.value.toInt()
             topicListBean.title = td[2].select(".item_title").select("a").text()
             topicListBean.node!!.title = td[2].select(".topic_info").select(".node").text()
             val replies = td[3].select("a").text()
