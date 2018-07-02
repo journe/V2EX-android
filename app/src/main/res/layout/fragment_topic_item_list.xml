@@ -9,12 +9,12 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topic_list_recycleview"
-        android:name="me.journey.android.v2ex.ItemFragment"
+        android:name="com.journey.android.v2ex.ItemFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="me.journey.android.v2ex.ui.TopicListFragment"
+        tools:context="com.journey.android.v2ex.ui.TopicListFragment"
         tools:listitem="@layout/fragment_topic_item"/>
 </android.support.v4.widget.SwipeRefreshLayout>

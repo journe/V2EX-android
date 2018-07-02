@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

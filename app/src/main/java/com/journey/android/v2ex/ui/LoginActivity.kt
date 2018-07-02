@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.Manifest.permission.READ_CONTACTS
 import android.animation.Animator
@@ -21,7 +21,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
-import me.journey.android.v2ex.R
+import com.journey.android.v2ex.R
 import java.util.*
 
 /**

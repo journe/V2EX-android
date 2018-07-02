@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.content.Context
 import android.content.Intent
@@ -11,11 +11,11 @@ import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
-import me.journey.android.v2ex.R
-import me.journey.android.v2ex.bean.TopicCommentBean
-import me.journey.android.v2ex.bean.TopicDetailBean
-import me.journey.android.v2ex.net.GetTopicDetailTask
-import me.journey.android.v2ex.utils.ImageLoader
+import com.journey.android.v2ex.R
+import com.journey.android.v2ex.bean.TopicCommentBean
+import com.journey.android.v2ex.bean.TopicDetailBean
+import com.journey.android.v2ex.net.GetTopicDetailTask
+import com.journey.android.v2ex.utils.ImageLoader
 
 
 class TopicDetailActivity : BaseActivity() {
@@ -28,6 +28,7 @@ class TopicDetailActivity : BaseActivity() {
                 null as ViewGroup?, false)
         setContentView(R.layout.activity_topic_detail)
         setSupportActionBar(topic_detail_toolbar)
+//        topic_detail_toolbar
         topicId = intent.extras[TOPIC_ID] as Int
         initView(view)
     }
@@ -49,6 +50,7 @@ class TopicDetailActivity : BaseActivity() {
                 ImageLoader.displayImage(view, topicDetailBean.memberBean.avatar,
                         topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
 
+                topicDetailBean.topicComments?.let { topic_detail_comments_list.visibility = View.VISIBLE }
                 topic_detail_comments_list.adapter = topicDetailBean.topicComments?.let { getTopicCommentItemAdapter(it) }
             }
 

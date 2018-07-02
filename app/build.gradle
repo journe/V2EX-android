@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "me.journey.android.v2ex"
+        applicationId "com.journey.android.v2ex"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1

@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.content.Context
 import android.content.Intent
@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_member_info.*
-import me.journey.android.v2ex.R
-import me.journey.android.v2ex.bean.MemberInfoDetailBean
-import me.journey.android.v2ex.net.GetAPIService
-import me.journey.android.v2ex.utils.ImageLoader
+import com.journey.android.v2ex.R
+import com.journey.android.v2ex.bean.MemberInfoDetailBean
+import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.utils.ImageLoader
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

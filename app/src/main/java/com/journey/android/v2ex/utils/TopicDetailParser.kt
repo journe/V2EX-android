@@ -1,9 +1,9 @@
-package me.journey.android.v2ex.utils
+package com.journey.android.v2ex.utils
 
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.TopicCommentBean
-import me.journey.android.v2ex.bean.TopicDetailBean
-import me.journey.android.v2ex.bean.MemberBean
+import com.journey.android.v2ex.bean.TopicCommentBean
+import com.journey.android.v2ex.bean.TopicDetailBean
+import com.journey.android.v2ex.bean.MemberBean
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 

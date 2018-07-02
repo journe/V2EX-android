@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import android.view.MenuItem
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import me.journey.android.v2ex.R
+import com.journey.android.v2ex.R
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,

@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -10,10 +10,10 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.journey.android.v2ex.R
-import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.utils.Constants
-import me.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.R
+import com.journey.android.v2ex.bean.TopicListBean
+import com.journey.android.v2ex.utils.Constants
+import com.journey.android.v2ex.net.GetAPIService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,10 +22,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import me.journey.android.v2ex.R.id.topic_list_recycleview
-import me.journey.android.v2ex.R.id.topic_list_refreshview
-import me.journey.android.v2ex.net.GetNodeTopicListTask
-import me.journey.android.v2ex.utils.ImageLoader
+import com.journey.android.v2ex.R.id.topic_list_recycleview
+import com.journey.android.v2ex.R.id.topic_list_refreshview
+import com.journey.android.v2ex.net.GetNodeTopicListTask
+import com.journey.android.v2ex.utils.ImageLoader
 
 
 /**

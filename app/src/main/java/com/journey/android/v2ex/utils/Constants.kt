@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.utils
+package com.journey.android.v2ex.utils
 
 /**
  * Created by journey on 2018/1/23.

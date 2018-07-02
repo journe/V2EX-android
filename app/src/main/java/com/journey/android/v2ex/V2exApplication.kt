@@ -1,4 +1,4 @@
-package me.journey.android.v2ex
+package com.journey.android.v2ex
 
 import android.app.Application
 import com.orhanobut.logger.AndroidLogAdapter

@@ -1,4 +1,4 @@
-package me.journey.android.v2ex.utils;
+package com.journey.android.v2ex.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -1,8 +1,8 @@
-package me.journey.android.v2ex.net
+package com.journey.android.v2ex.net
 
 import android.os.AsyncTask
-import me.journey.android.v2ex.bean.TopicListBean
-import me.journey.android.v2ex.utils.TopicListParser
+import com.journey.android.v2ex.bean.TopicListBean
+import com.journey.android.v2ex.utils.TopicListParser
 import org.jsoup.Jsoup
 
 

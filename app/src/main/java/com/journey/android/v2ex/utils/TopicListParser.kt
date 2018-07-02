@@ -1,7 +1,7 @@
-package me.journey.android.v2ex.utils
+package com.journey.android.v2ex.utils
 
 import com.orhanobut.logger.Logger
-import me.journey.android.v2ex.bean.TopicListBean
+import com.journey.android.v2ex.bean.TopicListBean
 import org.jsoup.nodes.Document
 
 /**
