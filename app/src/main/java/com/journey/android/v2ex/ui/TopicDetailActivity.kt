@@ -7,15 +7,15 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewGroup
-import com.zhy.adapter.recyclerview.CommonAdapter
-import com.zhy.adapter.recyclerview.base.ViewHolder
-import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_topic_detail.*
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.TopicCommentBean
 import com.journey.android.v2ex.bean.TopicDetailBean
 import com.journey.android.v2ex.net.GetTopicDetailTask
 import com.journey.android.v2ex.utils.ImageLoader
+import com.zhy.adapter.recyclerview.CommonAdapter
+import com.zhy.adapter.recyclerview.base.ViewHolder
+import com.zzhoujay.richtext.RichText
+import kotlinx.android.synthetic.main.activity_topic_detail.*
 
 
 class TopicDetailActivity : BaseActivity() {
@@ -28,7 +28,8 @@ class TopicDetailActivity : BaseActivity() {
                 null as ViewGroup?, false)
         setContentView(R.layout.activity_topic_detail)
         setSupportActionBar(topic_detail_toolbar)
-//        topic_detail_toolbar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        topic_detail_toolbar.setNavigationOnClickListener({ finish() })
         topicId = intent.extras[TOPIC_ID] as Int
         initView(view)
     }
