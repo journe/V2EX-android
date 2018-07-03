@@ -11,6 +11,8 @@ class TopicDetailBean {
     var id: Int = 0
     var title: String = ""
     var content: String = ""
+    var node: String = ""
+    var nodeUrl: String = ""
     var replies: Int = 0
     var replyTime: String = ""
     var memberBean: MemberBean = MemberBean("", "")

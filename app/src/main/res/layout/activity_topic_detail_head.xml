@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topic_detail_head_cl"
+    android:layout_width="match_parent"
+    android:minWidth="360dp"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    app:layout_scrollFlags="scroll">
+
+    <TextView
+        android:id="@+id/topic_detail_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="3"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/topic_detail_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了"/>
+
+    <ImageView
+        android:id="@+id/topic_detail_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/topic_detail_node_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text=""
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+        tools:text="全球工单系统"/>
+
+    <TextView
+        android:id="@+id/topic_detail_create_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text=""
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/topic_detail_node_tv"
+        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+        tools:text="1小时3分钟前"/>
+
+    <TextView
+        android:id="@+id/topic_detail_content_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+        app:layout_scrollFlags="scroll"
+        tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了新人写博客，
+        前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了新人写博客，前天刚把删除功能做出来，
+        今天一看被 google 爬虫全删掉了爬虫全删掉了！"/>
+
+</android.support.constraint.ConstraintLayout>
+

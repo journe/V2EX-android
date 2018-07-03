@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.TopicCommentBean
 import com.journey.android.v2ex.bean.TopicDetailBean
@@ -14,6 +16,7 @@ import com.journey.android.v2ex.net.GetTopicDetailTask
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
+import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 
@@ -44,18 +47,33 @@ class TopicDetailActivity : BaseActivity() {
             }
 
             override fun onFinish(topicDetailBean: TopicDetailBean) {
-                topic_detail_title_tv.text = topicDetailBean.title
-                RichText.fromHtml(topicDetailBean.content)
-                        .into(topic_detail_content_tv)
-                topic_detail_menber_name_tv.text = topicDetailBean.memberBean.username
+                val headView = layoutInflater.inflate(R.layout.activity_topic_detail_head,
+                        null as ViewGroup?, false)
+                headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean.title
+                headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean.node
+                headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean.replyTime
+                topicDetailBean.content?.let {
+                    RichText.fromHtml(it)
+                            .into(headView.findViewById(R.id.topic_detail_content_tv))
+                }
                 ImageLoader.displayImage(view, topicDetailBean.memberBean.avatar,
-                        topic_detail_avatar, R.mipmap.ic_launcher_round, 4)
+                        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
 
-                topicDetailBean.topicComments?.let { topic_detail_comments_list.visibility = View.VISIBLE }
-                topic_detail_comments_list.adapter = topicDetailBean.topicComments?.let { getTopicCommentItemAdapter(it) }
+                topicDetailBean.topicComments?.let {
+                    topic_detail_comments_list.visibility = View.VISIBLE
+                    setTopicHeadView(getTopicCommentItemAdapter(it), headView)
+                }
             }
 
         }.execute(topicId.toString())
+    }
+
+    private fun setTopicHeadView(topicCommentItemAdapter: CommonAdapter<TopicCommentBean>,
+                                 headView: View) {
+        val mHeaderAndFooterWrapper = HeaderAndFooterWrapper<RecyclerView.Adapter<RecyclerView.ViewHolder>>(topicCommentItemAdapter)
+        mHeaderAndFooterWrapper.addHeaderView(headView)
+        topic_detail_comments_list.adapter = mHeaderAndFooterWrapper
+        mHeaderAndFooterWrapper.notifyDataSetChanged()
     }
 
     private fun getTopicCommentItemAdapter(topicComments: ArrayList<TopicCommentBean>): CommonAdapter<TopicCommentBean> {

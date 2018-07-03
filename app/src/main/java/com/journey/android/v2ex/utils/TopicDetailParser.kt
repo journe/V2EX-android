@@ -1,9 +1,9 @@
 package com.journey.android.v2ex.utils
 
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.bean.MemberBean
 import com.journey.android.v2ex.bean.TopicCommentBean
 import com.journey.android.v2ex.bean.TopicDetailBean
-import com.journey.android.v2ex.bean.MemberBean
+import com.orhanobut.logger.Logger
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -147,6 +147,16 @@ object TopicDetailParser {
                 .select("img")
                 .attr("src")
         topicDetailBean.memberBean = MemberBean(username, avatar)
+
+        topicDetailBean.node = topic.selectFirst(".header")
+                .select("a")[2]
+                .text()
+        topicDetailBean.nodeUrl = topic.selectFirst(".header")
+                .select("a")[2]
+                .attr("href")
+        topicDetailBean.replyTime = topic.selectFirst(".header")
+                .selectFirst("small.gray")
+                .text()
 
         if (mainContent.size > 1) {
             topicDetailBean.topicComments = parseComments(mainContent[1])
