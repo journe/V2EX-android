@@ -1,6 +1,6 @@
-package com.journey.android.v2ex.bean
+package com.journey.android.v2ex.bean.api
 
-class MemberInfoDetailBean(){
+class MembersShowBean {
 
     /**
      * status : found

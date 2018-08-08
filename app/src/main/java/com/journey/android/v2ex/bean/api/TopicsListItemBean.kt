@@ -1,6 +1,6 @@
-package com.journey.android.v2ex.bean
+package com.journey.android.v2ex.bean.api
 
-class TopicListBean() {
+class TopicsListItemBean() {
 
     /**
      * id : 425341

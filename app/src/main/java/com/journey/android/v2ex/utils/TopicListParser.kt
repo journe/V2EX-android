@@ -1,7 +1,7 @@
 package com.journey.android.v2ex.utils
 
+import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.orhanobut.logger.Logger
-import com.journey.android.v2ex.bean.TopicListBean
 import org.jsoup.nodes.Document
 
 /**
@@ -47,7 +47,7 @@ object TopicListParser {
      */
 
     @JvmStatic
-    fun parseTopicList(doc: Document): ArrayList<TopicListBean> {
+    fun parseTopicList(doc: Document): ArrayList<TopicsListItemBean> {
         val content = doc.body().selectFirst("#Wrapper")
                 .selectFirst(".content")
                 .selectFirst("#Main")
@@ -56,11 +56,11 @@ object TopicListParser {
                 .select("table")
                 .select("tbody")
                 .select("tr")
-        val topicList: ArrayList<TopicListBean> = ArrayList()
+        val topicListItem: ArrayList<TopicsListItemBean> = ArrayList()
         for (element in content) {
             Logger.d(element.toString())
             val td = element.select("td")
-            val topicListBean = TopicListBean()
+            val topicListBean = TopicsListItemBean()
             topicListBean.member!!.username = td[0].select("a").attr("href")
                     .substringAfterLast("/")
             topicListBean.member!!.avatar_large = td[0].select("a").select("img")
@@ -82,8 +82,8 @@ object TopicListParser {
             } else {
                 topicListBean.last_modified_str = ""
             }
-            topicList.add(topicListBean)
+            topicListItem.add(topicListBean)
         }
-        return topicList
+        return topicListItem
     }
 }

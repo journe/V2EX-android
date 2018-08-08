@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.TopicListBean
+import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.net.GetAPIService
 import retrofit2.Call
@@ -22,8 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import com.journey.android.v2ex.R.id.topic_list_recycleview
-import com.journey.android.v2ex.R.id.topic_list_refreshview
 import com.journey.android.v2ex.net.GetNodeTopicListTask
 import com.journey.android.v2ex.utils.ImageLoader
 
@@ -95,20 +92,20 @@ class TopicListFragment : Fragment() {
                 .build()
         val service = retrofit.create(GetAPIService::class.java)
         val call = when (mTopicType) {
-            TOPIC_NODE_LAST -> service.listLastestTopics()
+            TOPIC_NODE_LAST -> service.listLatestTopics()
             TOPIC_NODE_HOT -> service.listHotTopics()
-            else -> service.listLastestTopics()
+            else -> service.listLatestTopics()
         }
-        call.enqueue(object : Callback<ArrayList<TopicListBean>> {
-            override fun onResponse(call: Call<ArrayList<TopicListBean>>,
-                                    response: Response<ArrayList<TopicListBean>>) {
+        call.enqueue(object : Callback<ArrayList<TopicsListItemBean>> {
+            override fun onResponse(call: Call<ArrayList<TopicsListItemBean>>,
+                                    response: Response<ArrayList<TopicsListItemBean>>) {
                 topic_list_recycleview.adapter = genTopicListAdapter(response.body()!!)
                 topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity,
                         DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
             }
 
-            override fun onFailure(call: Call<ArrayList<TopicListBean>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<TopicsListItemBean>>, t: Throwable) {
                 print(t.message)
                 topic_list_refreshview.isRefreshing = false
             }
@@ -121,8 +118,8 @@ class TopicListFragment : Fragment() {
                 topic_list_refreshview.isRefreshing = true
             }
 
-            override fun onFinish(topicList: ArrayList<TopicListBean>) {
-                topic_list_recycleview.adapter = genTopicListAdapter(topicList)
+            override fun onFinish(topicListItem: ArrayList<TopicsListItemBean>) {
+                topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
                 topic_list_recycleview.addItemDecoration(DividerItemDecoration(activity,
                         DividerItemDecoration.VERTICAL))
                 topic_list_refreshview.isRefreshing = false
@@ -132,10 +129,10 @@ class TopicListFragment : Fragment() {
         getListNodeTopicsTask.execute("apple")
     }
 
-    private fun genTopicListAdapter(topicList: ArrayList<TopicListBean>): CommonAdapter<TopicListBean> {
-        return object : CommonAdapter<TopicListBean>(activity,
-                R.layout.fragment_topic_item, topicList) {
-            override fun convert(holder: ViewHolder?, t: TopicListBean?, position: Int) {
+    private fun genTopicListAdapter(topicListItem: ArrayList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
+        return object : CommonAdapter<TopicsListItemBean>(activity,
+                R.layout.fragment_topic_item, topicListItem) {
+            override fun convert(holder: ViewHolder?, t: TopicsListItemBean?, position: Int) {
                 holder?.setText(R.id.topic_title_item_tv, t?.title)
                 holder?.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
                 holder?.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
