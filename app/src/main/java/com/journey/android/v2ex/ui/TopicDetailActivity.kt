@@ -10,13 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.TopicCommentBean
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.net.GetAPIService
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
+import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
@@ -42,6 +42,7 @@ class TopicDetailActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         topic_detail_toolbar.setNavigationOnClickListener({ finish() })
         topicId = intent.extras[TOPIC_ID] as Int
+        Logger.d(topicId)
         initView(view)
     }
 
@@ -51,31 +52,6 @@ class TopicDetailActivity : BaseActivity() {
                 DividerItemDecoration.VERTICAL))
 
         getTopicDetais()
-
-//        object : GetTopicDetailTask() {
-//            override fun onStart() {
-//            }
-//
-//            override fun onFinish(topicDetailBean: TopicDetailBean) {
-//                val headView = layoutInflater.inflate(R.layout.activity_topic_detail_head,
-//                        null as ViewGroup?, false)
-//                headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean.title
-//                headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean.node
-//                headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean.replyTime
-//                topicDetailBean.content?.let {
-//                    RichText.fromHtml(it)
-//                            .into(headView.findViewById(R.id.topic_detail_content_tv))
-//                }
-//                ImageLoader.displayImage(view, topicDetailBean.memberBean.avatar,
-//                        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
-//
-//                topicDetailBean.topicComments?.let {
-//                    topic_detail_comments_list.visibility = View.VISIBLE
-//                    setTopicHeadView(getTopicCommentItemAdapter(it), headView)
-//                }
-//            }
-//
-//        }.execute(topicId.toString())
     }
 
     private fun getTopicDetais() {
@@ -93,7 +69,7 @@ class TopicDetailActivity : BaseActivity() {
                         headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean?.title
                         headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean?.node?.title
                         headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean?.created?.toLong()?.let { calculateTime(it) }
-                        topicDetailBean?.content?.let {
+                        topicDetailBean?.content_rendered?.let {
                             RichText.fromHtml(it)
                                     .into(headView.findViewById(R.id.topic_detail_content_tv))
                         }
@@ -101,10 +77,6 @@ class TopicDetailActivity : BaseActivity() {
                                 headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
 
                         getTopicReplies(headView)
-//                        topicDetailBean.topicComments?.let {
-//                            topic_detail_comments_list.visibility = View.VISIBLE
-//                            setTopicHeadView(getTopicCommentItemAdapter(it), headView)
-//                        }
                     }
 
                     override fun onFailure(call: Call<ArrayList<TopicsShowBean>>?, t: Throwable?) {
@@ -138,19 +110,11 @@ class TopicDetailActivity : BaseActivity() {
     }
 
 
-    private fun setTopicHeadView(topicCommentItemAdapter: CommonAdapter<TopicCommentBean>,
-                                 headView: View) {
-        val mHeaderAndFooterWrapper = HeaderAndFooterWrapper<RecyclerView.Adapter<RecyclerView.ViewHolder>>(topicCommentItemAdapter)
-        mHeaderAndFooterWrapper.addHeaderView(headView)
-        topic_detail_comments_list.adapter = mHeaderAndFooterWrapper
-        mHeaderAndFooterWrapper.notifyDataSetChanged()
-    }
-
     private fun getTopicReplyItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
         return object : CommonAdapter<RepliesShowBean>(this, R.layout.activity_topic_comment_item,
                 topicComments) {
             override fun convert(holder: ViewHolder, t: RepliesShowBean, position: Int) {
-                RichText.fromHtml(t.content)
+                RichText.fromHtml(t.content_rendered)
                         .into(holder.getView(R.id.topic_comment_item_content_tv))
                 holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
                 holder.setText(R.id.topic_comment_item_floor_tv, position.toString())
@@ -165,24 +129,6 @@ class TopicDetailActivity : BaseActivity() {
         }
     }
 
-    private fun getTopicCommentItemAdapter(topicComments: ArrayList<TopicCommentBean>): CommonAdapter<TopicCommentBean> {
-        return object : CommonAdapter<TopicCommentBean>(this, R.layout.activity_topic_comment_item,
-                topicComments) {
-            override fun convert(holder: ViewHolder, t: TopicCommentBean, position: Int) {
-                RichText.fromHtml(t.content)
-                        .into(holder.getView(R.id.topic_comment_item_content_tv))
-                holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
-                holder.setText(R.id.topic_comment_item_floor_tv, t.floor.toString())
-                holder.setText(R.id.topic_comment_item_reply_time_tv, t.replyTime)
-
-                ImageLoader.displayImage(holder.convertView, t.member.avatar,
-                        holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round, 4)
-                holder.convertView.setOnClickListener {
-                    //            mListener?.onListFragmentInteraction(holder.mItem!!.id)
-                }
-            }
-        }
-    }
 
     companion object {
         val TOPIC_ID = "topic_id"

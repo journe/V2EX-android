@@ -66,11 +66,12 @@ class TopicListFragment : BaseFragment() {
     }
 
     fun getTopics() {
-        if (mTopicType == TOPIC_NODE_TEST) {
-            getJsTopics()
-        } else {
-            getApiTopics()
-        }
+        getApiTopics()
+//        if (mTopicType == TOPIC_NODE_TEST) {
+//            getJsTopics()
+//        } else {
+//            getApiTopics()
+//        }
     }
 
     fun getApiTopics() {
@@ -82,7 +83,7 @@ class TopicListFragment : BaseFragment() {
         val call = when (mTopicType) {
             TOPIC_NODE_LAST -> service.listLatestTopics()
             TOPIC_NODE_HOT -> service.listHotTopics()
-            else -> service.listLatestTopics()
+            else -> service.getTopicsByNode(1)
         }
         call.enqueue(object : Callback<ArrayList<TopicsListItemBean>> {
             override fun onResponse(call: Call<ArrayList<TopicsListItemBean>>,

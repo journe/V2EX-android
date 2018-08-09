@@ -1,8 +1,8 @@
 package com.journey.android.v2ex.utils
 
-import com.journey.android.v2ex.bean.MemberBean
-import com.journey.android.v2ex.bean.TopicCommentBean
-import com.journey.android.v2ex.bean.TopicDetailBean
+import com.journey.android.v2ex.bean.js.MemberBean
+import com.journey.android.v2ex.bean.js.TopicCommentBean
+import com.journey.android.v2ex.bean.js.TopicDetailBean
 import com.orhanobut.logger.Logger
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element

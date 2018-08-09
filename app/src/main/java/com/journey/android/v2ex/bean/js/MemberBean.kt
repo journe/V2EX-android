@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.bean
+package com.journey.android.v2ex.bean.js
 
 class MemberBean {
     constructor(username: String, avatar: String?) {

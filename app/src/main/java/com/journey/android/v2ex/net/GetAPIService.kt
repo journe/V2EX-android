@@ -49,7 +49,7 @@ interface GetAPIService {
     fun getTopicsByUser(@Query("username") username: String): Call<ArrayList<TopicsShowBean>>
 
     @GET(Constants.TOPICS_SHOW)
-    fun getTopicsByNode(@Query("node_id") nodeId: Int): Call<ArrayList<TopicsShowBean>>
+    fun getTopicsByNode(@Query("node_id") nodeId: Int): Call<ArrayList<TopicsListItemBean>>
 
     @GET(Constants.REPLIES)
     fun getReplies(@Query("topic_id") id: Int,
