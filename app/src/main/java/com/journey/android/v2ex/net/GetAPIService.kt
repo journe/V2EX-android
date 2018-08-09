@@ -43,7 +43,7 @@ interface GetAPIService {
     fun listLatestTopics(): Call<ArrayList<TopicsListItemBean>>
 
     @GET(Constants.TOPICS_SHOW)
-    fun getTopicsById(@Query("id") id: Int): Call<TopicsShowBean>
+    fun getTopicsById(@Query("id") id: Int): Call<ArrayList<TopicsShowBean>>
 
     @GET(Constants.TOPICS_SHOW)
     fun getTopicsByUser(@Query("username") username: String): Call<ArrayList<TopicsShowBean>>

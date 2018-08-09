@@ -10,10 +10,10 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
+import com.journey.android.v2ex.R
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import com.journey.android.v2ex.R
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -117,6 +117,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onListFragmentInteraction(id: Int) {
+//        TopicDetailJsActivity.start(id, this)
         TopicDetailActivity.start(id, this)
     }
 

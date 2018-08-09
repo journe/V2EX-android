@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/topic_detail_head_cl"
     android:layout_width="match_parent"
-    android:minWidth="360dp"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
+    android:minWidth="360dp"
     app:layout_scrollFlags="scroll">
 
     <TextView
@@ -62,15 +62,13 @@
         android:id="@+id/topic_detail_content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topic_detail_title_tv"
+        app:layout_constraintTop_toBottomOf="@+id/topic_detail_create_time_tv"
         app:layout_scrollFlags="scroll"
         tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了新人写博客，
         前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了新人写博客，前天刚把删除功能做出来，

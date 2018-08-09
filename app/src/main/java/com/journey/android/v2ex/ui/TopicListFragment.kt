@@ -2,41 +2,29 @@ package com.journey.android.v2ex.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
-import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.GetNodeTopicListTask
+import com.journey.android.v2ex.utils.Constants
+import com.journey.android.v2ex.utils.ImageLoader
+import com.journey.android.v2ex.utils.TimeUtil.calculateTime
+import com.zhy.adapter.recyclerview.CommonAdapter
+import com.zhy.adapter.recyclerview.base.ViewHolder
+import kotlinx.android.synthetic.main.fragment_topic_item_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlinx.android.synthetic.main.fragment_topic_item_list.*
-import com.zhy.adapter.recyclerview.CommonAdapter
-import com.zhy.adapter.recyclerview.base.ViewHolder
-import com.journey.android.v2ex.net.GetNodeTopicListTask
-import com.journey.android.v2ex.utils.ImageLoader
 
 
-/**
- * A fragment representing a list of Items.
- *
- *
- * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
- * interface.
- */
-/**
- * Mandatory empty constructor for the fragment manager to instantiate the
- * fragment (e.g. upon screen orientation changes).
- */
-class TopicListFragment : Fragment() {
+class TopicListFragment : BaseFragment() {
     private var mListener: OnListFragmentInteractionListener? = null
 
     private var mTopicType: Int = 0
@@ -112,7 +100,7 @@ class TopicListFragment : Fragment() {
         })
     }
 
-    fun getJsTopics() {
+    private fun getJsTopics() {
         val getListNodeTopicsTask = object : GetNodeTopicListTask() {
             override fun onStart() {
                 topic_list_refreshview.isRefreshing = true
@@ -138,60 +126,39 @@ class TopicListFragment : Fragment() {
                 holder?.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
                 holder?.setText(R.id.topic_replies_item_tv, t?.replies.toString())
                 if (t?.last_modified != 0) {
-                    t?.last_modified_str = caculateTime(t?.last_modified!!.toLong())
+                    t?.last_modified_str = calculateTime(t?.last_modified!!.toLong())
                 }
-                if (t?.last_modified_str.isNullOrEmpty()) {
+                if (t.last_modified_str.isNullOrEmpty()) {
                     holder?.setText(R.id.topic_reply_time_item_tv, "")
                 } else {
-                    holder?.setText(R.id.topic_reply_time_item_tv, t?.last_modified_str)
+                    holder?.setText(R.id.topic_reply_time_item_tv, t.last_modified_str)
                 }
 
-                ImageLoader.displayImage(holder!!.convertView, t?.member?.avatar_large,
+                ImageLoader.displayImage(holder!!.convertView, t.member?.avatar_large,
                         holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4)
 
                 holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
-                    MemberInfoActivity.start(t!!.member!!.id, holder.convertView.context)
+                    MemberInfoActivity.start(t.member!!.id, holder.convertView.context)
                 })
 
                 holder.convertView.setOnClickListener {
-                    mListener?.onListFragmentInteraction(t!!.id)
+                    mListener?.onListFragmentInteraction(t.id)
                 }
             }
         }
     }
 
-    private fun caculateTime(ts: Long): String {
-        val created = ts * 1000
-        val now = System.currentTimeMillis()
-        val difference = now - created
-        val text = if (difference >= 0 && difference <= DateUtils.MINUTE_IN_MILLIS)
-            "刚刚"
-        else
-            DateUtils.getRelativeTimeSpanString(created, now, DateUtils.MINUTE_IN_MILLIS,
-                    DateUtils.FORMAT_ABBREV_RELATIVE)
-        return text.toString()
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onListFragmentInteraction(id: Int)
     }
 
     companion object {
 
-        private val TOPIC_NODE = "TOPIC_NODE"
-        val TOPIC_NODE_LAST = 0
-        val TOPIC_NODE_HOT = 1
-        val TOPIC_NODE_TEST = 2
+        private const val TOPIC_NODE = "TOPIC_NODE"
+        const val TOPIC_NODE_LAST = 0
+        const val TOPIC_NODE_HOT = 1
+        const val TOPIC_NODE_TEST = 2
 
         fun newInstance(topicType: Int): TopicListFragment {
             val fragment = TopicListFragment()

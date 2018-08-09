@@ -11,14 +11,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.TopicCommentBean
-import com.journey.android.v2ex.bean.TopicDetailBean
-import com.journey.android.v2ex.net.GetTopicDetailTask
+import com.journey.android.v2ex.bean.api.RepliesShowBean
+import com.journey.android.v2ex.bean.api.TopicsShowBean
+import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
+import com.journey.android.v2ex.utils.TimeUtil.calculateTime
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class TopicDetailActivity : BaseActivity() {
@@ -42,31 +50,93 @@ class TopicDetailActivity : BaseActivity() {
         topic_detail_comments_list.addItemDecoration(DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL))
 
-        object : GetTopicDetailTask() {
-            override fun onStart() {
-            }
+        getTopicDetais()
 
-            override fun onFinish(topicDetailBean: TopicDetailBean) {
-                val headView = layoutInflater.inflate(R.layout.activity_topic_detail_head,
-                        null as ViewGroup?, false)
-                headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean.title
-                headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean.node
-                headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean.replyTime
-                topicDetailBean.content?.let {
-                    RichText.fromHtml(it)
-                            .into(headView.findViewById(R.id.topic_detail_content_tv))
-                }
-                ImageLoader.displayImage(view, topicDetailBean.memberBean.avatar,
-                        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
-
-                topicDetailBean.topicComments?.let {
-                    topic_detail_comments_list.visibility = View.VISIBLE
-                    setTopicHeadView(getTopicCommentItemAdapter(it), headView)
-                }
-            }
-
-        }.execute(topicId.toString())
+//        object : GetTopicDetailTask() {
+//            override fun onStart() {
+//            }
+//
+//            override fun onFinish(topicDetailBean: TopicDetailBean) {
+//                val headView = layoutInflater.inflate(R.layout.activity_topic_detail_head,
+//                        null as ViewGroup?, false)
+//                headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean.title
+//                headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean.node
+//                headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean.replyTime
+//                topicDetailBean.content?.let {
+//                    RichText.fromHtml(it)
+//                            .into(headView.findViewById(R.id.topic_detail_content_tv))
+//                }
+//                ImageLoader.displayImage(view, topicDetailBean.memberBean.avatar,
+//                        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
+//
+//                topicDetailBean.topicComments?.let {
+//                    topic_detail_comments_list.visibility = View.VISIBLE
+//                    setTopicHeadView(getTopicCommentItemAdapter(it), headView)
+//                }
+//            }
+//
+//        }.execute(topicId.toString())
     }
+
+    private fun getTopicDetais() {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        retrofit.create(GetAPIService::class.java).getTopicsById(topicId)
+                .enqueue(object : Callback<ArrayList<TopicsShowBean>> {
+                    override fun onResponse(call: Call<ArrayList<TopicsShowBean>>?,
+                                            response: Response<ArrayList<TopicsShowBean>>?) {
+                        val headView = layoutInflater.inflate(R.layout.activity_topic_detail_head,
+                                null as ViewGroup?, false)
+                        val topicDetailBean = response?.body()?.get(0)
+                        headView.findViewById<TextView>(R.id.topic_detail_title_tv).text = topicDetailBean?.title
+                        headView.findViewById<TextView>(R.id.topic_detail_node_tv).text = topicDetailBean?.node?.title
+                        headView.findViewById<TextView>(R.id.topic_detail_create_time_tv).text = topicDetailBean?.created?.toLong()?.let { calculateTime(it) }
+                        topicDetailBean?.content?.let {
+                            RichText.fromHtml(it)
+                                    .into(headView.findViewById(R.id.topic_detail_content_tv))
+                        }
+                        ImageLoader.displayImage(headView, topicDetailBean?.member?.avatar_large,
+                                headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4)
+
+                        getTopicReplies(headView)
+//                        topicDetailBean.topicComments?.let {
+//                            topic_detail_comments_list.visibility = View.VISIBLE
+//                            setTopicHeadView(getTopicCommentItemAdapter(it), headView)
+//                        }
+                    }
+
+                    override fun onFailure(call: Call<ArrayList<TopicsShowBean>>?, t: Throwable?) {
+                        print(t?.message)
+                    }
+                })
+    }
+
+    private fun getTopicReplies(headView: View) {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        retrofit.create(GetAPIService::class.java).getReplies(topicId, 1, 100)
+                .enqueue(object : Callback<ArrayList<RepliesShowBean>> {
+                    override fun onFailure(call: Call<ArrayList<RepliesShowBean>>?, t: Throwable?) {
+                    }
+
+                    override fun onResponse(call: Call<ArrayList<RepliesShowBean>>?, response: Response<ArrayList<RepliesShowBean>>?) {
+                        val replies = response?.body()
+                        replies?.let {
+                            topic_detail_comments_list.visibility = View.VISIBLE
+                            val mHeaderAndFooterWrapper = HeaderAndFooterWrapper<RecyclerView.Adapter<RecyclerView.ViewHolder>>(getTopicReplyItemAdapter(it))
+                            mHeaderAndFooterWrapper.addHeaderView(headView)
+                            topic_detail_comments_list.adapter = mHeaderAndFooterWrapper
+                            mHeaderAndFooterWrapper.notifyDataSetChanged()
+                        }
+                    }
+
+                })
+    }
+
 
     private fun setTopicHeadView(topicCommentItemAdapter: CommonAdapter<TopicCommentBean>,
                                  headView: View) {
@@ -74,6 +144,25 @@ class TopicDetailActivity : BaseActivity() {
         mHeaderAndFooterWrapper.addHeaderView(headView)
         topic_detail_comments_list.adapter = mHeaderAndFooterWrapper
         mHeaderAndFooterWrapper.notifyDataSetChanged()
+    }
+
+    private fun getTopicReplyItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
+        return object : CommonAdapter<RepliesShowBean>(this, R.layout.activity_topic_comment_item,
+                topicComments) {
+            override fun convert(holder: ViewHolder, t: RepliesShowBean, position: Int) {
+                RichText.fromHtml(t.content)
+                        .into(holder.getView(R.id.topic_comment_item_content_tv))
+                holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
+                holder.setText(R.id.topic_comment_item_floor_tv, position.toString())
+                holder.setText(R.id.topic_comment_item_reply_time_tv, t?.created?.toLong()?.let { calculateTime(it) })
+
+                ImageLoader.displayImage(holder.convertView, t.member.avatar_large,
+                        holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round, 4)
+                holder.convertView.setOnClickListener {
+                    //            mListener?.onListFragmentInteraction(holder.mItem!!.id)
+                }
+            }
+        }
     }
 
     private fun getTopicCommentItemAdapter(topicComments: ArrayList<TopicCommentBean>): CommonAdapter<TopicCommentBean> {
@@ -93,7 +182,6 @@ class TopicDetailActivity : BaseActivity() {
                 }
             }
         }
-
     }
 
     companion object {
