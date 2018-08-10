@@ -13,7 +13,6 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.net.GetAPIService
-import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
 import com.orhanobut.logger.Logger
@@ -25,8 +24,6 @@ import kotlinx.android.synthetic.main.activity_topic_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class TopicDetailActivity : BaseActivity() {
@@ -55,11 +52,7 @@ class TopicDetailActivity : BaseActivity() {
     }
 
     private fun getTopicDetais() {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        retrofit.create(GetAPIService::class.java).getTopicsById(topicId)
+        GetAPIService.getInstance().getTopicsById(topicId)
                 .enqueue(object : Callback<ArrayList<TopicsShowBean>> {
                     override fun onResponse(call: Call<ArrayList<TopicsShowBean>>?,
                                             response: Response<ArrayList<TopicsShowBean>>?) {
@@ -86,11 +79,7 @@ class TopicDetailActivity : BaseActivity() {
     }
 
     private fun getTopicReplies(headView: View) {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        retrofit.create(GetAPIService::class.java).getReplies(topicId, 1, 100)
+        GetAPIService.getInstance().getReplies(topicId, 1, 100)
                 .enqueue(object : Callback<ArrayList<RepliesShowBean>> {
                     override fun onFailure(call: Call<ArrayList<RepliesShowBean>>?, t: Throwable?) {
                     }
@@ -116,11 +105,11 @@ class TopicDetailActivity : BaseActivity() {
             override fun convert(holder: ViewHolder, t: RepliesShowBean, position: Int) {
                 RichText.fromHtml(t.content_rendered)
                         .into(holder.getView(R.id.topic_comment_item_content_tv))
-                holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
+                holder.setText(R.id.topic_comment_item_username_tv, t.member?.username)
                 holder.setText(R.id.topic_comment_item_floor_tv, position.toString())
-                holder.setText(R.id.topic_comment_item_reply_time_tv, t?.created?.toLong()?.let { calculateTime(it) })
+                holder.setText(R.id.topic_comment_item_reply_time_tv, calculateTime(t.created.toLong()))
 
-                ImageLoader.displayImage(holder.convertView, t.member.avatar_large,
+                ImageLoader.displayImage(holder.convertView, t.member?.avatar_large,
                         holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round, 4)
                 holder.convertView.setOnClickListener {
                     //            mListener?.onListFragmentInteraction(holder.mItem!!.id)

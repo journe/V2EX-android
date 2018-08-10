@@ -16,5 +16,5 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.journey.android.v2ex.ui.TopicListFragment"
-        tools:listitem="@layout/fragment_topic_item"/>
+        tools:listitem="@layout/fragment_topic_list_item"/>
 </android.support.v4.widget.SwipeRefreshLayout>

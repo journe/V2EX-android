@@ -11,17 +11,14 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.net.GetAPIService
 import com.journey.android.v2ex.net.GetNodeTopicListTask
-import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import kotlinx.android.synthetic.main.fragment_topic_item_list.*
+import kotlinx.android.synthetic.main.fragment_topic_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class TopicListFragment : BaseFragment() {
@@ -37,7 +34,7 @@ class TopicListFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_topic_item_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_topic_list, container, false)
         return view
     }
 
@@ -75,11 +72,7 @@ class TopicListFragment : BaseFragment() {
     }
 
     fun getApiTopics() {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        val service = retrofit.create(GetAPIService::class.java)
+        val service = GetAPIService.getInstance()
         val call = when (mTopicType) {
             TOPIC_NODE_LAST -> service.listLatestTopics()
             TOPIC_NODE_HOT -> service.listHotTopics()
@@ -120,7 +113,7 @@ class TopicListFragment : BaseFragment() {
 
     private fun genTopicListAdapter(topicListItem: ArrayList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
         return object : CommonAdapter<TopicsListItemBean>(activity,
-                R.layout.fragment_topic_item, topicListItem) {
+                R.layout.fragment_topic_list_item, topicListItem) {
             override fun convert(holder: ViewHolder?, t: TopicsListItemBean?, position: Int) {
                 holder?.setText(R.id.topic_title_item_tv, t?.title)
                 holder?.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")

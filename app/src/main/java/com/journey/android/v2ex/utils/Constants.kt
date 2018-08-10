@@ -19,6 +19,7 @@ object Constants {
     const val REPLIES = "/api/replies/show.json"
 
     const val MEMBERS = "/api/members/show.json"
+    const val SIGNIN = "/signin"
 
 }
 

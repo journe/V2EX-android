@@ -5,7 +5,9 @@ import com.journey.android.v2ex.utils.Constants
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -58,5 +60,12 @@ interface GetAPIService {
 
     @GET(Constants.MEMBERS)
     fun getMemberInfo(@Query("id") id: Int): Call<MembersShowBean>
+
+    @GET(Constants.SIGNIN)
+    fun login(): Call<String>
+
+    @FormUrlEncoded
+    @POST(Constants.SIGNIN)
+    fun postLogin(@Query("id") id: Int): Call<MembersShowBean>
 
 }
