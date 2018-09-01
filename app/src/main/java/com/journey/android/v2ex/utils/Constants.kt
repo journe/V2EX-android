@@ -1,5 +1,8 @@
 package com.journey.android.v2ex.utils
 
+import android.os.Build
+import com.journey.android.v2ex.BuildConfig
+
 /**
  * Created by journey on 2018/1/23.
  */
@@ -20,6 +23,9 @@ object Constants {
 
     const val MEMBERS = "/api/members/show.json"
     const val SIGNIN = "/signin"
+
+    const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
+    val USER_AGENT_ANDROID = String.format("%s (Android %s)", USER_AGENT, Build.VERSION.RELEASE)
 
 }
 
