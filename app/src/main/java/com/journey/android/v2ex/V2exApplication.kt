@@ -15,5 +15,9 @@ class V2exApplication : Application() {
         Logger.addLogAdapter(AndroidLogAdapter())
         RichText.initCacheDir(this)
     }
+    companion object {
+        @JvmStatic
+        lateinit var instance: V2exApplication
+    }
 }
 

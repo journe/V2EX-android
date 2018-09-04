@@ -48,10 +48,10 @@ class TopicDetailActivity : BaseActivity() {
         topic_detail_comments_list.addItemDecoration(DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL))
 
-        getTopicDetais()
+        getTopicDetails()
     }
 
-    private fun getTopicDetais() {
+    private fun getTopicDetails() {
         GetAPIService.getInstance().getTopicsById(topicId)
                 .enqueue(object : Callback<ArrayList<TopicsShowBean>> {
                     override fun onResponse(call: Call<ArrayList<TopicsShowBean>>?,

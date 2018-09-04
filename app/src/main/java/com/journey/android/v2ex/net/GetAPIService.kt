@@ -1,7 +1,12 @@
 package com.journey.android.v2ex.net
 
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.journey.android.v2ex.V2exApplication
 import com.journey.android.v2ex.bean.api.*
 import com.journey.android.v2ex.utils.Constants
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,16 +15,25 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
+
+
 /**
  * Created by journey on 2017/12/29.
  */
 interface GetAPIService {
 
     companion object {
+        private var cookieJar: PersistentCookieJar = PersistentCookieJar(SetCookieCache(),
+                SharedPrefsCookiePersistor(V2exApplication.instance))
+        private var okHttpClient = OkHttpClient.Builder()
+                .cookieJar(cookieJar)
+                .build()
         private val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()!!
+
         private val service = retrofit.create(GetAPIService::class.java)
         fun getInstance(): GetAPIService {
             return service

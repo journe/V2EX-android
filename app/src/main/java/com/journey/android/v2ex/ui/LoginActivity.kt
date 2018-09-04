@@ -10,6 +10,7 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.js.LoginBean
 import com.journey.android.v2ex.net.GetLoginTask
 import com.journey.android.v2ex.utils.ImageLoader
+import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity() {
@@ -29,8 +30,11 @@ class LoginActivity : BaseActivity() {
         })
 
         sign_in_button.setOnClickListener {
-//            attemptLogin()
-            ImageLoader.displayImage(this@LoginActivity, mLoginBean.genCaptcha(),
+            //            attemptLogin()
+            val temp = mLoginBean.genCaptcha()
+            RichText.fromHtml("<img style=\"-webkit-user-select:none; display:block; margin:auto;\" src=\"$temp\">")
+                    .into(login_captcha_tv)
+            ImageLoader.displayImage(this@LoginActivity, temp,
                     login_captcha_iv)
         }
         login_refresh.setOnRefreshListener {

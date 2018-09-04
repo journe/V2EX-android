@@ -36,9 +36,8 @@ class MemberInfoActivity : BaseActivity() {
         member_info_tagline_tv.text = mMembersShowBean.tagline
     }
 
-    fun getMemberInfo() {
-        val service = GetAPIService.getInstance()
-        val call = service.getMemberInfo(mUserId)
+    private fun getMemberInfo() {
+        val call = GetAPIService.getInstance().getMemberInfo(mUserId)
         call.enqueue(object : Callback<MembersShowBean> {
             override fun onFailure(call: Call<MembersShowBean>?, t: Throwable?) {
             }

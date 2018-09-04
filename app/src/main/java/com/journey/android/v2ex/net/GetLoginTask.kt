@@ -18,7 +18,8 @@ abstract class GetLoginTask : AsyncTask<Any, Any, LoginBean>() {
     override fun doInBackground(vararg params: Any?): LoginBean {
         val url = Constants.BASE_URL + Constants.SIGNIN
         val doc = Jsoup.connect(url)
-                .header("User-Agent", Constants.USER_AGENT_ANDROID).get()
+                .userAgent(Constants.USER_AGENT_ANDROID)
+                .get()
         Logger.d(doc.toString())
         return LoginParser.parseLoginBean(doc)
     }
