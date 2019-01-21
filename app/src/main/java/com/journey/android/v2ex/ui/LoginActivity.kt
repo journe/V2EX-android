@@ -40,20 +40,6 @@ class LoginActivity : BaseActivity() {
         login_refresh.setOnRefreshListener {
             doGetLoginTask()
         }
-//        val retrofit = Retrofit.Builder()
-//                .baseUrl(Constants.BASE_URL)
-//                .addConverterFactory(SimpleXmlConverterFactory.create())
-//                .build()!!
-//        val service = retrofit.create(GetAPIService::class.java)
-//        service.login().enqueue(object : Callback<String> {
-//            override fun onFailure(call: Call<String>?, t: Throwable?) {
-//                t?.printStackTrace()
-//            }
-//
-//            override fun onResponse(call: Call<String>?, response: Response<String>?) {
-//                Logger.d(response?.body().toString())
-//            }
-//        })
         doGetLoginTask()
     }
 

@@ -23,16 +23,16 @@ import retrofit2.http.Query
 interface GetAPIService {
 
     companion object {
-        private var cookieJar: PersistentCookieJar = PersistentCookieJar(SetCookieCache(),
+        var cookieJar: PersistentCookieJar = PersistentCookieJar(SetCookieCache(),
                 SharedPrefsCookiePersistor(V2exApplication.instance))
-        private var okHttpClient = OkHttpClient.Builder()
+        var okHttpClient = OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .build()
         private val retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()!!
+                .build()
 
         private val service = retrofit.create(GetAPIService::class.java)
         fun getInstance(): GetAPIService {

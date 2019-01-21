@@ -12,6 +12,7 @@ import com.zzhoujay.richtext.RichText
 class V2exApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        instance = this
         Logger.addLogAdapter(AndroidLogAdapter())
         RichText.initCacheDir(this)
     }
