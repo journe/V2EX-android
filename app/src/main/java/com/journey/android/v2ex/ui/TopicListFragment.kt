@@ -71,7 +71,7 @@ class TopicListFragment : BaseFragment() {
 //        }
     }
 
-    fun getApiTopics() {
+    private fun getApiTopics() {
         val service = GetAPIService.getInstance()
         val call = when (mTopicType) {
             TOPIC_NODE_LAST -> service.listLatestTopics()
