@@ -8,24 +8,24 @@ import com.journey.android.v2ex.BuildConfig
  */
 
 object Constants {
-    const val BASE_URL = "https://www.v2ex.com"
+  const val BASE_URL = "https://www.v2ex.com"
 
-    const val SITE_INFO = "/api/site/info.json"
-    const val SITE_STATS = "/api/site/stats.json"
+  const val SITE_INFO = "/api/site/info.json"
+  const val SITE_STATS = "/api/site/stats.json"
 
-    const val NODES_ALL = "/api/nodes/all.json"
-    const val NODES_SHOW = "/api/nodes/show.json"
+  const val NODES_ALL = "/api/nodes/all.json"
+  const val NODES_SHOW = "/api/nodes/show.json"
 
-    const val TOPICS_HOT = "/api/topics/hot.json"
-    const val TOPICS_LATEST = "/api/topics/latest.json"
-    const val TOPICS_SHOW = "/api/topics/show.json"
-    const val REPLIES = "/api/replies/show.json"
+  const val TOPICS_HOT = "/api/topics/hot.json"
+  const val TOPICS_LATEST = "/api/topics/latest.json"
+  const val TOPICS_SHOW = "/api/topics/show.json"
+  const val REPLIES = "/api/replies/show.json"
 
-    const val MEMBERS = "/api/members/show.json"
-    const val SIGNIN = "/signin"
+  const val MEMBERS = "/api/members/show.json"
+  const val SIGNIN = "/signin"
 
-    const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
-    val USER_AGENT_ANDROID = String.format("%s (Android %s)", USER_AGENT, Build.VERSION.RELEASE)
+  const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
+  val USER_AGENT_ANDROID = "$USER_AGENT (Android ${Build.VERSION.RELEASE})"
 
 }
 

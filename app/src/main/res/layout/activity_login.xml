@@ -5,112 +5,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity">
+    tools:context=".ui.LoginActivity"
+    >
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/appBarLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/login_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/login_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            />
-
-    </android.support.design.widget.AppBarLayout>
+  </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/login_refresh"
+  <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/login_refresh"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+      >
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-        <LinearLayout
+      <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <AutoCompleteTextView
+            android:id="@+id/login_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="@string/prompt_account"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text=""
+            />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+      </android.support.design.widget.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/login_account"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_account"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
+      <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
 
-            </android.support.design.widget.TextInputLayout>
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_password"
+            android:imeActionId="6"
+            android:imeActionLabel="@string/action_sign_in"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text=""
+            />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+      </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
+      <ImageView
+          android:id="@+id/login_captcha_iv"
+          android:layout_width="match_parent"
+          android:layout_height="88dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
+          android:scaleType="fitXY"
+          />
+      <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
 
-            </android.support.design.widget.TextInputLayout>
+        <EditText
+            android:id="@+id/login_captcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_captcha"
+            android:imeActionId="6"
+            android:imeActionLabel="@string/action_sign_in"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
+      </android.support.design.widget.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/login_captcha_iv"
-                android:layout_width="332dp"
-                android:layout_height="82dp"
-                android:scaleType="fitXY"/>
+      <Button
+          android:id="@+id/sign_in_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:text="@string/action_sign_in"
+          android:textStyle="bold"
+          style="?android:textAppearanceSmall"
+          />
 
-
-            <TextView
-                android:id="@+id/login_captcha_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/login_captcha"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_captcha"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:id="@+id/sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold"/>
-
-        </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+  </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>

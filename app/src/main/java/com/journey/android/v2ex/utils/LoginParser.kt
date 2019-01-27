@@ -35,13 +35,16 @@ object LoginParser {
    *      <tbody>
    *       <tr>
    *        <td width="60" align="right">用户名</td>
-   *        <td width="auto" align="left"><input type="text" class="sl" name="dedfb2ab7c721d6bff57da883204ee663fa327fb59780bd1fca503ed8d7d853e" value="" autocorrect="off" spellcheck="false" autocapitalize="off"></td>
+   *        <td width="auto" align="left">
+   *          <input type="text" class="sl" name="dedfb2ab7c721d6bff57da883204ee663fa327fb59780bd1fca503ed8d7d853e" value="" autocorrect="off" spellcheck="false" autocapitalize="off">
+   *        </td>
    *       </tr>
    *       <tr>
    *        <td width="60" align="right">密码</td>
-   *        <td width="auto" align="left"><input type="hidden" value="87092" name="once">
+   *        <td width="auto" align="left">
+   *          <input type="hidden" value="87092" name="once">
    *           <input type="password" class="sl" name="edeafdaf750137780da4cb650269058bb646e23e904127f5d496a0523c554430" value="" autocorrect="off" spellcheck="false" autocapitalize="off">
-   *       </td>
+   *        </td>
    *       </tr>
    *       <tr>
    *        <td colspan="2" width="auto" align="left">
@@ -49,7 +52,8 @@ object LoginParser {
    *       </tr>
    *       <tr>
    *        <td width="60" align="right">机器？</td>
-   *        <td width="auto" align="left"> <input type="text" class="sl" name="2961290093a747f27f05f739d567851bb77a45f8e0ffd6974e034970911afb2b" value="" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="请输入上图中的验证码"> </td>
+   *        <td width="auto" align="left">
+   *          <input type="text" class="sl" name="2961290093a747f27f05f739d567851bb77a45f8e0ffd6974e034970911afb2b" value="" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="请输入上图中的验证码"> </td>
    *       </tr>
    *      </tbody>
    *     </table>
@@ -84,10 +88,9 @@ object LoginParser {
     loginBean.once = content.select("input[name=once]")
         .attr("value")
         .toInt()
-    loginBean.captcha = content.select("input.sl")
-        .first()
+    loginBean.account = content.select("input[type=text]")[0]
         .attr("name")
-    loginBean.account = content.select("input[type=text]")
+    loginBean.captcha = content.select("input[type=text]")[1]
         .attr("name")
     loginBean.password = content.select("input[type=password]")
         .attr("name")
