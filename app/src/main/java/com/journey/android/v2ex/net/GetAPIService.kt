@@ -123,4 +123,7 @@ interface GetAPIService {
   @Streaming
   @GET
   fun getCaptcha(@Url url: String): Call<ResponseBody>
+
+  @GET(Constants.MORE)
+  fun getMore(): Call<ResponseBody>
 }

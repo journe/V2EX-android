@@ -2,7 +2,7 @@ package com.journey.android.v2ex.net
 
 import android.os.AsyncTask
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
-import com.journey.android.v2ex.utils.TopicListParser
+import com.journey.android.v2ex.utils.parser.TopicListParser
 import org.jsoup.Jsoup
 
 

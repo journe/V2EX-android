@@ -23,6 +23,7 @@ object Constants {
 
   const val MEMBERS = "/api/members/show.json"
   const val SIGNIN = "/signin"
+  const val MORE = "/more"
 
   const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
   val USER_AGENT_ANDROID = "$USER_AGENT (Android ${Build.VERSION.RELEASE})"

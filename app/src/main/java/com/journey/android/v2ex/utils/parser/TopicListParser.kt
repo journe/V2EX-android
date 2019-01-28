@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils
+package com.journey.android.v2ex.utils.parser
 
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.orhanobut.logger.Logger

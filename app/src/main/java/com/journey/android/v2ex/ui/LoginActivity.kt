@@ -8,8 +8,9 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.js.LoginBean
 import com.journey.android.v2ex.net.GetAPIService
 import com.journey.android.v2ex.net.HttpStatus
-import com.journey.android.v2ex.utils.LoginParser
 import com.journey.android.v2ex.utils.UserPreferenceUtil
+import com.journey.android.v2ex.utils.parser.LoginParser
+import com.journey.android.v2ex.utils.parser.MoreParser
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_login.login_account
 import kotlinx.android.synthetic.main.activity_login.login_captcha
@@ -191,8 +192,51 @@ class LoginActivity : BaseActivity() {
             if (response.code() != HttpStatus.SC_MOVED_TEMPORARILY) {
               Logger.d("code should not be " + response.code(), response)
             }
+            doGetMore()
           }
         })
+  }
+
+  private fun doGetMore() {
+    GetAPIService.getInstance()
+        .getMore()
+        .enqueue(object : Callback<ResponseBody> {
+          override fun onFailure(
+            call: Call<ResponseBody>,
+            t: Throwable
+          ) {
+            showProgress(false)
+            Logger.d(t.stackTrace)
+          }
+
+          override fun onResponse(
+            call: Call<ResponseBody>,
+            response: Response<ResponseBody>
+          ) {
+            showProgress(false)
+            val source = response.body()
+                ?.source()
+            source?.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
+            val buffer = source?.buffer()
+            var charset = Charset.defaultCharset()
+            val contentType = response.body()
+                ?.contentType()
+            if (contentType != null) {
+              try {
+                charset = contentType.charset(charset)
+              } catch (e: UnsupportedCharsetException) {
+                e.printStackTrace()
+              }
+
+            }
+            val rBody = buffer?.clone()
+                ?.readString(charset)
+            if (MoreParser.isLogin(Jsoup.parse(rBody))) {
+              finish()
+            }
+          }
+        })
+
   }
 
   private fun isEmailValid(email: String): Boolean {

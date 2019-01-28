@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils
+package com.journey.android.v2ex.utils.parser
 
 import com.journey.android.v2ex.bean.js.MemberBean
 import com.journey.android.v2ex.bean.js.TopicCommentBean
@@ -159,7 +159,8 @@ object TopicDetailParser {
                 .text()
 
         if (mainContent.size > 1) {
-            topicDetailBean.topicComments = parseComments(mainContent[1])
+            topicDetailBean.topicComments =
+              parseComments(mainContent[1])
         }
         return topicDetailBean
     }
