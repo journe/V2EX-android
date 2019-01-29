@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.js.LoginBean
+import com.journey.android.v2ex.bean.jsoup.LoginBean
+import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
+import com.journey.android.v2ex.bean.jsoup.parser.MoreParser
 import com.journey.android.v2ex.net.GetAPIService
 import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.utils.UserPreferenceUtil
-import com.journey.android.v2ex.utils.parser.LoginParser
-import com.journey.android.v2ex.utils.parser.MoreParser
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_login.login_account
 import kotlinx.android.synthetic.main.activity_login.login_captcha
@@ -23,8 +23,6 @@ import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.nio.charset.Charset
-import java.nio.charset.UnsupportedCharsetException
 import java.util.HashMap
 
 class LoginActivity : BaseActivity() {
@@ -67,24 +65,7 @@ class LoginActivity : BaseActivity() {
             response: Response<ResponseBody>
           ) {
             showProgress(false)
-            val source = response.body()
-                ?.source()
-            source?.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
-            val buffer = source?.buffer()
-            var charset = Charset.defaultCharset()
-            val contentType = response.body()
-                ?.contentType()
-            if (contentType != null) {
-              try {
-                charset = contentType.charset(charset)
-              } catch (e: UnsupportedCharsetException) {
-                e.printStackTrace()
-              }
-
-            }
-            val rBody = buffer?.clone()
-                ?.readString(charset)
-            val doc = Jsoup.parse(rBody)
+            val doc = Jsoup.parse(response.body()!!.string())
             mLoginBean = LoginParser.parseLoginBean(doc)
             getCaptcha(mLoginBean.genCaptcha())
           }
@@ -214,24 +195,7 @@ class LoginActivity : BaseActivity() {
             response: Response<ResponseBody>
           ) {
             showProgress(false)
-            val source = response.body()
-                ?.source()
-            source?.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
-            val buffer = source?.buffer()
-            var charset = Charset.defaultCharset()
-            val contentType = response.body()
-                ?.contentType()
-            if (contentType != null) {
-              try {
-                charset = contentType.charset(charset)
-              } catch (e: UnsupportedCharsetException) {
-                e.printStackTrace()
-              }
-
-            }
-            val rBody = buffer?.clone()
-                ?.readString(charset)
-            if (MoreParser.isLogin(Jsoup.parse(rBody))) {
+            if (MoreParser.isLogin(Jsoup.parse(response.body()!!.string()))) {
               finish()
             }
           }

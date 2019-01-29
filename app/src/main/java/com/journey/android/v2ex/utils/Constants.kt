@@ -20,12 +20,13 @@ object Constants {
   const val TOPICS_LATEST = "/api/topics/latest.json"
   const val TOPICS_SHOW = "/api/topics/show.json"
   const val REPLIES = "/api/replies/show.json"
-
   const val MEMBERS = "/api/members/show.json"
+
   const val SIGNIN = "/signin"
   const val MORE = "/more"
+  const val TAB = "$BASE_URL/?tab="
 
-  const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
+  private const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
   val USER_AGENT_ANDROID = "$USER_AGENT (Android ${Build.VERSION.RELEASE})"
 
 }

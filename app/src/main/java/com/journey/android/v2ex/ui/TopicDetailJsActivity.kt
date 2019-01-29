@@ -11,8 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.js.TopicCommentBean
-import com.journey.android.v2ex.bean.js.TopicDetailBean
+import com.journey.android.v2ex.bean.jsoup.TopicCommentBean
+import com.journey.android.v2ex.bean.jsoup.TopicDetailBean
 import com.journey.android.v2ex.net.GetTopicDetailTask
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter

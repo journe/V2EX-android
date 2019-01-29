@@ -126,4 +126,9 @@ interface GetAPIService {
 
   @GET(Constants.MORE)
   fun getMore(): Call<ResponseBody>
+
+  //"https://www.v2ex.com/?tab="
+  @GET
+  fun getTopicsByNode(@Url url: String): Call<ResponseBody>
+
 }

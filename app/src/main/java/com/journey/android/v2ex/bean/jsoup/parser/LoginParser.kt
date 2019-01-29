@@ -1,6 +1,6 @@
-package com.journey.android.v2ex.utils.parser
+package com.journey.android.v2ex.bean.jsoup.parser
 
-import com.journey.android.v2ex.bean.js.LoginBean
+import com.journey.android.v2ex.bean.jsoup.LoginBean
 import org.jsoup.nodes.Document
 
 /**

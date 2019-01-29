@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.bean.js
+package com.journey.android.v2ex.bean.jsoup
 
 import com.journey.android.v2ex.utils.Constants
 
