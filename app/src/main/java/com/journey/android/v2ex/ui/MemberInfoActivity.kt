@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.MembersShowBean
-import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import kotlinx.android.synthetic.main.activity_member_info.*
 import retrofit2.Call
@@ -37,7 +37,7 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun getMemberInfo() {
-        val call = GetAPIService.getInstance().getMemberInfo(mUserId)
+        val call = RetrofitService.getInstance().getMemberInfo(mUserId)
         call.enqueue(object : Callback<MembersShowBean> {
             override fun onFailure(call: Call<MembersShowBean>?, t: Throwable?) {
             }

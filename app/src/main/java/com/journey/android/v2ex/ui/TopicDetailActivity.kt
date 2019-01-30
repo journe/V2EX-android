@@ -12,7 +12,7 @@ import android.widget.TextView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
-import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
 import com.orhanobut.logger.Logger
@@ -52,7 +52,7 @@ class TopicDetailActivity : BaseActivity() {
     }
 
     private fun getTopicDetails() {
-        GetAPIService.getInstance().getTopicsById(topicId)
+        RetrofitService.getInstance().getTopicsById(topicId)
                 .enqueue(object : Callback<ArrayList<TopicsShowBean>> {
                     override fun onResponse(call: Call<ArrayList<TopicsShowBean>>?,
                                             response: Response<ArrayList<TopicsShowBean>>?) {
@@ -79,7 +79,7 @@ class TopicDetailActivity : BaseActivity() {
     }
 
     private fun getTopicReplies(headView: View) {
-        GetAPIService.getInstance().getReplies(topicId, 1, 100)
+        RetrofitService.getInstance().getReplies(topicId, 1, 100)
                 .enqueue(object : Callback<ArrayList<RepliesShowBean>> {
                     override fun onFailure(call: Call<ArrayList<RepliesShowBean>>?, t: Throwable?) {
                     }

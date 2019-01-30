@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by journey on 2017/12/29.
  */
-interface GetAPIService {
+interface RetrofitService {
 
   companion object {
     private val cookieJar =
@@ -69,8 +69,8 @@ interface GetAPIService {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val service = retrofit.create(GetAPIService::class.java)
-    fun getInstance(): GetAPIService {
+    private val service = retrofit.create(RetrofitService::class.java)
+    fun getInstance(): RetrofitService {
       return service
     }
   }

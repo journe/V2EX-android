@@ -10,11 +10,10 @@ import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
-import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
-import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
@@ -91,7 +90,7 @@ class TopicListFragment : BaseFragment() {
   }
 
   private fun getApiTopics() {
-    val service = GetAPIService.getInstance()
+    val service = RetrofitService.getInstance()
     val call = when (mTopicType) {
       TOPIC_NODE_LAST -> service.listLatestTopics()
       TOPIC_NODE_HOT -> service.listHotTopics()
@@ -117,7 +116,7 @@ class TopicListFragment : BaseFragment() {
   }
 
   private fun getJsTopics() {
-    GetAPIService.getInstance()
+    RetrofitService.getInstance()
         .getTopicsByNode(Constants.TAB + "apple")
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

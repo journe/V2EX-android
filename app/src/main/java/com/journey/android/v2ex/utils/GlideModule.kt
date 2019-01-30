@@ -11,7 +11,7 @@ import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory
 import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.RetrofitService
 import java.io.InputStream
 
 @GlideModule
@@ -39,7 +39,7 @@ class GlideModule : AppGlideModule() {
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(GetAPIService.okHttpClient))
+        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(RetrofitService.okHttpClient))
     }
 
     override fun isManifestParsingEnabled(): Boolean {

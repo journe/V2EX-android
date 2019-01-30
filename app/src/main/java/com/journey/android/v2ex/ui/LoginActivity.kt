@@ -8,7 +8,7 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.jsoup.LoginBean
 import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
 import com.journey.android.v2ex.bean.jsoup.parser.MoreParser
-import com.journey.android.v2ex.net.GetAPIService
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.utils.UserPreferenceUtil
 import com.orhanobut.logger.Logger
@@ -49,7 +49,7 @@ class LoginActivity : BaseActivity() {
 
   private fun doGetLoginTask() {
     showProgress(true)
-    GetAPIService.getInstance()
+    RetrofitService.getInstance()
         .getLogin()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -73,7 +73,7 @@ class LoginActivity : BaseActivity() {
   }
 
   private fun getCaptcha(captchaUrl: String) {
-    GetAPIService.getInstance()
+    RetrofitService.getInstance()
         .getCaptcha(captchaUrl)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -153,7 +153,7 @@ class LoginActivity : BaseActivity() {
     map[mLoginBean.captcha] = captcha
     map["once"] = mLoginBean.once.toString()
     map["next"] = "/mission"
-    GetAPIService.getInstance()
+    RetrofitService.getInstance()
         .postLogin(map)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -179,7 +179,7 @@ class LoginActivity : BaseActivity() {
   }
 
   private fun doGetMore() {
-    GetAPIService.getInstance()
+    RetrofitService.getInstance()
         .getMore()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

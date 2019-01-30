@@ -117,8 +117,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onListFragmentInteraction(id: Int) {
-//        TopicDetailJsActivity.start(id, this)
-        TopicDetailActivity.start(id, this)
+        TopicDetailJsActivity.start(id, this)
+//        TopicDetailActivity.start(id, this)
     }
 
     inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

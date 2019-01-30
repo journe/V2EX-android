@@ -32,7 +32,7 @@ class TopicDetailJsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_topic_detail)
         setSupportActionBar(topic_detail_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        topic_detail_toolbar.setNavigationOnClickListener({ finish() })
+        topic_detail_toolbar.setNavigationOnClickListener { finish() }
         topicId = intent.extras[TOPIC_ID] as Int
         initView(view)
     }
