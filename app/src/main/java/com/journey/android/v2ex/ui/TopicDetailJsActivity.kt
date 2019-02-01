@@ -21,7 +21,7 @@ import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_topic_detail.*
 
-class TopicDetailJsActivity : AppCompatActivity() {
+class TopicDetailJsActivity : BaseActivity() {
 
     private var topicId: Int = 0
 
