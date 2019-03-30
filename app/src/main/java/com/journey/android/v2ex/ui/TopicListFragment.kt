@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
@@ -117,7 +118,7 @@ class TopicListFragment : BaseFragment() {
 
   private fun getJsTopics() {
     RetrofitService.getInstance()
-        .getTopicsByNode(Constants.TAB + "apple")
+        .getTopicsByNode(Constants.TAB + "all")
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
             call: Call<ResponseBody>,
@@ -156,11 +157,9 @@ class TopicListFragment : BaseFragment() {
         if (t?.last_modified != 0) {
           t?.last_modified_str = calculateTime(t?.last_modified!!.toLong())
         }
-        if (t.last_modified_str.isNullOrEmpty()) {
-          holder?.setText(R.id.topic_reply_time_item_tv, "")
-        } else {
-          holder?.setText(R.id.topic_reply_time_item_tv, t.last_modified_str)
-        }
+
+        holder?.setText(R.id.topic_reply_time_item_tv, t.last_modified_str ?: "")
+        holder?.setVisible(R.id.topic_corner_star_iv, t.last_modified_str.equals("置顶"))
 
         ImageLoader.displayImage(
             holder!!.convertView, t.member?.avatar_large,
