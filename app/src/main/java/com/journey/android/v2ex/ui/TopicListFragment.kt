@@ -7,8 +7,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.R.layout
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
 import com.journey.android.v2ex.net.RetrofitService
@@ -28,12 +28,12 @@ import retrofit2.Response
 class TopicListFragment : BaseFragment() {
   private var mListener: OnListFragmentInteractionListener? = null
 
-  private var mTopicType: Int = 0
+  private var mNodeName: String = "all"
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (arguments != null) {
-      mTopicType = arguments!!.getInt(TOPIC_NODE)
+      mNodeName = arguments!!.getString(TOPIC_NODE)
     }
   }
 
@@ -42,8 +42,7 @@ class TopicListFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = inflater.inflate(R.layout.fragment_topic_list, container, false)
-    return view
+    return inflater.inflate(layout.fragment_topic_list, container, false)
   }
 
   override fun onViewCreated(
@@ -59,9 +58,9 @@ class TopicListFragment : BaseFragment() {
         )
     )
     topic_list_refreshview.isRefreshing = true
-    getTopics()
+    getJsTopicsByNodeName(mNodeName)
     topic_list_refreshview.setOnRefreshListener {
-      getTopics()
+      getJsTopicsByNodeName(mNodeName)
     }
   }
 
@@ -81,44 +80,39 @@ class TopicListFragment : BaseFragment() {
     mListener = null
   }
 
-  fun getTopics() {
-//        getApiTopics()
-    if (mTopicType == TOPIC_NODE_TEST) {
-      getJsTopics()
-    } else {
-      getApiTopics()
-    }
+  private fun getTopics() {
+      getJsTopicsByNodeName(mNodeName)
   }
 
   private fun getApiTopics() {
-    val service = RetrofitService.getInstance()
-    val call = when (mTopicType) {
-      TOPIC_NODE_LAST -> service.listLatestTopics()
-      TOPIC_NODE_HOT -> service.listHotTopics()
-      else -> service.getTopicsByNode(1)
-    }
-    call.enqueue(object : Callback<ArrayList<TopicsListItemBean>> {
-      override fun onResponse(
-        call: Call<ArrayList<TopicsListItemBean>>,
-        response: Response<ArrayList<TopicsListItemBean>>
-      ) {
-        topic_list_recycleview.adapter = genTopicListAdapter(response.body()!!)
-        topic_list_refreshview.isRefreshing = false
-      }
-
-      override fun onFailure(
-        call: Call<ArrayList<TopicsListItemBean>>,
-        t: Throwable
-      ) {
-        print(t.message)
-        topic_list_refreshview.isRefreshing = false
-      }
-    })
+//    val service = RetrofitService.getInstance()
+//    val call = when (mNodeName) {
+//      TOPIC_NODE_LAST -> service.listLatestTopics()
+//      TOPIC_NODE_HOT -> service.listHotTopics()
+//      else -> service.getTopicsByNode(1)
+//    }
+//    call.enqueue(object : Callback<ArrayList<TopicsListItemBean>> {
+//      override fun onResponse(
+//        call: Call<ArrayList<TopicsListItemBean>>,
+//        response: Response<ArrayList<TopicsListItemBean>>
+//      ) {
+//        topic_list_recycleview.adapter = genTopicListAdapter(response.body()!!)
+//        topic_list_refreshview.isRefreshing = false
+//      }
+//
+//      override fun onFailure(
+//        call: Call<ArrayList<TopicsListItemBean>>,
+//        t: Throwable
+//      ) {
+//        print(t.message)
+//        topic_list_refreshview.isRefreshing = false
+//      }
+//    })
   }
 
-  private fun getJsTopics() {
+  private fun getJsTopicsByNodeName(node:String) {
     RetrofitService.getInstance()
-        .getTopicsByNode(Constants.TAB + "all")
+        .getTopicsByNode(Constants.TAB + node)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
             call: Call<ResponseBody>,
@@ -184,14 +178,11 @@ class TopicListFragment : BaseFragment() {
   companion object {
 
     private const val TOPIC_NODE = "TOPIC_NODE"
-    const val TOPIC_NODE_LAST = 0
-    const val TOPIC_NODE_HOT = 1
-    const val TOPIC_NODE_TEST = 2
 
-    fun newInstance(topicType: Int): TopicListFragment {
+    fun newInstance(topicType: String): TopicListFragment {
       val fragment = TopicListFragment()
       val args = Bundle()
-      args.putInt(TOPIC_NODE, topicType)
+      args.putString(TOPIC_NODE, topicType)
       fragment.arguments = args
       return fragment
     }
