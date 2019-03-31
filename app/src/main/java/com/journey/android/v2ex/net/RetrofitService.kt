@@ -4,9 +4,8 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.journey.android.v2ex.V2exApplication
-import com.journey.android.v2ex.bean.api.MembersShowBean
-import com.journey.android.v2ex.bean.api.NodesAllBean
-import com.journey.android.v2ex.bean.api.NodesShowBean
+import com.journey.android.v2ex.bean.api.MemberBean
+import com.journey.android.v2ex.bean.api.NodeBean
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.SiteInfoBean
 import com.journey.android.v2ex.bean.api.SiteStatsBean
@@ -24,6 +23,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Streaming
 import retrofit2.http.Url
@@ -82,10 +82,10 @@ interface RetrofitService {
   fun getSiteStats(): Call<SiteStatsBean>
 
   @GET(Constants.NODES_ALL)
-  fun getNodesAll(): Call<ArrayList<NodesAllBean>>
+  fun getNodesAll(): Call<ArrayList<NodeBean>>
 
   @GET(Constants.NODES_SHOW)
-  fun getNodesShow(@Query("id") id: Int): Call<NodesShowBean>
+  fun getNodesShow(@Query("id") id: Int): Call<NodeBean>
 
   @GET(Constants.TOPICS_HOT)
   fun listHotTopics(): Call<ArrayList<TopicsListItemBean>>
@@ -110,7 +110,7 @@ interface RetrofitService {
   ): Call<ArrayList<RepliesShowBean>>
 
   @GET(Constants.MEMBERS)
-  fun getMemberInfo(@Query("id") id: Int): Call<MembersShowBean>
+  fun getMemberInfo(@Query("id") id: Int): Call<MemberBean>
 
   @GET(Constants.SIGNIN)
   fun getLogin(): Call<ResponseBody>
@@ -127,8 +127,13 @@ interface RetrofitService {
   @GET(Constants.MORE)
   fun getMore(): Call<ResponseBody>
 
-  //"https://www.v2ex.com/?tab="
   @GET
   fun getTopicsByNode(@Url url: String): Call<ResponseBody>
+
+  @GET("/t/{id}")
+  fun getTopicById(
+    @Path("id") id: Int,
+    @Query("p") page: Int
+  ): Call<ResponseBody>
 
 }

@@ -1,11 +1,9 @@
 package com.journey.android.v2ex.ui
 
 import android.os.Bundle
-import android.widget.ImageView
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.api.NodesAllBean
+import com.journey.android.v2ex.bean.api.NodeBean
 import com.journey.android.v2ex.net.RetrofitService
-import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import kotlinx.android.synthetic.main.activity_node_list.node_list_recycle
@@ -24,28 +22,28 @@ class NodeListActivity : BaseActivity() {
   private fun doGetNodes() {
     RetrofitService.getInstance()
         .getNodesAll()
-        .enqueue(object : Callback<ArrayList<NodesAllBean>> {
+        .enqueue(object : Callback<ArrayList<NodeBean>> {
           override fun onFailure(
-            call: Call<ArrayList<NodesAllBean>>,
+            call: Call<ArrayList<NodeBean>>,
             t: Throwable
           ) {
             t.printStackTrace()
           }
 
           override fun onResponse(
-            call: Call<ArrayList<NodesAllBean>>,
-            response: Response<ArrayList<NodesAllBean>>
+            call: Call<ArrayList<NodeBean>>,
+            response: Response<ArrayList<NodeBean>>
           ) {
             node_list_recycle.adapter = genAdapter(response.body()!!)
           }
         })
   }
 
-  private fun genAdapter(list: ArrayList<NodesAllBean>): CommonAdapter<NodesAllBean> {
-    return object : CommonAdapter<NodesAllBean>(this, R.layout.activity_node_list_item, list) {
+  private fun genAdapter(list: ArrayList<NodeBean>): CommonAdapter<NodeBean> {
+    return object : CommonAdapter<NodeBean>(this, R.layout.activity_node_list_item, list) {
       override fun convert(
         holder: ViewHolder?,
-        bean: NodesAllBean?,
+        bean: NodeBean?,
         position: Int
       ) {
         holder?.setText(R.id.node_item_tv, bean?.title)

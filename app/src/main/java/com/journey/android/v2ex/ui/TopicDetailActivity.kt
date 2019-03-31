@@ -32,10 +32,10 @@ import retrofit2.Response
 class TopicDetailActivity : BaseActivity() {
 
   private var topicId: Int = 0
-
+  private lateinit var view: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val view = this.layoutInflater.inflate(
+    view = this.layoutInflater.inflate(
         R.layout.activity_topic_detail,
         null as ViewGroup?, false
     )
@@ -45,10 +45,7 @@ class TopicDetailActivity : BaseActivity() {
     topic_detail_toolbar.setNavigationOnClickListener({ finish() })
     topicId = intent.extras[TOPIC_ID] as Int
     Logger.d(topicId)
-    initView(view)
-  }
 
-  private fun initView(view: View) {
     topic_detail_comments_list.layoutManager = LinearLayoutManager(this)
     topic_detail_comments_list.addItemDecoration(
         DividerItemDecoration(
@@ -56,7 +53,6 @@ class TopicDetailActivity : BaseActivity() {
             DividerItemDecoration.VERTICAL
         )
     )
-
     getTopicDetails()
   }
 
@@ -70,7 +66,7 @@ class TopicDetailActivity : BaseActivity() {
           ) {
             val headView = layoutInflater.inflate(
                 R.layout.activity_topic_detail_head,
-                null as ViewGroup?, false
+                view as ViewGroup, false
             )
             val topicDetailBean = response?.body()
                 ?.get(0)

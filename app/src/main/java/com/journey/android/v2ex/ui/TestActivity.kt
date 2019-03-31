@@ -14,7 +14,7 @@ class TestActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_test)
     button0.setOnClickListener {
-      TopicDetailActivity.start(550323, this)
+      TopicDetailActivity.start(550419, this)
     }
     button1.setOnClickListener {
       TopicDetailJsActivity.start(550323, this)

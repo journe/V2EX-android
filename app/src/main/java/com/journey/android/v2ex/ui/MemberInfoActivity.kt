@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.api.MembersShowBean
+import com.journey.android.v2ex.bean.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import kotlinx.android.synthetic.main.activity_member_info.*
@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class MemberInfoActivity : BaseActivity() {
 
-    private lateinit var mMembersShowBean: MembersShowBean
+    private lateinit var mMemberBean: MemberBean
     private var mUserId = 0
     private lateinit var mView: View
 
@@ -30,20 +30,20 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun initView() {
-        ImageLoader.displayImage(mView, mMembersShowBean.avatar_large,
+        ImageLoader.displayImage(mView, mMemberBean.avatar_large,
                 member_info_avatar_iv, R.mipmap.ic_launcher_round, 4)
-        member_info_username_tv.text = mMembersShowBean.username
-        member_info_tagline_tv.text = mMembersShowBean.tagline
+        member_info_username_tv.text = mMemberBean.username
+        member_info_tagline_tv.text = mMemberBean.tagline
     }
 
     private fun getMemberInfo() {
         val call = RetrofitService.getInstance().getMemberInfo(mUserId)
-        call.enqueue(object : Callback<MembersShowBean> {
-            override fun onFailure(call: Call<MembersShowBean>?, t: Throwable?) {
+        call.enqueue(object : Callback<MemberBean> {
+            override fun onFailure(call: Call<MemberBean>?, t: Throwable?) {
             }
 
-            override fun onResponse(call: Call<MembersShowBean>?, response: Response<MembersShowBean>?) {
-                mMembersShowBean = response!!.body()!!
+            override fun onResponse(call: Call<MemberBean>?, response: Response<MemberBean>?) {
+                mMemberBean = response!!.body()!!
                 initView()
             }
         })
@@ -53,7 +53,7 @@ class MemberInfoActivity : BaseActivity() {
     companion object {
         val MEMBERBEAN = "memberbean"
         val USERID = "userid"
-        fun start(memberDetail: MembersShowBean, context: Context) {
+        fun start(memberDetail: MemberBean, context: Context) {
             val intent = Intent(context, MemberInfoActivity::class.java)
 //            intent.putExtra(MEMBERBEAN, memberDetail)
             context.startActivity(intent)

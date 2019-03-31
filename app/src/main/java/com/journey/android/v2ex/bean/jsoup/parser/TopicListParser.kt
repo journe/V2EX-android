@@ -54,7 +54,7 @@ object TopicListParser {
         .select("tr")
     val topicListItem: ArrayList<TopicsListItemBean> = ArrayList()
     for (element in content) {
-      Logger.d(element.toString())
+//      Logger.d(element.toString())
       val td = element.select("td")
       val topicListBean = TopicsListItemBean()
       topicListBean.member!!.username = td[0].select("a")
