@@ -14,7 +14,6 @@ import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
-import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
@@ -86,7 +85,9 @@ class TopicDetailJsActivity : BaseActivity() {
             topicDetailBean.content?.let {
               RichText.fromHtml(it)
                   .clickable(true)
-                  .imageClick { imageUrls, position -> Logger.d(imageUrls?.get(position)) }
+                  .imageClick { imageUrls, position ->
+                    TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+                  }
                   .into(headView.findViewById(R.id.topic_detail_content_tv))
             }
             ImageLoader.displayImage(
