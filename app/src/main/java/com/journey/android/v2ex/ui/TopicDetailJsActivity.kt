@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
@@ -95,6 +96,23 @@ class TopicDetailJsActivity : BaseActivity() {
                 headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4
             )
 
+            //附言
+            val subtlesView = headView.findViewById<LinearLayout>(R.id.topic_subtles_ll)
+            topicDetailBean.subtles?.forEach {
+              val subtleItemView = layoutInflater.inflate(
+                  R.layout.activity_topic_detail_subtle_item,
+                  view as ViewGroup, false
+              )
+              subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
+                  .text = it.title
+              RichText.fromHtml(it.content)
+                  .imageClick { imageUrls, position ->
+                    TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+                  }
+                  .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
+              subtlesView.addView(subtleItemView)
+            }
+            //取得评论数据并添加head view
             TopicDetailParser.parseComments(doc)
                 ?.let {
                   topic_detail_comments_list.visibility = View.VISIBLE
@@ -128,12 +146,12 @@ class TopicDetailJsActivity : BaseActivity() {
       ) {
         RichText.fromHtml(t.content)
             .into(holder.getView(R.id.topic_comment_item_content_tv))
-        holder.setText(R.id.topic_comment_item_username_tv, t.member?.username)
+        holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
         holder.setText(R.id.topic_comment_item_floor_tv, t.floor.toString())
         holder.setText(R.id.topic_comment_item_reply_time_tv, t.created_str)
 
         ImageLoader.displayImage(
-            holder.convertView, t.member?.avatar_large,
+            holder.convertView, t.member.avatar_large,
             holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round, 4
         )
         holder.convertView.setOnClickListener {

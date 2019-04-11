@@ -79,7 +79,7 @@ object TopicDetailParser {
             subtle.content = element.selectFirst(".topic_content")
                 .html()
             Logger.d(subtle.title + subtle.content)
-//            topicDetailBean.subtles.add(subtle)
+            topicDetailBean.subtles!!.add(subtle)
           }
         }
 
