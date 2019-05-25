@@ -17,7 +17,11 @@ class TestActivity : AppCompatActivity() {
       TopicDetailActivity.start(550419, this)
     }
     button1.setOnClickListener {
-      TopicDetailJsActivity.start(550323, this)
+      //DIY 24 寸的 4K 显示器
+      TopicDetailJsActivity.start(567460, this)
+      //一个完全靠抄的项目-附言-评论数量
+//      TopicDetailJsActivity.start(550323, this)
+//      TopicDetailJsActivity.start(553960, this)
     }
     button2.setOnClickListener {
       startActivity(Intent(this, MainActivity::class.java))

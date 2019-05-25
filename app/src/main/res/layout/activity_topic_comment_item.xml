@@ -16,6 +16,7 @@
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="calm"/>
@@ -52,14 +53,15 @@
     <TextView
         android:id="@+id/topic_comment_item_floor_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/shape_backround_reply_count"
+        android:background="@drawable/shape_backround_floor_count"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/floor_text"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="115"/>

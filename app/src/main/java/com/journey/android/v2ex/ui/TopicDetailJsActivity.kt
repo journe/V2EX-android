@@ -14,11 +14,14 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.utils.BarUtils
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
+import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
+import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_cl
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_toolbar
 import okhttp3.ResponseBody
@@ -52,7 +55,7 @@ class TopicDetailJsActivity : BaseActivity() {
             DividerItemDecoration.VERTICAL
         )
     )
-
+    topic_detail_cl.setPadding(0, BarUtils.getStatusBarHeight(baseContext), 0, 0)
     getJsTopicById(topicId)
   }
 
@@ -106,6 +109,7 @@ class TopicDetailJsActivity : BaseActivity() {
               subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
                   .text = it.title
               RichText.fromHtml(it.content)
+                  .clickable(true)
                   .imageClick { imageUrls, position ->
                     TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
                   }
@@ -130,6 +134,12 @@ class TopicDetailJsActivity : BaseActivity() {
     val mHeaderAndFooterWrapper =
       HeaderAndFooterWrapper<RecyclerView.Adapter<RecyclerView.ViewHolder>>(topicCommentItemAdapter)
     mHeaderAndFooterWrapper.addHeaderView(headView)
+    mHeaderAndFooterWrapper.addFootView(
+        layoutInflater.inflate(
+            R.layout.activity_topic_detail_foot,
+            view as ViewGroup, false
+        )
+    )
     topic_detail_comments_list.adapter = mHeaderAndFooterWrapper
     mHeaderAndFooterWrapper.notifyDataSetChanged()
   }
@@ -145,6 +155,12 @@ class TopicDetailJsActivity : BaseActivity() {
         position: Int
       ) {
         RichText.fromHtml(t.content)
+            .clickable(true)
+            .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
+            .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
+            .imageClick { imageUrls, position ->
+              TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+            }
             .into(holder.getView(R.id.topic_comment_item_content_tv))
         holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
         holder.setText(R.id.topic_comment_item_floor_tv, t.floor.toString())

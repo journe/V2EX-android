@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.R.layout
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
 import com.journey.android.v2ex.net.RetrofitService
@@ -42,7 +41,7 @@ class TopicListFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(layout.fragment_topic_list, container, false)
+    return inflater.inflate(R.layout.fragment_topic_list, container, false)
   }
 
   override fun onViewCreated(

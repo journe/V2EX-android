@@ -28,7 +28,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@Deprecated("This api lack content_rendered")
 class TopicDetailActivity : BaseActivity() {
 
   private var topicId: Int = 0

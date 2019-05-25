@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/topic_detail_cl"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.journey.android.v2ex.ui.TopicDetailActivity">
+    tools:context="com.journey.android.v2ex.ui.TopicDetailJsActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,6 +25,7 @@
         android:id="@+id/topic_detail_comments_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/activity_topic_comment_item"

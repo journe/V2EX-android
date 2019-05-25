@@ -6,7 +6,7 @@
     android:id="@+id/topic_detail_head_cl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/subtles_bg"
     android:minWidth="360dp"
     app:layout_scrollFlags="scroll">
 
