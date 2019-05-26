@@ -66,6 +66,7 @@
     </activity>
     <activity android:name=".ui.NodeListActivity">
     </activity>
+    <activity android:name=".ui.SettingsActivity"></activity>
   </application>
 
 </manifest>

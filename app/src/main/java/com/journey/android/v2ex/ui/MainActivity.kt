@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.model.Tab
+import com.journey.android.v2ex.utils.PrefStore
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -46,22 +49,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   private fun initViewPager() {
     val myPagerAdapter = MainPagerAdapter(supportFragmentManager)
-    val fragments = ArrayList<Fragment>()
-    fragments.add(TopicListFragment.newInstance("all"))
-    fragments.add(TopicListFragment.newInstance("hot"))
-    fragments.add(TopicListFragment.newInstance("tech"))
-    myPagerAdapter.setFragments(fragments)
     main_viewpager.adapter = myPagerAdapter
-    main_tab.addTab(main_tab.newTab())
     main_tab.setupWithViewPager(main_viewpager)
-
-    // TabLayout指示器添加文本
-    main_tab.getTabAt(0)
-        ?.text = "全部"
-    main_tab.getTabAt(1)
-        ?.text = "热门"
-    main_tab.getTabAt(2)
-        ?.text = "技术"
   }
 
   override fun onBackPressed() {
@@ -103,10 +92,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       R.id.nav_manage -> {
 
       }
-      R.id.nav_share -> {
-
+      R.id.drawer_settings -> {
+        startActivity(Intent(this, SettingsActivity::class.java))
       }
-      R.id.nav_send -> {
+      R.id.drawer_update -> {
 
       }
     }
@@ -127,18 +116,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private var mFragmentList: List<Fragment>? = null
-
-    fun setFragments(fragments: ArrayList<Fragment>) {
-      mFragmentList = fragments
-    }
+    private val mTabs: List<Tab> = PrefStore.getInstance()
+        .tabsToShow
 
     override fun getItem(position: Int): Fragment {
-      return mFragmentList!![position]
+      return TopicListFragment.newInstance(mTabs[position].key)
     }
 
     override fun getCount(): Int {
-      return mFragmentList!!.size
+      return mTabs.size
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+      return mTabs[position].title
     }
   }
 }
