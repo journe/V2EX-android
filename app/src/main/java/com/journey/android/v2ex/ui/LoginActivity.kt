@@ -8,15 +8,16 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.jsoup.LoginBean
 import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
 import com.journey.android.v2ex.bean.jsoup.parser.MoreParser
-import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.HttpStatus
-import com.journey.android.v2ex.utils.UserPreferenceUtil
+import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.utils.PrefStore
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_login.login_account
 import kotlinx.android.synthetic.main.activity_login.login_captcha
 import kotlinx.android.synthetic.main.activity_login.login_captcha_iv
 import kotlinx.android.synthetic.main.activity_login.login_password
 import kotlinx.android.synthetic.main.activity_login.login_refresh
+import kotlinx.android.synthetic.main.activity_login.login_toolbar
 import kotlinx.android.synthetic.main.activity_login.sign_in_button
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
@@ -33,6 +34,10 @@ class LoginActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
 
+    setSupportActionBar(login_toolbar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    login_toolbar.setNavigationOnClickListener { finish() }
+
     sign_in_button.setOnClickListener {
       attemptLogin()
     }
@@ -43,8 +48,8 @@ class LoginActivity : BaseActivity() {
       doGetLoginTask()
     }
     doGetLoginTask()
-    login_account.setText(UserPreferenceUtil.getValue(UserPreferenceUtil.NAME, ""), false)
-    login_password.setText(UserPreferenceUtil.getValue(UserPreferenceUtil.PASS, ""))
+    login_account.setText(PrefStore.instance.userName)
+    login_password.setText(PrefStore.instance.userPass)
   }
 
   private fun doGetLoginTask() {
@@ -145,8 +150,8 @@ class LoginActivity : BaseActivity() {
     captcha: String
   ) {
     showProgress(true)
-    UserPreferenceUtil.setValue(UserPreferenceUtil.NAME, emailStr)
-    UserPreferenceUtil.setValue(UserPreferenceUtil.PASS, passwordStr)
+    PrefStore.instance.userName = emailStr
+    PrefStore.instance.userPass = passwordStr
     val map = HashMap<String, String>()
     map[mLoginBean.account] = emailStr
     map[mLoginBean.password] = passwordStr

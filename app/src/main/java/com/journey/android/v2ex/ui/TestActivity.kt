@@ -7,6 +7,7 @@ import com.journey.android.v2ex.R
 import kotlinx.android.synthetic.main.activity_test.button0
 import kotlinx.android.synthetic.main.activity_test.button1
 import kotlinx.android.synthetic.main.activity_test.button2
+import kotlinx.android.synthetic.main.activity_test.button3
 
 class TestActivity : AppCompatActivity() {
 
@@ -25,6 +26,9 @@ class TestActivity : AppCompatActivity() {
     }
     button2.setOnClickListener {
       startActivity(Intent(this, MainActivity::class.java))
+    }
+    button3.setOnClickListener {
+      startActivity(Intent(this, LoginActivity::class.java))
     }
   }
 }

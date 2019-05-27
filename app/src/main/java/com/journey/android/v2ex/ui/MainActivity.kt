@@ -116,7 +116,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private val mTabs: List<Tab> = PrefStore.getInstance()
+    private val mTabs: List<Tab> = PrefStore.instance
         .tabsToShow
 
     override fun getItem(position: Int): Fragment {
