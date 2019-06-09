@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_test.button0
 import kotlinx.android.synthetic.main.activity_test.button1
 import kotlinx.android.synthetic.main.activity_test.button2
 import kotlinx.android.synthetic.main.activity_test.button3
+import kotlinx.android.synthetic.main.activity_test.button4
 
 class TestActivity : AppCompatActivity() {
 
@@ -29,6 +30,9 @@ class TestActivity : AppCompatActivity() {
     }
     button3.setOnClickListener {
       startActivity(Intent(this, LoginActivity::class.java))
+    }
+    button4.setOnClickListener {
+      startActivity(Intent(this, BalanceActivity::class.java))
     }
   }
 }

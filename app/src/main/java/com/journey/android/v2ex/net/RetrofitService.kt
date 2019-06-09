@@ -38,7 +38,7 @@ interface RetrofitService {
   companion object {
     private val cookieJar =
       PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(V2exApplication.instance))
-    val okHttpClient = OkHttpClient.Builder()
+    val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .apply {
           cache(buildCache())
           connectTimeout(10, TimeUnit.SECONDS)
@@ -126,6 +126,9 @@ interface RetrofitService {
 
   @GET(Constants.MORE)
   fun getMore(): Call<ResponseBody>
+
+  @GET(Constants.BALANCE)
+  fun getBalance(): Call<ResponseBody>
 
   @GET
   fun getTopicsByNode(@Url url: String): Call<ResponseBody>

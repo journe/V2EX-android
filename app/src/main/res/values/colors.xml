@@ -9,4 +9,5 @@
   <color name="black_overlay">#66000000</color>
   <color name="subtles_bg">#fffffa</color>
   <color name="floor_text">#cccccc</color>
+  <color name="balance_add">#0aa31c</color>
 </resources>

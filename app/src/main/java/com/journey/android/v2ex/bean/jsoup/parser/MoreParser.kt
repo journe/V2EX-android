@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document
 object MoreParser {
 
   /**
+   * 登陆状态下
    * <div id="Top">
    *  <div class="content">
    *  <div style="padding-top: 6px;">
@@ -46,6 +47,7 @@ object MoreParser {
    *  </div>
    * </div>
    *
+   * 未登录状态
    * <div id="Top">
    *  <div class="content">
    *  <div style="padding-top: 6px;">
@@ -65,33 +67,6 @@ object MoreParser {
    *  </div>
    *  </div>
    * </div>
-   *
-   *<div id="Wrapper">
-   *  <div class="content">
-   *
-   *  <div class="box">
-   *  <div class="inner">搜索全站主题
-   *  <div class="sep5"></div>
-   *  <form onsubmit="dispatch();">
-   *  <input type="text" class="sl" name="q" id="q" style="width: 280px; display: block; margin-left: 2px; border: 1px solid #ddd; box-shadow: none;" data-cip-id="q">
-   *  <div class="sep5"></div>
-   *  <input type="submit" value="提交" class="super normal button">
-   *  </form>
-   *  </div>
-   *  </div>
-   *
-   *  <div class="sep5"></div>
-   *
-   *  <div class="box">
-   *  <div class="inner">
-   *  &nbsp; <li class="fa fa-angle-right"></li> &nbsp; <a href="/ip">IP 地址查询工具</a>
-   *  <div class="sep5"></div>
-   *  &nbsp; <li class="fa fa-angle-right"></li> &nbsp; <a href="#;" onclick="if (confirm('确定要从 V2EX 登出？')) { location.href= '/signout?once=82080'; }">登出</a>
-   *  </div>
-   *  </div>
-   *
-   *  </div>
-   *</div>
    */
 
   @JvmStatic
