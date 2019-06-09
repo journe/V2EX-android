@@ -3,9 +3,9 @@ package com.journey.android.v2ex.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -45,7 +45,8 @@ class TopicDetailActivity : BaseActivity() {
     topicId = intent.extras[TOPIC_ID] as Int
     Logger.d(topicId)
 
-    topic_detail_comments_list.layoutManager = LinearLayoutManager(this)
+    topic_detail_comments_list.layoutManager =
+      LinearLayoutManager(this)
     topic_detail_comments_list.addItemDecoration(
         DividerItemDecoration(
             this,

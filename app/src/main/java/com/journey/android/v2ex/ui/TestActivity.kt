@@ -1,7 +1,7 @@
 package com.journey.android.v2ex.ui
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.journey.android.v2ex.R
 import kotlinx.android.synthetic.main.activity_test.button0

@@ -37,15 +37,6 @@ class SettingsActivity : BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    mFragment.onActivityResult(requestCode, resultCode, data)
-  }
-
   class PrefsFragment : PreferenceFragment(), Preference.OnPreferenceClickListener {
     private var isLogin: Boolean = false
     private lateinit var mNotificationsPref: SwitchPreference

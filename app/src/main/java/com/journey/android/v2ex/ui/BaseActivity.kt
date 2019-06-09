@@ -1,7 +1,7 @@
 package com.journey.android.v2ex.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Created by journey on 2018/1/26.
