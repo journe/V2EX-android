@@ -16,12 +16,6 @@
       android:theme="@style/AppTheme">
     <activity android:name=".ui.BalanceActivity">
     </activity>
-    <activity
-        android:name=".ui.TopicImageActivity"
-        android:configChanges="orientation|keyboardHidden|screenSize"
-        android:label="@string/title_activity_topic_image"
-        android:theme="@style/FullscreenTheme">
-    </activity>
     <activity android:name=".ui.TestActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -33,40 +27,15 @@
     <activity android:name=".ui.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-        <action android:name="android.intent.action.VIEW"/>
 
+        <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.LAUNCHER"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-
-        <data
-            android:host="@string/master_host"
-            android:pathPrefix="@string/node_url_prefix"
-            android:scheme="@string/scheme_http"/>
-        <data
-            android:host="@string/master_host"
-            android:pathPrefix="@string/node_url_prefix"
-            android:scheme="@string/scheme_https"/>
-        <data
-            android:host="@string/www_host"
-            android:pathPrefix="@string/node_url_prefix"
-            android:scheme="@string/scheme_http"/>
-        <data
-            android:host="@string/www_host"
-            android:pathPrefix="@string/node_url_prefix"
-            android:scheme="@string/scheme_https"/>
       </intent-filter>
+      <nav-graph android:value="@navigation/navigation_graph_main"/>
     </activity>
     <activity android:name=".ui.TopicDetailActivity">
     </activity>
     <activity android:name=".ui.MemberInfoActivity">
-    </activity>
-    <activity
-        android:name=".ui.LoginActivity"
-        android:label="@string/title_activity_login">
-    </activity>
-    <activity android:name=".ui.TopicDetailJsActivity">
-    </activity>
-    <activity android:name=".ui.NodeListActivity">
     </activity>
     <activity android:name=".ui.SettingsActivity"/>
   </application>

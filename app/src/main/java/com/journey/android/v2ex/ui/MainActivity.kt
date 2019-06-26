@@ -1,64 +1,46 @@
 package com.journey.android.v2ex.ui
 
-import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.model.Tab
-import com.journey.android.v2ex.utils.PrefStore
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.activity_main.drawer_layout
+import kotlinx.android.synthetic.main.activity_main.nav_view
+import kotlinx.android.synthetic.main.activity_main.toolbar
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
-    TopicListFragment.OnListFragmentInteractionListener {
+class MainActivity : BaseActivity() {
+  private lateinit var appBarConfiguration: AppBarConfiguration
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbar)
 
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
+    val host: NavHostFragment = supportFragmentManager
+        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+    val navController = host.navController
 
-    val toggle = ActionBarDrawerToggle(
-        this, drawer_layout, toolbar, R.string.navigation_drawer_open,
-        R.string.navigation_drawer_close
+    appBarConfiguration = AppBarConfiguration(
+        setOf(R.id.main_dest, R.id.nodeList_dest),//顶层导航设置
+        drawer_layout
     )
-    drawer_layout.addDrawerListener(toggle)
-    toggle.syncState()
-
-    nav_view.setNavigationItemSelectedListener(this)
+    setupActionBarWithNavController(navController, appBarConfiguration)
+    nav_view?.setupWithNavController(navController)
 
     nav_view.getHeaderView(0)
         .setOnClickListener {
-          startActivity(Intent(this, LoginActivity::class.java))
+          findNavController(R.id.nav_host_fragment).navigate(R.id.login_dest)
+          drawer_layout.closeDrawers()
         }
 
-    initViewPager()
-  }
-
-  private fun initViewPager() {
-    val myPagerAdapter = MainPagerAdapter(supportFragmentManager)
-    main_viewpager.adapter = myPagerAdapter
-    main_tab.setupWithViewPager(main_viewpager)
-  }
-
-  override fun onBackPressed() {
-    if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-      drawer_layout.closeDrawer(GravityCompat.START)
-    } else {
-      super.onBackPressed()
-    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,31 +59,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
   }
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    // Handle navigation view item clicks here.
-    when (item.itemId) {
-      R.id.nav_nodes -> {
-        startActivity(Intent(this, NodeListActivity::class.java))
-      }
-      R.id.nav_gallery -> {
-
-      }
-      R.id.nav_slideshow -> {
-
-      }
-      R.id.nav_manage -> {
-
-      }
-      R.id.drawer_settings -> {
-        startActivity(Intent(this, SettingsActivity::class.java))
-      }
-      R.id.drawer_update -> {
-
-      }
-    }
-
-    drawer_layout.closeDrawer(GravityCompat.START)
-    return true
+  override fun onSupportNavigateUp(): Boolean {
+    return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
   }
 
   override fun onDestroy() {
@@ -109,26 +68,4 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     RichText.recycle()
   }
 
-  override fun onListFragmentInteraction(id: Int) {
-    TopicDetailJsActivity.start(id, this)
-//        TopicDetailActivity.start(id, this)
-  }
-
-  inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
-    private val mTabs: List<Tab> = PrefStore.instance
-        .tabsToShow
-
-    override fun getItem(position: Int): Fragment {
-      return TopicListFragment.newInstance(mTabs[position].key)
-    }
-
-    override fun getCount(): Int {
-      return mTabs.size
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-      return mTabs[position].title
-    }
-  }
 }

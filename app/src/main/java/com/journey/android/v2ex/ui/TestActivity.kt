@@ -16,11 +16,11 @@ class TestActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_test)
     button0.setOnClickListener {
-      TopicDetailActivity.start(550419, this)
+//      TopicDetailActivity.start(550419, this)
     }
     button1.setOnClickListener {
       //DIY 24 寸的 4K 显示器
-      TopicDetailJsActivity.start(567460, this)
+//      TopicDetailJsActivity.start(567460, this)
       //一个完全靠抄的项目-附言-评论数量
 //      TopicDetailJsActivity.start(550323, this)
 //      TopicDetailJsActivity.start(553960, this)
@@ -29,7 +29,7 @@ class TestActivity : AppCompatActivity() {
       startActivity(Intent(this, MainActivity::class.java))
     }
     button3.setOnClickListener {
-      startActivity(Intent(this, LoginActivity::class.java))
+      //      startActivity(Intent(this, LoginActivity::class.java))
     }
     button4.setOnClickListener {
       startActivity(Intent(this, BalanceActivity::class.java))

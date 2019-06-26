@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/login_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <AutoCompleteTextView
+          android:id="@+id/login_account"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/prompt_account"
+          android:inputType="textEmailAddress"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text=""
+          />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <EditText
+          android:id="@+id/login_password"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/prompt_password"
+          android:imeActionId="6"
+          android:imeActionLabel="@string/action_sign_in"
+          android:imeOptions="actionUnspecified"
+          android:inputType="textPassword"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text=""
+          />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/login_captcha_iv"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitXY"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <EditText
+          android:id="@+id/login_captcha"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/prompt_captcha"
+          android:imeActionId="6"
+          android:imeActionLabel="@string/action_sign_in"
+          android:imeOptions="actionUnspecified"
+          android:inputType="textPassword"
+          android:maxLines="1"
+          android:singleLine="true"
+          />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/action_sign_in"
+        android:textStyle="bold"
+        style="?android:textAppearanceSmall"
+        />
+
+  </LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

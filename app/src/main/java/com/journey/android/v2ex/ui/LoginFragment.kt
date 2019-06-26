@@ -3,7 +3,9 @@ package com.journey.android.v2ex.ui
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.jsoup.LoginBean
 import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
@@ -12,13 +14,12 @@ import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.PrefStore
 import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.activity_login.login_account
-import kotlinx.android.synthetic.main.activity_login.login_captcha
-import kotlinx.android.synthetic.main.activity_login.login_captcha_iv
-import kotlinx.android.synthetic.main.activity_login.login_password
-import kotlinx.android.synthetic.main.activity_login.login_refresh
-import kotlinx.android.synthetic.main.activity_login.login_toolbar
-import kotlinx.android.synthetic.main.activity_login.sign_in_button
+import kotlinx.android.synthetic.main.fragment_login.login_account
+import kotlinx.android.synthetic.main.fragment_login.login_captcha
+import kotlinx.android.synthetic.main.fragment_login.login_captcha_iv
+import kotlinx.android.synthetic.main.fragment_login.login_password
+import kotlinx.android.synthetic.main.fragment_login.login_refresh
+import kotlinx.android.synthetic.main.fragment_login.sign_in_button
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import retrofit2.Call
@@ -26,18 +27,29 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.HashMap
 
-class LoginActivity : BaseActivity() {
+class LoginFragment : BaseFragment() {
 
   private lateinit var mLoginBean: LoginBean
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_login)
 
-    setSupportActionBar(login_toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    login_toolbar.setNavigationOnClickListener { finish() }
+  }
 
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return inflater.inflate(R.layout.fragment_login, container, false)
+
+  }
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
     sign_in_button.setOnClickListener {
       attemptLogin()
     }
@@ -201,7 +213,7 @@ class LoginActivity : BaseActivity() {
           ) {
             showProgress(false)
             if (MoreParser.isLogin(Jsoup.parse(response.body()!!.string()))) {
-              finish()
+//              finish()
             }
           }
         })

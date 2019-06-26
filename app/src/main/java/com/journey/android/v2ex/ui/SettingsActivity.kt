@@ -167,7 +167,7 @@ class SettingsActivity : BaseActivity() {
     override fun onPreferenceClick(preference: Preference): Boolean {
       when (preference.key) {
         PREF_KEY_LOGIN -> {
-          startActivityForResult(Intent(activity, LoginActivity::class.java), 0)
+//          startActivityForResult(Intent(activity, LoginActivity::class.java), 0)
           return true
         }
         PREF_KEY_LOGOUT -> {

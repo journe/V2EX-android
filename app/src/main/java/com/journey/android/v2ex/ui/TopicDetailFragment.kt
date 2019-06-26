@@ -1,62 +1,58 @@
 package com.journey.android.v2ex.ui
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitService
-import com.journey.android.v2ex.utils.BarUtils
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
-import com.zhy.adapter.recyclerview.base.ViewHolder
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_cl
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
-import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_toolbar
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TopicDetailJsActivity : BaseActivity() {
-
+class TopicDetailFragment : BaseFragment() {
   private var topicId: Int = 0
 
-  private lateinit var view: View
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return inflater.inflate(R.layout.activity_topic_detail, container, false)
+  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    view = this.layoutInflater.inflate(
-        R.layout.activity_topic_detail,
-        null as ViewGroup?, false
-    )
-    setContentView(R.layout.activity_topic_detail)
-    setSupportActionBar(topic_detail_toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    topic_detail_toolbar.setNavigationOnClickListener { finish() }
-    topicId = intent.extras[TOPIC_ID] as Int
-
-    topic_detail_comments_list.layoutManager =
-      LinearLayoutManager(this)
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    topic_detail_comments_list.layoutManager = LinearLayoutManager(context)
     topic_detail_comments_list.addItemDecoration(
         DividerItemDecoration(
-            this,
+            context,
             DividerItemDecoration.VERTICAL
         )
     )
-    topic_detail_cl.setPadding(0, BarUtils.getStatusBarHeight(baseContext), 0, 0)
+    val safeArgs: TopicDetailFragmentArgs by navArgs()
+    topicId = safeArgs.topicId
     getJsTopicById(topicId)
   }
 
@@ -91,12 +87,12 @@ class TopicDetailJsActivity : BaseActivity() {
               RichText.fromHtml(it)
                   .clickable(true)
                   .imageClick { imageUrls, position ->
-                    TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+                    showImage(imageUrls[position])
                   }
                   .into(headView.findViewById(R.id.topic_detail_content_tv))
             }
             ImageLoader.displayImage(
-                view, topicDetailBean.member.avatar_large,
+                view as ViewGroup, topicDetailBean.member.avatar_large,
                 headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4
             )
 
@@ -112,7 +108,7 @@ class TopicDetailJsActivity : BaseActivity() {
               RichText.fromHtml(it.content)
                   .clickable(true)
                   .imageClick { imageUrls, position ->
-                    TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+                    showImage(imageUrls[position])
                   }
                   .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
               subtlesView.addView(subtleItemView)
@@ -128,12 +124,17 @@ class TopicDetailJsActivity : BaseActivity() {
         })
   }
 
+  private fun showImage(url: String?) {
+    val action = TopicDetailFragmentDirections.nextAction(url ?: "")
+    findNavController().navigate(action)
+  }
+
   private fun setTopicHeadView(
     topicCommentItemAdapter: CommonAdapter<RepliesShowBean>,
     headView: View
   ) {
     val mHeaderAndFooterWrapper =
-      HeaderAndFooterWrapper<RecyclerView.Adapter<RecyclerView.ViewHolder>>(topicCommentItemAdapter)
+      HeaderAndFooterWrapper<Adapter<ViewHolder>>(topicCommentItemAdapter)
     mHeaderAndFooterWrapper.addHeaderView(headView)
     mHeaderAndFooterWrapper.addFootView(
         layoutInflater.inflate(
@@ -147,11 +148,11 @@ class TopicDetailJsActivity : BaseActivity() {
 
   private fun getTopicCommentItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
     return object : CommonAdapter<RepliesShowBean>(
-        this, R.layout.activity_topic_comment_item,
+        context, R.layout.activity_topic_comment_item,
         topicComments
     ) {
       override fun convert(
-        holder: ViewHolder,
+        holder: com.zhy.adapter.recyclerview.base.ViewHolder,
         t: RepliesShowBean,
         position: Int
       ) {
@@ -160,7 +161,7 @@ class TopicDetailJsActivity : BaseActivity() {
             .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
             .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
             .imageClick { imageUrls, position ->
-              TopicImageActivity.start(imageUrls[position], this@TopicDetailJsActivity)
+              showImage(imageUrls[position])
             }
             .into(holder.getView(R.id.topic_comment_item_content_tv))
         holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
@@ -175,18 +176,6 @@ class TopicDetailJsActivity : BaseActivity() {
           //            mListener?.onListFragmentInteraction(holder.mItem!!.id)
         }
       }
-    }
-  }
-
-  companion object {
-    const val TOPIC_ID = "topic_id"
-    fun start(
-      id: Int,
-      context: Context
-    ) {
-      val intent = Intent(context, TopicDetailJsActivity::class.java)
-      intent.putExtra(TOPIC_ID, id)
-      context.startActivity(intent)
     }
   }
 }
