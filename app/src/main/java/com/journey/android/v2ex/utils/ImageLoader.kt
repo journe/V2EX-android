@@ -38,7 +38,7 @@ class ImageLoader {
                 options.placeholder(placeholder)
             }
             options.transform(GlideRoundTransform(view.context, radius))
-            Glide.with(view).load("http:" + uri).apply(options).into(imageView)
+            Glide.with(view).load("https:" + uri).apply(options).into(imageView)
         }
     }
 
