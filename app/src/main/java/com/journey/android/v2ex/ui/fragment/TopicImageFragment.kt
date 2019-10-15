@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle

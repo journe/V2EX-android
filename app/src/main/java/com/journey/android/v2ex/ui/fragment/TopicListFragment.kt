@@ -1,17 +1,16 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
 import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.ui.MemberInfoActivity
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
@@ -38,7 +37,9 @@ class TopicListFragment : BaseFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (arguments != null) {
-      mNodeName = arguments!!.getString(TOPIC_NODE)
+      mNodeName = arguments!!.getString(
+          TOPIC_NODE
+      )
     }
   }
 
@@ -120,7 +121,9 @@ class TopicListFragment : BaseFragment() {
         )
 
         holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
-          MemberInfoActivity.start(t.member!!.id, holder.convertView.context)
+          MemberInfoActivity.start(
+              t.member!!.id, holder.convertView.context
+          )
         })
 
         holder.convertView.setOnClickListener {

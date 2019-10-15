@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -125,7 +125,8 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun showImage(url: String?) {
-    val action = TopicDetailFragmentDirections.nextAction(url ?: "")
+    val action =
+      TopicDetailFragmentDirections.nextAction(url ?: "")
     findNavController().navigate(action)
   }
 
