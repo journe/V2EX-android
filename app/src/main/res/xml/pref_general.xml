@@ -16,6 +16,8 @@
             android:title="@string/pref_title_tab_list"
             android:key="tabs_to_show"
             android:dialogTitle="@string/pref_long_press_to_sort"
+            android:positiveButtonText="确认"
+            android:negativeButtonText="取消"
             />
     </PreferenceCategory>
     <PreferenceCategory

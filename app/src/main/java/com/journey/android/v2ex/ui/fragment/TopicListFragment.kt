@@ -26,6 +26,7 @@ import retrofit2.Response
 
 class TopicListFragment : BaseFragment() {
 
+  private lateinit var topicListItem: java.util.ArrayList<TopicsListItemBean>
   private var mNodeName: String = "all"
 
   interface NavInterface {
@@ -39,7 +40,7 @@ class TopicListFragment : BaseFragment() {
     if (arguments != null) {
       mNodeName = arguments!!.getString(
           TOPIC_NODE
-      )
+      )!!
     }
   }
 
@@ -84,15 +85,17 @@ class TopicListFragment : BaseFragment() {
             call: Call<ResponseBody>,
             response: Response<ResponseBody>
           ) {
-            val topicListItem =
+            topicListItem =
               TopicListParser.parseTopicList(Jsoup.parse(response.body()!!.string()))
 
-            topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
-            topic_list_refreshview.isRefreshing = false
+            topic_list_recycleview?.adapter = genTopicListAdapter(topicListItem)
+            topic_list_refreshview?.isRefreshing = false
           }
 
         })
   }
+
+
 
   private fun genTopicListAdapter(topicListItem: ArrayList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
     return object : CommonAdapter<TopicsListItemBean>(
@@ -112,7 +115,8 @@ class TopicListFragment : BaseFragment() {
           t?.last_modified_str = calculateTime(t?.last_modified!!.toLong())
         }
 
-        holder?.setText(R.id.topic_reply_time_item_tv, t.last_modified_str ?: "")
+        holder?.setText(
+            R.id.topic_reply_time_item_tv, t.last_modified_str ?: "")
         holder?.setVisible(R.id.topic_corner_star_iv, t.last_modified_str.equals("置顶"))
 
         ImageLoader.displayImage(

@@ -1,57 +1,35 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.ui.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
-import android.preference.PreferenceCategory
-import android.preference.PreferenceFragment
+import android.preference.Preference.OnPreferenceClickListener
 import android.preference.SwitchPreference
-import android.view.MenuItem
 import android.widget.Toast
 import com.journey.android.v2ex.BuildConfig
 import com.journey.android.v2ex.R
 
-class SettingsActivity : BaseActivity() {
-  private val mFragment = PrefsFragment()
+class SettingFragment : androidx.preference.PreferenceFragmentCompat(),
+    OnPreferenceClickListener {
+  override fun onCreatePreferences(
+    savedInstanceState: Bundle?,
+    rootKey: String?
+  ) {
+    setPreferencesFromResource(R.xml.pref_general, rootKey)
+  }
+
+  private var isLogin: Boolean = false
+  private lateinit var mNotificationsPref: SwitchPreference
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    // Display the fragment as the main content.
-    fragmentManager.beginTransaction()
-        .replace(
-            android.R.id.content,
-            mFragment
-        )
-        .commit()
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//    addPreferencesFromResource(R.xml.pref_general)
+    initGeneral()
+    initUser()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      onBackPressed()
-      return true
-    }
-
-    return super.onOptionsItemSelected(item)
-  }
-
-  class PrefsFragment : PreferenceFragment(), Preference.OnPreferenceClickListener {
-    private var isLogin: Boolean = false
-    private lateinit var mNotificationsPref: SwitchPreference
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
-
-      // Load the preferences from an XML resource
-      addPreferencesFromResource(R.xml.pref_general)
-
-      initGeneral()
-      initUser()
-    }
-
-    private fun initUser() {
+  private fun initUser() {
 //            isLogin = UserState.isLoggedIn()
 //            val user = findPreference(PREF_KEY_CATEGORY_USER) as PreferenceCategory
 //            if (!isLogin) {
@@ -74,14 +52,14 @@ class SettingsActivity : BaseActivity() {
 //                preference, newValue -> toggleReceiveNotifications(newValue as Boolean)
 //            }
 //            logoutPref.onPreferenceClickListener = this
+  }
+
+  override fun onStart() {
+    super.onStart()
+
+    if (!isLogin) {
+      return
     }
-
-    override fun onStart() {
-      super.onStart()
-
-      if (!isLogin) {
-        return
-      }
 
 //            val errMsg = GoogleHelper.checkPlayServices(activity)
 //            if (Strings.isNullOrEmpty(errMsg)) {
@@ -89,19 +67,21 @@ class SettingsActivity : BaseActivity() {
 //                return
 //            }
 //            showPlayServicesErrorToast(errMsg)
-      mNotificationsPref.isEnabled = false
-    }
+    mNotificationsPref.isEnabled = false
+  }
 
-    private fun showPlayServicesErrorToast(errMsg: String) {
-      Toast.makeText(
-          activity,
-          getString(R.string.toast_check_google_play_services_failed, errMsg),
-          Toast.LENGTH_LONG
-      )
-          .show()
-    }
+  private fun showPlayServicesErrorToast(errMsg: String) {
+    Toast.makeText(
+        activity,
+        getString(
+            R.string.toast_check_google_play_services_failed, errMsg
+        ),
+        Toast.LENGTH_LONG
+    )
+        .show()
+  }
 
-    private fun initGeneral() {
+  private fun initGeneral() {
 //      val general = findPreference(PREF_KEY_CATEGORY_GENERAL) as PreferenceCategory
 //      val debugPref = findPreference(PREF_KEY_DEBUG)
 //      val loginPref = findPreference(PREF_KEY_LOGIN)
@@ -119,25 +99,28 @@ class SettingsActivity : BaseActivity() {
 //                loginPref.onPreferenceClickListener = this
 //            }
 
-      findPreference(PREF_KEY_VERSION).summary =
-        "%s(%d) by journey".format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
-    }
+    findPreference<androidx.preference.Preference>(PREF_KEY_VERSION)?.summary =
+      "%s(%d) by journey".format(
+          BuildConfig.VERSION_NAME,
+          BuildConfig.VERSION_CODE
+      )
+  }
 
-    override fun onActivityResult(
-      requestCode: Int,
-      resultCode: Int,
-      data: Intent?
-    ) {
-      when (requestCode) {
-        REQ_LOGIN -> if (resultCode == Activity.RESULT_OK) {
-          activity.recreate()
-        }
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    when (requestCode) {
+      REQ_LOGIN -> if (resultCode == Activity.RESULT_OK) {
+        activity?.recreate()
       }
-
-      super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun toggleReceiveNotifications(turnOn: Boolean): Boolean {
+    super.onActivityResult(requestCode, resultCode, data)
+  }
+
+  private fun toggleReceiveNotifications(turnOn: Boolean): Boolean {
 //            check(UserState.isLoggedIn()) { "guest can't toggle notifications" }
 //            task?.dispose()
 //
@@ -146,8 +129,8 @@ class SettingsActivity : BaseActivity() {
 //                onDeviceRegisterEvent(it)
 //            }
 //            activity.startService(GoogleHelper.getRegistrationIntentToStartService(activity, turnOn))
-      return false
-    }
+    return false
+  }
 
 //        fun onDeviceRegisterEvent(e: DeviceRegisterEvent) {
 //            if (e.isSuccess) {
@@ -164,34 +147,33 @@ class SettingsActivity : BaseActivity() {
 //            mNotificationsPref.isEnabled = true
 //        }
 
-    override fun onPreferenceClick(preference: Preference): Boolean {
-      when (preference.key) {
-        PREF_KEY_LOGIN -> {
+  override fun onPreferenceClick(preference: Preference): Boolean {
+    when (preference.key) {
+      PREF_KEY_LOGIN -> {
 //          startActivityForResult(Intent(activity, LoginActivity::class.java), 0)
-          return true
-        }
-        PREF_KEY_LOGOUT -> {
-//                    UserState.logout()
-          activity.recreate()
-          return true
-        }
+        return true
       }
-
-      return false
+      PREF_KEY_LOGOUT -> {
+//                    UserState.logout()
+        activity?.recreate()
+        return true
+      }
     }
 
-    companion object {
-      private const val PREF_KEY_CATEGORY_GENERAL = "general"
-      private const val PREF_KEY_CATEGORY_USER = "user"
-      private const val PREF_KEY_USER_INFO = "user_info"
-      private const val PREF_KEY_RECEIVE_NOTIFICATIONS = "receive_notifications"
-      private const val PREF_KEY_LOGIN = "login"
-      private const val PREF_KEY_DEBUG = "debug"
-      private const val PREF_KEY_LOGOUT = "logout"
-      private const val PREF_KEY_ENABLE_FORCE_TOUCH = "enable_force_touch"
-      private const val PREF_KEY_VERSION = "version"
+    return false
+  }
 
-      private const val REQ_LOGIN = 0
-    }
+  companion object {
+    private const val PREF_KEY_CATEGORY_GENERAL = "general"
+    private const val PREF_KEY_CATEGORY_USER = "user"
+    private const val PREF_KEY_USER_INFO = "user_info"
+    private const val PREF_KEY_RECEIVE_NOTIFICATIONS = "receive_notifications"
+    private const val PREF_KEY_LOGIN = "login"
+    private const val PREF_KEY_DEBUG = "debug"
+    private const val PREF_KEY_LOGOUT = "logout"
+    private const val PREF_KEY_ENABLE_FORCE_TOUCH = "enable_force_touch"
+    private const val PREF_KEY_VERSION = "version"
+
+    private const val REQ_LOGIN = 0
   }
 }
