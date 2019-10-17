@@ -35,46 +35,6 @@ import java.util.concurrent.TimeUnit
  */
 interface RetrofitService {
 
-  companion object {
-    private val cookieJar =
-      PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(V2exApplication.instance))
-    val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .apply {
-          cache(buildCache())
-          connectTimeout(10, TimeUnit.SECONDS)
-          writeTimeout(10, TimeUnit.SECONDS)
-          readTimeout(30, TimeUnit.SECONDS)
-          followRedirects(false)
-          cookieJar(cookieJar)
-        }
-        .addInterceptor { chain ->
-          val request = chain.request()
-              .newBuilder()
-              .addHeader("User-Agent", Constants.USER_AGENT_ANDROID)
-              .build()
-          val response = chain.proceed(request)
-          response
-        }
-        .build()
-
-    private fun buildCache(): Cache? {
-      val cacheDir = File(V2exApplication.instance.cacheDir, "webCache")
-      val cacheSize = 16 * 1024 * 1024
-      return Cache(cacheDir, cacheSize.toLong())
-    }
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val service = retrofit.create(RetrofitService::class.java)
-    fun getInstance(): RetrofitService {
-      return service
-    }
-  }
-
   @GET(Constants.SITE_INFO)
   fun getSiteInfo(): Call<SiteInfoBean>
 

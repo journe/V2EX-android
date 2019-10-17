@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
+import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
@@ -57,7 +58,7 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getJsTopicById(id: Int) {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getTopicById(id, 1)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.jsoup.BalanceBean
 import com.journey.android.v2ex.bean.jsoup.parser.BalanceParser
+import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.CommonAdapter
@@ -41,7 +42,7 @@ class BalanceActivity : AppCompatActivity() {
   }
 
   private fun doGetBalance() {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getBalance()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

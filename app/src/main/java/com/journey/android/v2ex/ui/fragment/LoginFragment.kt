@@ -14,6 +14,7 @@ import com.journey.android.v2ex.bean.jsoup.LoginBean
 import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
 import com.journey.android.v2ex.bean.jsoup.parser.MoreParser
 import com.journey.android.v2ex.net.HttpStatus
+import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.PrefStore
@@ -64,7 +65,7 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun doGetLoginTask() {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getLogin()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -88,20 +89,8 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun getCaptcha(captchaUrl: String) {
-//    val placeholder = getDrawable(R.drawable.ic_sync_white_24dp)!!.apply {
-//      setTint(Color.BLACK)
-//    }
-//    val fallback = getDrawable(R.drawable.ic_sync_problem_white_24dp)!!.apply {
-//      setTint(Color.BLACK)
-//    }
-//    Glide.with(this)
-//        .load(captchaUrl)
-//        .placeholder(R.drawable.ic_sync_white_24dp)
-//        .error(R.drawable.ic_sync_problem_white_24dp)
-//        .dontAnimate()
-//        .into(login_captcha_iv)
 
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getCaptcha(captchaUrl)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -117,9 +106,6 @@ class LoginFragment : BaseFragment() {
           ) {
             if (response.code() == 200) {
               val bitmap = BitmapFactory.decodeStream(response.body()!!.byteStream())
-
-//              login_captcha_iv.setImageBitmap(bitmap)
-
               Glide.with(this@LoginFragment)
                   .load(bitmap)
                   .placeholder(R.drawable.ic_sync_white_24dp)
@@ -187,7 +173,7 @@ class LoginFragment : BaseFragment() {
     map[mLoginBean.captcha] = captcha
     map["once"] = mLoginBean.once.toString()
     map["next"] = "/mission"
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .postSignin(map)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -213,7 +199,7 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun doGetMore() {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getMore()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
+import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.ui.MemberInfoActivity
 import com.journey.android.v2ex.utils.Constants
@@ -71,7 +72,7 @@ class TopicListFragment : BaseFragment() {
   }
 
   private fun getJsTopicsByNodeName(node: String) {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getTopicsByNode(Constants.TAB + node)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

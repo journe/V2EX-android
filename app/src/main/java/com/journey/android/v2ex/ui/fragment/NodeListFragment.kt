@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.NodeBean
+import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
@@ -34,7 +35,7 @@ class NodeListFragment : BaseFragment() {
   }
 
   private fun doGetNodes() {
-    RetrofitService.getInstance()
+    RetrofitRequest.retrofit
         .getNodesAll()
         .enqueue(object : Callback<ArrayList<NodeBean>> {
           override fun onFailure(
