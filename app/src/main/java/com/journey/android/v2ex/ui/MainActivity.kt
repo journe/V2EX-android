@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
     val navController = host.navController
 
     appBarConfiguration = AppBarConfiguration(
-        setOf(R.id.main_dest, R.id.nodeList_dest),//顶层导航设置
+        setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest),//顶层导航设置
         drawer_layout
     )
     setupActionBarWithNavController(navController, appBarConfiguration)
