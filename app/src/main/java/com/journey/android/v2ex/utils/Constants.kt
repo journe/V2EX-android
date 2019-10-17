@@ -25,7 +25,7 @@ object Constants {
   const val SIGNIN = "/signin"
   const val MORE = "/more"
   const val TAB = "$BASE_URL/?tab="
-  const val mission = "https://www.v2ex.com/mission/daily"
+  const val mission = "/mission/daily"
   const val BALANCE = "/balance"
   
   private const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME

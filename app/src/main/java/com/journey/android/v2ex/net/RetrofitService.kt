@@ -118,7 +118,7 @@ interface RetrofitService {
   @FormUrlEncoded
   @Headers("Referer: https://www.v2ex.com/signin")
   @POST(Constants.SIGNIN)
-  fun postLogin(@FieldMap hashMap: HashMap<String, String>): Call<ResponseBody>
+  fun postSignin(@FieldMap hashMap: HashMap<String, String>): Call<ResponseBody>
 
   @Streaming
   @GET

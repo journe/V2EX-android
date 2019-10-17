@@ -40,6 +40,7 @@ class GlideModule : AppGlideModule() {
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(RetrofitService.okHttpClient))
+        registry.prepend(String::class.java, InputStream::class.java, GooglePhotoUrlLoader.Factory())
     }
 
     override fun isManifestParsingEnabled(): Boolean {
