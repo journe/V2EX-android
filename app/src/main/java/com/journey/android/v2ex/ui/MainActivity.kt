@@ -3,6 +3,7 @@ package com.journey.android.v2ex.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -28,7 +29,7 @@ class MainActivity : BaseActivity() {
     val navController = host.navController
 
     appBarConfiguration = AppBarConfiguration(
-        setOf(R.id.main_dest, R.id.nodeList_dest,R.id.settings_dest),//顶层导航设置
+        setOf(R.id.main_dest, R.id.nodeList_dest),//顶层导航设置
         drawer_layout
     )
     setupActionBarWithNavController(navController, appBarConfiguration)

@@ -20,7 +20,7 @@
     <group android:menuCategory="secondary" android:id="@+id/secondary"
         android:checkableBehavior="none">
         <item
-            android:id="@+id/settings_dest"
+            android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/action_settings"/>
         <item
