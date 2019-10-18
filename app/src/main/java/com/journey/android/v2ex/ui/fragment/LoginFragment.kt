@@ -18,6 +18,7 @@ import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.PrefStore
+import com.journey.android.v2ex.utils.ToastUtils
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_login.login_account
 import kotlinx.android.synthetic.main.fragment_login.login_captcha
@@ -106,6 +107,10 @@ class LoginFragment : BaseFragment() {
           ) {
             if (response.code() == 200) {
               val bitmap = BitmapFactory.decodeStream(response.body()!!.byteStream())
+              if (bitmap == null) {
+                RetrofitRequest.cleanCookies()
+                ToastUtils.showShortToast(R.string.toast_load_captcha_failed)
+              }
               Glide.with(this@LoginFragment)
                   .load(bitmap)
                   .placeholder(R.drawable.ic_sync_white_24dp)
@@ -224,12 +229,10 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun isEmailValid(email: String): Boolean {
-    //TODO: Replace this with your own logic
     return email.isNotEmpty()
   }
 
   private fun isPasswordValid(password: String): Boolean {
-    //TODO: Replace this with your own logic
     return password.length > 4
   }
 

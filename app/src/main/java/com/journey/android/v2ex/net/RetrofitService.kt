@@ -70,7 +70,10 @@ interface RetrofitService {
   ): Call<ArrayList<RepliesShowBean>>
 
   @GET(Constants.MEMBERS)
-  fun getMemberInfo(@Query("id") id: Int): Call<MemberBean>
+  fun getMemberInfoByID(@Query("id") id: Int): Call<MemberBean>
+
+  @GET(Constants.MEMBERS)
+  fun getMemberInfo(@Query("username") name: String): Call<MemberBean>
 
   @GET(Constants.SIGNIN)
   fun getLogin(): Call<ResponseBody>

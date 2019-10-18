@@ -54,4 +54,8 @@ object RetrofitRequest {
     val cacheSize = 16 * 1024 * 1024
     return Cache(cacheDir, cacheSize.toLong())
   }
+
+  fun cleanCookies() {
+    cookieJar.clear()
+  }
 }

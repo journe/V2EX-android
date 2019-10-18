@@ -1,6 +1,7 @@
 package com.journey.android.v2ex
 
 import android.app.Application
+import com.journey.android.v2ex.utils.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.zzhoujay.richtext.RichText
@@ -15,6 +16,7 @@ class V2exApplication : Application() {
         instance = this
         Logger.addLogAdapter(AndroidLogAdapter())
         RichText.initCacheDir(this)
+        Utils.init(this)
     }
     companion object {
         @JvmStatic

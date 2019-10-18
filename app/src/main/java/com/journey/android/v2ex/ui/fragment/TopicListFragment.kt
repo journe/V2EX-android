@@ -123,7 +123,7 @@ class TopicListFragment : BaseFragment() {
 
         holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
           MemberInfoActivity.start(
-              t.member!!.id, holder.convertView.context
+              t.member!!.username, holder.convertView.context
           )
         })
 
