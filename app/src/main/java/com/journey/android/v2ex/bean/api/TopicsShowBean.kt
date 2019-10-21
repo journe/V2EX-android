@@ -1,9 +1,13 @@
 package com.journey.android.v2ex.bean.api
 
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+
 /**
  * Created by journey on 2018/8/8.
  */
-class TopicsShowBean {
+open class TopicsShowBean : RealmObject() {
 
   /**
    * id : 1000
@@ -19,6 +23,7 @@ class TopicsShowBean {
    * last_touched : 1280285385
    */
 
+  @PrimaryKey
   var id: Int = 0
   var title: String? = null
   var url: String? = null
@@ -31,9 +36,10 @@ class TopicsShowBean {
   var last_modified: Int = 0
   var last_touched: Int = 0
   var created_str: String = ""
-  var subtles: MutableList<Subtle>? = null
+  var subtles: RealmList<Subtle>? = null
 
-  class Subtle {
+  class Subtle : RealmObject() {
+    var id: Int = 0
     var title: String = ""
     var content: String = ""
   }

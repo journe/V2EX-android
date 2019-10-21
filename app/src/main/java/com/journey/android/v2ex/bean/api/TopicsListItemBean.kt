@@ -1,7 +1,25 @@
 package com.journey.android.v2ex.bean.api
 
-class TopicsListItemBean() {
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
+open class TopicsListItemBean(
+  @PrimaryKey
+  var id: Int = 0,
+  var title: String? = null,
+  var url: String? = null,
+  var content: String? = null,
+  var replies: Int = 0,
+  var memberName:String ="",
+  var memberAvatar:String ="",
+  var nodeName:String ="",
+  var member: MemberBean? = MemberBean(),
+  var node: NodeBean? = NodeBean(),
+  var created: Int = 0,
+  var last_modified: Int = 0,
+  var last_modified_str: String? = null,
+  var last_touched: Int = 0
+) : RealmObject() {
   /**
    * id : 425341
    * title : Python 培训需要多少钱？老男孩学 Python
@@ -14,17 +32,5 @@ class TopicsListItemBean() {
    * last_modified : 1516704999
    * last_touched : 1516690419
    */
-
-  var id: Int = 0
-  var title: String? = null
-  var url: String? = null
-  var content: String? = null
-  var replies: Int = 0
-  var member: MemberBean? = MemberBean()
-  var node: NodeBean? = NodeBean()
-  var created: Int = 0
-  var last_modified: Int = 0
-  var last_modified_str: String? = null
-  var last_touched: Int = 0
 
 }

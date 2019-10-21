@@ -17,6 +17,14 @@ import kotlinx.android.synthetic.main.fragment_main.main_viewpager
 
 class MainFragment : BaseFragment(),
     NavInterface {
+
+  val fragments =
+    PrefStore.instance.tabsToShow.map {
+      TopicListFragment.newInstance(
+          it.key, this@MainFragment
+      )
+    }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -47,9 +55,7 @@ class MainFragment : BaseFragment(),
         .tabsToShow
 
     override fun getItem(position: Int): Fragment {
-      return TopicListFragment.newInstance(
-          mTabs[position].key, this@MainFragment
-      )
+      return fragments[position]
     }
 
     override fun getCount(): Int {

@@ -2,6 +2,7 @@ package com.journey.android.v2ex.bean.jsoup.parser
 
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.orhanobut.logger.Logger
+import io.realm.RealmList
 import org.jsoup.nodes.Document
 
 /**
@@ -43,7 +44,7 @@ object TopicListParser {
    */
 
   @JvmStatic
-  fun parseTopicList(doc: Document): ArrayList<TopicsListItemBean> {
+  fun parseTopicList(doc: Document): RealmList<TopicsListItemBean> {
     val content = doc.body()
         .selectFirst("#Wrapper")
         .selectFirst(".content")
@@ -52,15 +53,15 @@ object TopicListParser {
         .select("table")
         .select("tbody")
         .select("tr")
-    val topicListItem: ArrayList<TopicsListItemBean> = ArrayList()
+    val topicListItem: RealmList<TopicsListItemBean> = RealmList()
     for (element in content) {
 //      Logger.d(element.toString())
       val td = element.select("td")
       val topicListBean = TopicsListItemBean()
-      topicListBean.member!!.username = td[0].select("a")
+      topicListBean.memberName = td[0].select("a")
           .attr("href")
           .substringAfterLast("/")
-      topicListBean.member!!.avatar_large = td[0].select("a")
+      topicListBean.memberAvatar = td[0].select("a")
           .select("img")
           .attr("src")
       topicListBean.url = td[2].select(".item_title")
@@ -70,7 +71,7 @@ object TopicListParser {
       topicListBean.title = td[2].select(".item_title")
           .select("a")
           .text()
-      topicListBean.node!!.title = td[2].selectFirst(".small.fade")
+      topicListBean.nodeName = td[2].selectFirst(".small.fade")
           .select(".node")
           .text()
       val replies = td[3].select("a")

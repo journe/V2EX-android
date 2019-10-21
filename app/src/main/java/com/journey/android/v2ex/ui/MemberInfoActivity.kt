@@ -32,7 +32,7 @@ class MemberInfoActivity : BaseActivity() {
 
     private fun initView() {
         ImageLoader.displayImage(mView, mMemberBean.avatar_large,
-                member_info_avatar_iv, R.mipmap.ic_launcher_round, 4)
+                member_info_avatar_iv, R.mipmap.ic_launcher_round, R.dimen.avatar_radius)
         member_info_username_tv.text = mMemberBean.username
         member_info_tagline_tv.text = mMemberBean.tagline
     }

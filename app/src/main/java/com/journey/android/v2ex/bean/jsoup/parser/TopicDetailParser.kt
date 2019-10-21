@@ -4,6 +4,7 @@ import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean.Subtle
 import com.orhanobut.logger.Logger
+import io.realm.RealmList
 import org.jsoup.nodes.Document
 
 /**
@@ -71,7 +72,7 @@ object TopicDetailParser {
 
     topic.select(".subtle")
         ?.let {
-          topicDetailBean.subtles = mutableListOf<Subtle>()
+          topicDetailBean.subtles = RealmList<Subtle>()
           for (element in it) {
             val subtle = Subtle()
             subtle.title = element.selectFirst(".fade")

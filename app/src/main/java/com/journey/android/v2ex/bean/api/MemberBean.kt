@@ -1,7 +1,25 @@
 package com.journey.android.v2ex.bean.api
 
-class MemberBean {
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
+open class MemberBean(
+  var status: String? = null,
+  @PrimaryKey
+  var id: Int = 0,
+  var username: String = "",
+  var url: String? = null,
+  var website: String? = null,
+  var twitter: String? = null,
+  var psn: String? = null,
+  var github: String? = null,
+  var btc: String? = null,
+  var location: String? = null,
+  var tagline: String? = null,
+  var bio: String? = null,
+  var avatar_large: String? = null,
+  var created: Int = 0
+) : RealmObject() {
   /**
    * status : found
    * id : 1
@@ -18,19 +36,4 @@ class MemberBean {
    * avatar_large : //cdn.v2ex.com/avatar/c4ca/4238/1_large.png?m=1466415272
    * created : 1272203146
    */
-
-  var status: String? = null
-  var id: Int = 0
-  var username: String = ""
-  var url: String? = null
-  var website: String? = null
-  var twitter: String? = null
-  var psn: String? = null
-  var github: String? = null
-  var btc: String? = null
-  var location: String? = null
-  var tagline: String? = null
-  var bio: String? = null
-  var avatar_large: String? = null
-  var created: Int = 0
 }

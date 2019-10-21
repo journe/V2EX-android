@@ -6,17 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.common.base.Predicates.equalTo
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.bean.TabCache
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicListParser
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.ui.MemberInfoActivity
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.query
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
+import com.vicpin.krealmextensions.saveAll
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
+import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
 import okhttp3.ResponseBody
@@ -27,6 +34,7 @@ import retrofit2.Response
 
 class TopicListFragment : BaseFragment() {
 
+  private var topicListItem = RealmList<TopicsListItemBean>()
   private var mNodeName: String = "all"
 
   interface NavInterface {
@@ -38,9 +46,7 @@ class TopicListFragment : BaseFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (arguments != null) {
-      mNodeName = arguments!!.getString(
-          TOPIC_NODE
-      )
+      mNodeName = arguments!!.getString(TOPIC_NODE)!!
     }
   }
 
@@ -64,14 +70,24 @@ class TopicListFragment : BaseFragment() {
             DividerItemDecoration.VERTICAL
         )
     )
-    topic_list_refreshview.isRefreshing = true
     getJsTopicsByNodeName(mNodeName)
     topic_list_refreshview.setOnRefreshListener {
-      getJsTopicsByNodeName(mNodeName)
+      getDataByNet(mNodeName)
     }
   }
 
   private fun getJsTopicsByNodeName(node: String) {
+    val results = TabCache().queryFirst { equalTo("tabName", node) }
+    if (results != null) {
+      topicListItem = results.topicsList
+      topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
+    } else {
+      getDataByNet(node)
+    }
+  }
+
+  private fun getDataByNet(node: String) {
+    topic_list_refreshview.isRefreshing = true
     RetrofitRequest.retrofit
         .getTopicsByNode(Constants.TAB + node)
         .enqueue(object : Callback<ResponseBody> {
@@ -85,50 +101,53 @@ class TopicListFragment : BaseFragment() {
             call: Call<ResponseBody>,
             response: Response<ResponseBody>
           ) {
-            val topicListItem =
+            topicListItem =
               TopicListParser.parseTopicList(Jsoup.parse(response.body()!!.string()))
+
+//            TabCache().delete { equalTo("tabName", node) }
+            topicListItem.saveAll()
+            TabCache(node, topicListItem).save()
 
             topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
             topic_list_refreshview.isRefreshing = false
           }
-
         })
   }
 
-  private fun genTopicListAdapter(topicListItem: ArrayList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
+  private fun genTopicListAdapter(topicListItem: RealmList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
     return object : CommonAdapter<TopicsListItemBean>(
         activity,
         R.layout.fragment_topic_list_item, topicListItem
     ) {
       override fun convert(
         holder: ViewHolder?,
-        t: TopicsListItemBean?,
+        itemBean: TopicsListItemBean?,
         position: Int
       ) {
-        holder?.setText(R.id.topic_title_item_tv, t?.title)
-        holder?.setText(R.id.topic_node_item_tv, t?.node?.title ?: "")
-        holder?.setText(R.id.topic_username_item_tv, t?.member?.username ?: "")
-        holder?.setText(R.id.topic_replies_item_tv, t?.replies.toString())
-        if (t?.last_modified != 0) {
-          t?.last_modified_str = calculateTime(t?.last_modified!!.toLong())
+        holder?.setText(R.id.topic_title_item_tv, itemBean?.title)
+        holder?.setText(R.id.topic_node_item_tv, itemBean?.nodeName)
+        holder?.setText(R.id.topic_username_item_tv, itemBean?.memberName)
+        holder?.setText(R.id.topic_replies_item_tv, itemBean?.replies.toString())
+        if (itemBean?.last_modified != 0) {
+          itemBean?.last_modified_str = calculateTime(itemBean?.last_modified!!.toLong())
         }
 
-        holder?.setText(R.id.topic_reply_time_item_tv, t.last_modified_str ?: "")
-        holder?.setVisible(R.id.topic_corner_star_iv, t.last_modified_str.equals("置顶"))
+        holder?.setText(R.id.topic_reply_time_item_tv, itemBean.last_modified_str ?: "")
+        holder?.setVisible(R.id.topic_corner_star_iv, itemBean.last_modified_str.equals("置顶"))
 
         ImageLoader.displayImage(
-            holder!!.convertView, t.member?.avatar_large,
-            holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, 4
+            holder!!.convertView, itemBean.memberAvatar,
+            holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round, R.dimen.avatar_radius
         )
 
         holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
           MemberInfoActivity.start(
-              t.member!!.username, holder.convertView.context
+              itemBean.memberName, holder.convertView.context
           )
         })
 
         holder.convertView.setOnClickListener {
-          navInterface.navigate(t.id)
+          navInterface.navigate(itemBean.id)
         }
       }
     }

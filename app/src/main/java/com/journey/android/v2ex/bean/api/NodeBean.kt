@@ -1,9 +1,26 @@
 package com.journey.android.v2ex.bean.api
 
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+
 /**
  * Created by journey on 2018/8/8.
  */
-class NodeBean {
+open class NodeBean(
+  @PrimaryKey
+  var id: Int = 0,
+  var name: String = "",
+  var url: String? = null,
+  var title: String? = null,
+  var title_alternative: String? = null,
+  var topics: Int = 0,
+  var header: String? = null,
+  var footer: String? = null,
+  var avatar_large: String? = null,
+  var stars: Int = 0,
+  var root: Boolean = false,
+  var parent_node_name: String? = null
+) : RealmObject() {
 
   /**
    * id : 1
@@ -19,17 +36,4 @@ class NodeBean {
    * root : false
    * parent_node_name : v2ex
    */
-
-  var id: Int = 0
-  var name: String = ""
-  var url: String? = null
-  var title: String? = null
-  var title_alternative: String? = null
-  var topics: Int = 0
-  var header: String? = null
-  var footer: String? = null
-  var avatar_large: String? = null
-  var stars: Int = 0
-  var root: Boolean = false
-  var parent_node_name: String? = null
 }

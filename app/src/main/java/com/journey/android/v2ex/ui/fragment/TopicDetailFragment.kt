@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.api.RepliesShowBean
+import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.utils.ImageLoader
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
@@ -58,6 +60,14 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getJsTopicById(id: Int) {
+    val result = TopicsShowBean().queryFirst { equalTo("id", id) }
+    if (result != null) {
+      val headView = addHeaderView(result)
+    }
+    getDataByNet(id)
+  }
+
+  private fun getDataByNet(id: Int) {
     RetrofitRequest.retrofit
         .getTopicById(id, 1)
         .enqueue(object : Callback<ResponseBody> {
@@ -73,56 +83,68 @@ class TopicDetailFragment : BaseFragment() {
           ) {
             val doc = Jsoup.parse(response.body()!!.string())
             val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
-
-            val headView = layoutInflater.inflate(
-                R.layout.activity_topic_detail_head,
-                view as ViewGroup, false
-            )
-            headView.findViewById<TextView>(R.id.topic_detail_title_tv)
-                .text = topicDetailBean.title
-            headView.findViewById<TextView>(R.id.topic_detail_node_tv)
-                .text = topicDetailBean.node.name
-            headView.findViewById<TextView>(R.id.topic_detail_create_time_tv)
-                .text = topicDetailBean.created_str
-            topicDetailBean.content?.let {
-              RichText.fromHtml(it)
-                  .clickable(true)
-                  .imageClick { imageUrls, position ->
-                    showImage(imageUrls[position])
-                  }
-                  .into(headView.findViewById(R.id.topic_detail_content_tv))
-            }
-            ImageLoader.displayImage(
-                view as ViewGroup, topicDetailBean.member.avatar_large,
-                headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round, 4
-            )
-
-            //附言
-            val subtlesView = headView.findViewById<LinearLayout>(R.id.topic_subtles_ll)
+            topicDetailBean.id = id
             topicDetailBean.subtles?.forEach {
-              val subtleItemView = layoutInflater.inflate(
-                  R.layout.activity_topic_detail_subtle_item,
-                  view as ViewGroup, false
-              )
-              subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
-                  .text = it.title
-              RichText.fromHtml(it.content)
-                  .clickable(true)
-                  .imageClick { imageUrls, position ->
-                    showImage(imageUrls[position])
-                  }
-                  .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
-              subtlesView.addView(subtleItemView)
+              it.id = id
             }
-            //取得评论数据并添加head view
+            topicDetailBean.save()
+            val headView = addHeaderView(topicDetailBean)
+
+            //评论
             TopicDetailParser.parseComments(doc)
-                ?.let {
+                .let {
                   topic_detail_comments_list.visibility = View.VISIBLE
-                  setTopicHeadView(getTopicCommentItemAdapter(it), headView)
+                  setTopicHeadView(genTopicCommentItemAdapter(it), headView)
                 }
           }
 
         })
+  }
+
+  private fun addHeaderView(topicDetailBean: TopicsShowBean): View {
+    //取得评论数据并添加head view
+    val headView = layoutInflater.inflate(
+        R.layout.activity_topic_detail_head,
+        view as ViewGroup, false
+    )
+    headView.findViewById<TextView>(R.id.topic_detail_title_tv)
+        .text = topicDetailBean.title
+    headView.findViewById<TextView>(R.id.topic_detail_node_tv)
+        .text = topicDetailBean.node.name
+    headView.findViewById<TextView>(R.id.topic_detail_create_time_tv)
+        .text = topicDetailBean.created_str
+    topicDetailBean.content?.let {
+      RichText.fromHtml(it)
+          .clickable(true)
+          .imageClick { imageUrls, position ->
+            showImage(imageUrls[position])
+          }
+          .into(headView.findViewById(R.id.topic_detail_content_tv))
+    }
+    ImageLoader.displayImage(
+        view as ViewGroup, topicDetailBean.member.avatar_large,
+        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round,
+        R.dimen.avatar_radius
+    )
+
+    //附言
+    val subtlesView = headView.findViewById<LinearLayout>(R.id.topic_subtles_ll)
+    topicDetailBean.subtles?.forEach {
+      val subtleItemView = layoutInflater.inflate(
+          R.layout.activity_topic_detail_subtle_item,
+          view as ViewGroup, false
+      )
+      subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
+          .text = it.title
+      RichText.fromHtml(it.content)
+          .clickable(true)
+          .imageClick { imageUrls, position ->
+            showImage(imageUrls[position])
+          }
+          .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
+      subtlesView.addView(subtleItemView)
+    }
+    return headView
   }
 
   private fun showImage(url: String?) {
@@ -148,17 +170,17 @@ class TopicDetailFragment : BaseFragment() {
     mHeaderAndFooterWrapper.notifyDataSetChanged()
   }
 
-  private fun getTopicCommentItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
+  private fun genTopicCommentItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
     return object : CommonAdapter<RepliesShowBean>(
         context, R.layout.activity_topic_comment_item,
         topicComments
     ) {
       override fun convert(
         holder: com.zhy.adapter.recyclerview.base.ViewHolder,
-        t: RepliesShowBean,
+        repliesShowBean: RepliesShowBean,
         position: Int
       ) {
-        RichText.fromHtml(t.content)
+        RichText.fromHtml(repliesShowBean.content)
             .clickable(true)
             .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
             .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
@@ -166,13 +188,14 @@ class TopicDetailFragment : BaseFragment() {
               showImage(imageUrls[position])
             }
             .into(holder.getView(R.id.topic_comment_item_content_tv))
-        holder.setText(R.id.topic_comment_item_username_tv, t.member.username)
-        holder.setText(R.id.topic_comment_item_floor_tv, t.floor.toString())
-        holder.setText(R.id.topic_comment_item_reply_time_tv, t.created_str)
+        holder.setText(R.id.topic_comment_item_username_tv, repliesShowBean.member.username)
+        holder.setText(R.id.topic_comment_item_floor_tv, repliesShowBean.floor.toString())
+        holder.setText(R.id.topic_comment_item_reply_time_tv, repliesShowBean.created_str)
 
         ImageLoader.displayImage(
-            holder.convertView, t.member.avatar_large,
-            holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round, 4
+            holder.convertView, repliesShowBean.member.avatar_large,
+            holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round,
+            R.dimen.avatar_radius
         )
         holder.convertView.setOnClickListener {
           //            mListener?.onListFragmentInteraction(holder.mItem!!.id)
