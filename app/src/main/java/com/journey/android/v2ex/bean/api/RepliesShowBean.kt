@@ -1,9 +1,12 @@
 package com.journey.android.v2ex.bean.api
 
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+
 /**
  * Created by journey on 2018/8/8.
  */
-class RepliesShowBean {
+open class RepliesShowBean : RealmObject() {
 
   /**
    * id : 6236603
@@ -15,7 +18,7 @@ class RepliesShowBean {
    * created : 1272207477
    * last_modified : 1335092176
    */
-
+  @PrimaryKey
   var id: Int = 0
   var topic_id: Int = 0
   var member_id: Int = 0

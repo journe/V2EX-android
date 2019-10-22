@@ -18,15 +18,19 @@ import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.ImageLoader
+import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
+import com.vicpin.krealmextensions.saveAll
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
+import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,20 +60,24 @@ class TopicDetailFragment : BaseFragment() {
     )
     val safeArgs: TopicDetailFragmentArgs by navArgs()
     topicId = safeArgs.topicId
-    getJsTopicById(topicId)
+    getData(topicId)
   }
 
-  private fun getJsTopicById(id: Int) {
+  private fun getData(id: Int) {
     val result = TopicsShowBean().queryFirst { equalTo("id", id) }
     if (result != null) {
       val headView = addHeaderView(result)
+      val replies = RepliesShowBean().query { equalTo("topic_id", id) }
+      topic_detail_comments_list.visibility = View.VISIBLE
+      setTopicHeadView(genTopicCommentItemAdapter(replies), headView)
+    } else {
+      getDataByNet(id)
     }
-    getDataByNet(id)
   }
 
   private fun getDataByNet(id: Int) {
     RetrofitRequest.retrofit
-        .getTopicById(id, 1)
+        .getTopicById(id)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
             call: Call<ResponseBody>,
@@ -90,12 +98,49 @@ class TopicDetailFragment : BaseFragment() {
             topicDetailBean.save()
             val headView = addHeaderView(topicDetailBean)
 
+            getReplyByNet(id, headView)
             //评论
-            TopicDetailParser.parseComments(doc)
-                .let {
-                  topic_detail_comments_list.visibility = View.VISIBLE
-                  setTopicHeadView(genTopicCommentItemAdapter(it), headView)
-                }
+//            getReplyByJsoup(doc, headView)
+          }
+
+        })
+  }
+
+  private fun getReplyByJsoup(
+    doc: Document,
+    headView: View
+  ) {
+    TopicDetailParser.parseComments(doc)
+        .let {
+          topic_detail_comments_list.visibility = View.VISIBLE
+          setTopicHeadView(genTopicCommentItemAdapter(it), headView)
+        }
+  }
+
+  private fun getReplyByNet(
+    id: Int,
+    headView: View
+  ) {
+    RetrofitRequest.retrofit
+        .getReplies(id, 1, 100)
+        .enqueue(object : Callback<RealmList<RepliesShowBean>> {
+          override fun onFailure(
+            call: Call<RealmList<RepliesShowBean>>,
+            t: Throwable
+          ) {
+
+          }
+
+          override fun onResponse(
+            call: Call<RealmList<RepliesShowBean>>,
+            response: Response<RealmList<RepliesShowBean>>
+          ) {
+            val replies = response.body()
+            if (replies!!.isNotEmpty()) {
+              replies.saveAll()
+              topic_detail_comments_list.visibility = View.VISIBLE
+              setTopicHeadView(genTopicCommentItemAdapter(replies), headView)
+            }
           }
 
         })
@@ -170,7 +215,7 @@ class TopicDetailFragment : BaseFragment() {
     mHeaderAndFooterWrapper.notifyDataSetChanged()
   }
 
-  private fun genTopicCommentItemAdapter(topicComments: ArrayList<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
+  private fun genTopicCommentItemAdapter(topicComments: List<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
     return object : CommonAdapter<RepliesShowBean>(
         context, R.layout.activity_topic_comment_item,
         topicComments
@@ -180,7 +225,7 @@ class TopicDetailFragment : BaseFragment() {
         repliesShowBean: RepliesShowBean,
         position: Int
       ) {
-        RichText.fromHtml(repliesShowBean.content)
+        RichText.fromHtml(repliesShowBean.content_rendered)
             .clickable(true)
             .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
             .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
@@ -189,7 +234,7 @@ class TopicDetailFragment : BaseFragment() {
             }
             .into(holder.getView(R.id.topic_comment_item_content_tv))
         holder.setText(R.id.topic_comment_item_username_tv, repliesShowBean.member.username)
-        holder.setText(R.id.topic_comment_item_floor_tv, repliesShowBean.floor.toString())
+        holder.setText(R.id.topic_comment_item_floor_tv, position.toString())
         holder.setText(R.id.topic_comment_item_reply_time_tv, repliesShowBean.created_str)
 
         ImageLoader.displayImage(

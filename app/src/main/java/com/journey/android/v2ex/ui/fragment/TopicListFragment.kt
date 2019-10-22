@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.common.base.Predicates.equalTo
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.bean.TabCache
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
@@ -16,8 +15,6 @@ import com.journey.android.v2ex.ui.MemberInfoActivity
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
-import com.vicpin.krealmextensions.delete
-import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -70,13 +67,13 @@ class TopicListFragment : BaseFragment() {
             DividerItemDecoration.VERTICAL
         )
     )
-    getJsTopicsByNodeName(mNodeName)
+    getData(mNodeName)
     topic_list_refreshview.setOnRefreshListener {
       getDataByNet(mNodeName)
     }
   }
 
-  private fun getJsTopicsByNodeName(node: String) {
+  private fun getData(node: String) {
     val results = TabCache().queryFirst { equalTo("tabName", node) }
     if (results != null) {
       topicListItem = results.topicsList

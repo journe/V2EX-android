@@ -2,8 +2,7 @@ package com.journey.android.v2ex.bean.jsoup.parser
 
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
-import com.journey.android.v2ex.bean.api.TopicsShowBean.Subtle
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.bean.api.TopicShowSubtle
 import io.realm.RealmList
 import org.jsoup.nodes.Document
 
@@ -72,14 +71,14 @@ object TopicDetailParser {
 
     topic.select(".subtle")
         ?.let {
-          topicDetailBean.subtles = RealmList<Subtle>()
+          topicDetailBean.subtles = RealmList<TopicShowSubtle>()
           for (element in it) {
-            val subtle = Subtle()
+            val subtle = TopicShowSubtle()
             subtle.title = element.selectFirst(".fade")
                 .text()
             subtle.content = element.selectFirst(".topic_content")
                 .html()
-            Logger.d(subtle.title + subtle.content)
+//            Logger.d(subtle.title + subtle.content)
             topicDetailBean.subtles!!.add(subtle)
           }
         }
@@ -87,13 +86,13 @@ object TopicDetailParser {
     return topicDetailBean
   }
 
-  fun parseComments(doc: Document): ArrayList<RepliesShowBean> {
+  fun parseComments(doc: Document): RealmList<RepliesShowBean> {
     val comments = doc.body()
         .selectFirst("#Wrapper")
         .selectFirst(".content")
         .select(".box")[1]
         .select("div[id^=r_]")
-    var commentBeanList = ArrayList<RepliesShowBean>()
+    var commentBeanList = RealmList<RepliesShowBean>()
     for (item in comments) {
       if (item.selectFirst("table") == null
           || item.attr("id").isNullOrEmpty()

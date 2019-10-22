@@ -12,6 +12,7 @@ import com.journey.android.v2ex.bean.api.SiteStatsBean
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.utils.Constants
+import io.realm.RealmList
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -67,7 +68,7 @@ interface RetrofitService {
     @Query("topic_id") id: Int,
     @Query("page") page: Int,
     @Query("page_size") pageSize: Int
-  ): Call<ArrayList<RepliesShowBean>>
+  ): Call<RealmList<RepliesShowBean>>
 
   @GET(Constants.MEMBERS)
   fun getMemberInfoByID(@Query("id") id: Int): Call<MemberBean>
@@ -100,6 +101,11 @@ interface RetrofitService {
   fun getTopicById(
     @Path("id") id: Int,
     @Query("p") page: Int
+  ): Call<ResponseBody>
+
+  @GET("/t/{id}")
+  fun getTopicById(
+    @Path("id") id: Int
   ): Call<ResponseBody>
 
 }

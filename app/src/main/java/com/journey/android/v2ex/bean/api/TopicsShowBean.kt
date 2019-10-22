@@ -36,12 +36,6 @@ open class TopicsShowBean : RealmObject() {
   var last_modified: Int = 0
   var last_touched: Int = 0
   var created_str: String = ""
-  var subtles: RealmList<Subtle>? = null
-
-  class Subtle : RealmObject() {
-    var id: Int = 0
-    var title: String = ""
-    var content: String = ""
-  }
+  var subtles: RealmList<TopicShowSubtle>? = null
 
 }
