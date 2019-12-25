@@ -7,6 +7,7 @@ apply plugin: 'realm-android'
 
 android {
   compileSdkVersion 28
+  ndkVersion "21.1.6352462"
   defaultConfig {
     applicationId "com.journey.android.v2ex"
     minSdkVersion 21
@@ -43,13 +44,12 @@ kapt {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50'
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72'
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-  implementation "com.google.android.material:material:$rootProject.materialVersion"
   implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
-  implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerVersion"
+  implementation "androidx.recyclerview:recyclerview:$rootProject.appCompatVersion"
   implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+  implementation "com.google.android.material:material:$rootProject.appCompatVersion"
 
   //Navigation
   implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
@@ -69,7 +69,7 @@ dependencies {
   implementation 'org.jsoup:jsoup:1.12.1'
   implementation 'com.zzhoujay.richtext:richtext:3.0.8'
   implementation 'com.zhy:base-rvadapter:3.0.3'
-  implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+  implementation 'com.github.chrisbanes:PhotoView:2.2.0'
 
   implementation "com.github.vicpinm:krealmextensions:2.5.0"
 

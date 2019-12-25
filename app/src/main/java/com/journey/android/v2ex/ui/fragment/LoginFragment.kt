@@ -221,6 +221,7 @@ class LoginFragment : BaseFragment() {
           ) {
             showProgress(false)
             if (MoreParser.isLogin(Jsoup.parse(response.body()!!.string()))) {
+              Logger.d("success")
 //              finish()
             }
           }
