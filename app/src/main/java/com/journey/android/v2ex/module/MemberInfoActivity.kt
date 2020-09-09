@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.module
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseActivity
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.ImageLoader
@@ -38,7 +39,7 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun getMemberInfo() {
-        val call = RetrofitRequest.retrofit.getMemberInfo(mUserName)
+        val call = RetrofitRequest.apiService.getMemberInfo(mUserName)
         call.enqueue(object : Callback<MemberBean> {
             override fun onFailure(call: Call<MemberBean>?, t: Throwable?) {
                 Logger.d(t?.message)

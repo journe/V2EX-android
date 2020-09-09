@@ -1,16 +1,16 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.module
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
-import android.preference.PreferenceCategory
 import android.preference.PreferenceFragment
 import android.preference.SwitchPreference
 import android.view.MenuItem
 import android.widget.Toast
 import com.journey.android.v2ex.BuildConfig
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseActivity
 
 class SettingsActivity : BaseActivity() {
   private val mFragment = PrefsFragment()

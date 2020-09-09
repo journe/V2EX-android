@@ -15,7 +15,7 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".ui.MainActivity">
+    <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <action android:name="android.intent.action.VIEW" />
@@ -25,10 +25,10 @@
       </intent-filter>
       <nav-graph android:value="@navigation/navigation_graph_main" />
     </activity>
-    <activity android:name=".ui.MemberInfoActivity" />
-    <activity android:name=".ui.SettingsActivity" />
-    <activity android:name=".ui.BalanceActivity" />
-    <activity android:name=".ui.TestActivity" />
+    <activity android:name=".module.MemberInfoActivity" />
+    <activity android:name=".module.SettingsActivity" />
+    <activity android:name=".module.BalanceActivity" />
+    <activity android:name=".module.TestActivity" />
   </application>
 
 </manifest>

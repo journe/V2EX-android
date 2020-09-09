@@ -32,7 +32,8 @@ data class TopicsListItemBean(
   var last_modified: Int = 0,
   var last_modified_str: String? = null,
   var last_touched: Int = 0,
-  var indexInResponse: Int = 0
+  var indexInResponse: Int = 0,
+  var tab: String = "",
 )
 
 

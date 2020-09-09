@@ -1,16 +1,15 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseActivity
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view

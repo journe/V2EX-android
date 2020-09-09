@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui.fragment
+package com.journey.android.v2ex.module.fragment
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.model.jsoup.LoginBean
 import com.journey.android.v2ex.net.parser.LoginParser
 import com.journey.android.v2ex.net.parser.MoreParser
 import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.PrefStore
-import com.journey.android.v2ex.utils.ToastUtils
+import com.journey.android.v2ex.libs.ToastUtils
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_login.login_account
 import kotlinx.android.synthetic.main.fragment_login.login_captcha
@@ -62,7 +63,7 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun doGetLoginTask() {
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getLogin()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -87,7 +88,7 @@ class LoginFragment : BaseFragment() {
 
   private fun getCaptcha(captchaUrl: String) {
 
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getCaptcha(captchaUrl)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -174,7 +175,7 @@ class LoginFragment : BaseFragment() {
     map[mLoginBean.captcha] = captcha
     map["once"] = mLoginBean.once.toString()
     map["next"] = "/mission"
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .postSignin(map)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -200,7 +201,7 @@ class LoginFragment : BaseFragment() {
   }
 
   private fun doGetMore() {
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getMore()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

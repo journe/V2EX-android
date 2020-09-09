@@ -12,7 +12,6 @@ import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
 import java.io.InputStream
 
 @GlideModule

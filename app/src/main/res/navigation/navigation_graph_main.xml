@@ -7,7 +7,7 @@
 
   <fragment
       android:id="@+id/main_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.MainFragment"
+      android:name="com.journey.android.v2ex.module.topic.MainFragment"
       android:label="@string/app_name"
       tools:layout="@layout/fragment_main">
     <action
@@ -23,18 +23,18 @@
 
   <fragment
       android:id="@+id/login_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.LoginFragment"
+      android:name="com.journey.android.v2ex.module.fragment.LoginFragment"
       android:label="LoginFragment"
       tools:layout="@layout/fragment_login"/>
 
   <fragment
       android:id="@+id/nodeList_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.NodeListFragment"
+      android:name="com.journey.android.v2ex.module.fragment.NodeListFragment"
       android:label="NodeListFragment"
       tools:layout="@layout/activity_node_list"/>
   <fragment
       android:id="@+id/topicDetail_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.TopicDetailFragment"
+      android:name="com.journey.android.v2ex.module.topic.detail.TopicDetailFragment"
       android:label="@string/app_name"
       tools:layout="@layout/activity_topic_detail">
     <argument
@@ -48,7 +48,7 @@
 
   <fragment
       android:id="@+id/topicImage_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.TopicImageFragment"
+      android:name="com.journey.android.v2ex.module.topic.detail.TopicImageFragment"
       android:label="TopicImageFragment"
       tools:layout="@layout/fragment_topic_image">
     <argument
@@ -57,7 +57,7 @@
 
   <fragment
       android:id="@+id/topicList_dest"
-      android:name="com.journey.android.v2ex.ui.fragment.TopicListFragment"
+      android:name="com.journey.android.v2ex.module.topic.list.TopicListFragment"
       android:label="TopicListFragment"
       tools:layout="@layout/fragment_topic_list">
     <action
@@ -66,11 +66,11 @@
   </fragment>
   <activity
       android:id="@+id/nav_test_dest"
-      android:name="com.journey.android.v2ex.ui.TestActivity"
+      android:name="com.journey.android.v2ex.module.TestActivity"
       android:label="test"
       tools:layout="@layout/activity_test"/>
   <activity
       android:id="@+id/settings_dest"
-      android:name="com.journey.android.v2ex.ui.SettingsActivity"
+      android:name="com.journey.android.v2ex.module.SettingsActivity"
       android:label="SettingsActivity" />
 </navigation>

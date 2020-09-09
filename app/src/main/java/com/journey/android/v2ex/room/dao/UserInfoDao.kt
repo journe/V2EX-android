@@ -16,6 +16,6 @@ interface UserInfoDao : BaseDao<MemberBean> {
   @Query("SELECT * FROM MemberBean WHERE id = :id LIMIT 1")
   suspend fun getUserById(id: String): MemberBean?
 
-  @Query("SELECT * FROM UserInfoModel WHERE id = :id LIMIT 1")
+  @Query("SELECT * FROM MemberBean WHERE id = :id LIMIT 1")
   fun getUserByIdLive(id: String): LiveData<MemberBean>?
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  * Created by journey on 2019-10-17.
  */
 object RetrofitRequest {
-  val retrofit: RetrofitService
+  val apiService: RetrofitService
   val client: OkHttpClient
   private var cookieJar: PersistentCookieJar =
     PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getContext()))
@@ -41,7 +41,7 @@ object RetrofitRequest {
         }
         .build()
 
-    retrofit = Retrofit.Builder()
+    apiService = Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())

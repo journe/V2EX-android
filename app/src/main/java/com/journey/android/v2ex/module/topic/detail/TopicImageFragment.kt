@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui.fragment
+package com.journey.android.v2ex.module.topic.detail
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_topic_image.photo_view
 
 class TopicImageFragment : BaseFragment() {

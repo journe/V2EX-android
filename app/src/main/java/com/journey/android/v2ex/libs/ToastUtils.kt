@@ -1,9 +1,10 @@
-package com.journey.android.v2ex.utils
+package com.journey.android.v2ex.libs
 
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.journey.android.v2ex.utils.Utils
 
 /**
  * <pre>
@@ -35,7 +36,7 @@ class ToastUtils private constructor() {
      * 如果为`false`的话可用来做显示任意时长的吐司
      */
     fun init(isJumpWhenMore: Boolean) {
-      ToastUtils.isJumpWhenMore = isJumpWhenMore
+      Companion.isJumpWhenMore = isJumpWhenMore
     }
 
     /**
@@ -209,7 +210,9 @@ class ToastUtils private constructor() {
      * @param duration 显示时长
      */
     private fun showToast(@StringRes resId: Int, duration: Int) {
-      showToast(Utils.getContext().getResources().getText(resId).toString(), duration)
+      showToast(
+          Utils.getContext()
+              .getResources().getText(resId).toString(), duration)
     }
 
     /**
@@ -223,7 +226,9 @@ class ToastUtils private constructor() {
       @StringRes resId: Int, duration: Int,
       vararg args: Any
     ) {
-      showToast(String.format(Utils.getContext().getResources().getString(resId), args), duration)
+      showToast(String.format(
+          Utils.getContext()
+              .getResources().getString(resId), args), duration)
     }
 
     /**

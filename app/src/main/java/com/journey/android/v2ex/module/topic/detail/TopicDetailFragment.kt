@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui.fragment
+package com.journey.android.v2ex.module.topic.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.net.parser.TopicDetailParser
@@ -72,7 +73,7 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getDataByNet(id: Int) {
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getTopicById(id)
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(
@@ -120,7 +121,7 @@ class TopicDetailFragment : BaseFragment() {
     id: Int,
     headView: View
   ) {
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getReplies(id, 1, 100)
         .enqueue(object : Callback<List<RepliesShowBean>> {
           override fun onFailure(

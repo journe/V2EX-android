@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.module
 
 import android.os.Bundle
 import android.view.View
@@ -41,7 +41,7 @@ class BalanceActivity : AppCompatActivity() {
   }
 
   private fun doGetBalance() {
-    RetrofitRequest.retrofit
+    RetrofitRequest.apiService
         .getBalance()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

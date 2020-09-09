@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.ui.fragment
+package com.journey.android.v2ex.module.topic
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.fragment.findNavController
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.model.Tab
-import com.journey.android.v2ex.ui.fragment.TopicListFragment.NavInterface
+import com.journey.android.v2ex.module.topic.list.TopicListFragment
+import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
 import com.journey.android.v2ex.utils.PrefStore
 import kotlinx.android.synthetic.main.fragment_main.main_tab
 import kotlinx.android.synthetic.main.fragment_main.main_viewpager
@@ -39,7 +41,7 @@ class MainFragment : BaseFragment(),
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    val myPagerAdapter = childFragmentManager?.let { MainPagerAdapter(it) }
+    val myPagerAdapter = MainPagerAdapter(childFragmentManager)
     main_viewpager.adapter = myPagerAdapter
     main_tab.setupWithViewPager(main_viewpager)
   }

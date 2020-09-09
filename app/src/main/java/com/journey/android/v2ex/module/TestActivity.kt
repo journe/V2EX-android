@@ -1,8 +1,9 @@
-package com.journey.android.v2ex.ui
+package com.journey.android.v2ex.module
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.journey.android.v2ex.MainActivity
 import com.journey.android.v2ex.R
 import kotlinx.android.synthetic.main.activity_test.button0
 import kotlinx.android.synthetic.main.activity_test.button1
