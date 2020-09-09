@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.api.RepliesShowBean
-import com.journey.android.v2ex.bean.api.TopicsShowBean
-import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
+import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.model.api.TopicsShowBean
+import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter

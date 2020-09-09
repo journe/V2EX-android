@@ -1,7 +1,6 @@
-package com.journey.android.v2ex.bean.jsoup.parser
+package com.journey.android.v2ex.net.parser
 
-import com.journey.android.v2ex.bean.api.TopicsListItemBean
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.model.api.TopicsListItemBean
 import org.jsoup.nodes.Document
 
 /**

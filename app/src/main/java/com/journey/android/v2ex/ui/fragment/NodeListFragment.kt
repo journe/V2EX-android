@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.api.NodeBean
+import com.journey.android.v2ex.model.api.NodeBean
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
 import kotlinx.android.synthetic.main.activity_node_list.node_list_recycle

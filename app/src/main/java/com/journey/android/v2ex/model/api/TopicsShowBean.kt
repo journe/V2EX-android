@@ -1,5 +1,6 @@
-package com.journey.android.v2ex.bean.api
+package com.journey.android.v2ex.model.api
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
@@ -19,6 +20,7 @@ import androidx.room.PrimaryKey
  * last_modified : 1335004238
  * last_touched : 1280285385
  */
+@Entity
 data class TopicsShowBean(
   @PrimaryKey
   var id: Int = 0,

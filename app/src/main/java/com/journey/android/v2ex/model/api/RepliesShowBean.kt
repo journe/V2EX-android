@@ -1,5 +1,6 @@
-package com.journey.android.v2ex.bean.api
+package com.journey.android.v2ex.model.api
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
@@ -16,7 +17,7 @@ import androidx.room.PrimaryKey
  * created : 1272207477
  * last_modified : 1335092176
  */
-
+@Entity
 data class RepliesShowBean(
   @PrimaryKey
   var id: Int = 0,

@@ -1,8 +1,8 @@
-package com.journey.android.v2ex.bean.jsoup.parser
+package com.journey.android.v2ex.net.parser
 
-import com.journey.android.v2ex.bean.api.RepliesShowBean
-import com.journey.android.v2ex.bean.api.TopicsShowBean
-import com.journey.android.v2ex.bean.api.TopicShowSubtle
+import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.model.api.TopicsShowBean
+import com.journey.android.v2ex.model.api.TopicShowSubtle
 import org.jsoup.nodes.Document
 
 /**

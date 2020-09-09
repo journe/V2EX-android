@@ -1,5 +1,6 @@
-package com.journey.android.v2ex.bean.api
+package com.journey.android.v2ex.model.api
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
@@ -18,6 +19,7 @@ import androidx.room.PrimaryKey
  * avatar_large : //cdn.v2ex.com/avatar/c4ca/4238/1_large.png?m=1466415272
  * created : 1272203146
  */
+@Entity
 data class MemberBean(
   @PrimaryKey
   var id: Int = 0,

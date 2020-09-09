@@ -1,10 +1,7 @@
-package com.journey.android.v2ex.bean.jsoup.parser
+package com.journey.android.v2ex.net.parser
 
-import com.journey.android.v2ex.bean.jsoup.BalanceBean
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.model.jsoup.BalanceBean
 import org.jsoup.nodes.Document
-import org.jsoup.select.Selector.select
-import org.jsoup.select.Selector.selectFirst
 
 /**
  * Selector选择器概述

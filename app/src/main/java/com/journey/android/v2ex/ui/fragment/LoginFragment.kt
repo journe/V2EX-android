@@ -1,22 +1,18 @@
 package com.journey.android.v2ex.ui.fragment
 
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.DrawableCompat.setTint
 import com.bumptech.glide.Glide
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.jsoup.LoginBean
-import com.journey.android.v2ex.bean.jsoup.parser.LoginParser
-import com.journey.android.v2ex.bean.jsoup.parser.MoreParser
+import com.journey.android.v2ex.model.jsoup.LoginBean
+import com.journey.android.v2ex.net.parser.LoginParser
+import com.journey.android.v2ex.net.parser.MoreParser
 import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
-import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.PrefStore
 import com.journey.android.v2ex.utils.ToastUtils
 import com.orhanobut.logger.Logger

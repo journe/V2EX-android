@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.bean.api
+package com.journey.android.v2ex.model.api
 
 /**
  * Created by journey on 2018/8/8.

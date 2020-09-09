@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.api.MemberBean
+import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.ImageLoader
 import com.orhanobut.logger.Logger

@@ -1,12 +1,12 @@
 package com.journey.android.v2ex.net
 
-import com.journey.android.v2ex.bean.api.MemberBean
-import com.journey.android.v2ex.bean.api.NodeBean
-import com.journey.android.v2ex.bean.api.RepliesShowBean
-import com.journey.android.v2ex.bean.api.SiteInfoBean
-import com.journey.android.v2ex.bean.api.SiteStatsBean
-import com.journey.android.v2ex.bean.api.TopicsListItemBean
-import com.journey.android.v2ex.bean.api.TopicsShowBean
+import com.journey.android.v2ex.model.api.MemberBean
+import com.journey.android.v2ex.model.api.NodeBean
+import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.model.api.SiteInfoBean
+import com.journey.android.v2ex.model.api.SiteStatsBean
+import com.journey.android.v2ex.model.api.TopicsListItemBean
+import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.utils.Constants
 import okhttp3.ResponseBody
 import retrofit2.Call

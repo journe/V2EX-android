@@ -7,10 +7,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.bean.jsoup.BalanceBean
-import com.journey.android.v2ex.bean.jsoup.parser.BalanceParser
+import com.journey.android.v2ex.model.jsoup.BalanceBean
+import com.journey.android.v2ex.net.parser.BalanceParser
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.RetrofitService
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder

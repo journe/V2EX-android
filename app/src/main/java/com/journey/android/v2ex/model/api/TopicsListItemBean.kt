@@ -1,5 +1,6 @@
-package com.journey.android.v2ex.bean.api
+package com.journey.android.v2ex.model.api
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
@@ -14,6 +15,7 @@ import androidx.room.PrimaryKey
  * last_modified : 1516704999
  * last_touched : 1516690419
  */
+@Entity
 data class TopicsListItemBean(
   @PrimaryKey
   var id: Int = 0,
@@ -29,7 +31,8 @@ data class TopicsListItemBean(
   var created: Int = 0,
   var last_modified: Int = 0,
   var last_modified_str: String? = null,
-  var last_touched: Int = 0
+  var last_touched: Int = 0,
+  var indexInResponse: Int = 0
 )
 
 

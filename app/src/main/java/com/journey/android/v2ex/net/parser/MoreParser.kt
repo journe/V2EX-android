@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.bean.jsoup.parser
+package com.journey.android.v2ex.net.parser
 
 import org.jsoup.nodes.Document
 
