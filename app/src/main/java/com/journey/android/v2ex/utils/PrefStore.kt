@@ -99,7 +99,7 @@ class PrefStore internal constructor(context: Context) : SharedPreferences.OnSha
   companion object {
     private val VERSION = 3
 
-    var instance: PrefStore = PrefStore(V2exApplication.instance)
+    var instance: PrefStore = PrefStore(Utils.getContext())
     val PREF_ALWAYS_LOAD_IMAGE = "always_load_image"
     val PREF_TABS_TO_SHOW = "tabs_to_show"
     val PREF_RECEIVE_NOTIFICATIONS = "receive_notifications"
@@ -111,7 +111,7 @@ class PrefStore internal constructor(context: Context) : SharedPreferences.OnSha
     val PASS = "password"
 
     fun requestBackup() {
-      val manager = BackupManager(V2exApplication.instance)
+      val manager = BackupManager(Utils.getContext())
       manager.dataChanged()
     }
   }

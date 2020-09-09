@@ -18,15 +18,10 @@ import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.bean.jsoup.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.ImageLoader
-import com.vicpin.krealmextensions.query
-import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
-import com.vicpin.krealmextensions.saveAll
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
@@ -64,15 +59,16 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getData(id: Int) {
-    val result = TopicsShowBean().queryFirst { equalTo("id", id) }
-    if (result != null) {
-      val headView = addHeaderView(result)
-      val replies = RepliesShowBean().query { equalTo("topic_id", id) }
-      topic_detail_comments_list.visibility = View.VISIBLE
-      setTopicHeadView(genTopicCommentItemAdapter(replies), headView)
-    } else {
-      getDataByNet(id)
-    }
+//    val result = TopicsShowBean().queryFirst { equalTo("id", id) }
+//    if (result != null) {
+//      val headView = addHeaderView(result)
+//      val replies = RepliesShowBean().query { equalTo("topic_id", id) }
+//      topic_detail_comments_list.visibility = View.VISIBLE
+//      setTopicHeadView(genTopicCommentItemAdapter(replies), headView)
+//    } else {
+//      getDataByNet(id)
+//    }
+    getDataByNet(id)
   }
 
   private fun getDataByNet(id: Int) {
@@ -89,13 +85,16 @@ class TopicDetailFragment : BaseFragment() {
             call: Call<ResponseBody>,
             response: Response<ResponseBody>
           ) {
-            val doc = Jsoup.parse(response.body()!!.string())
+            val doc = Jsoup.parse(
+                response.body()!!
+                    .string()
+            )
             val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
             topicDetailBean.id = id
             topicDetailBean.subtles?.forEach {
               it.id = id
             }
-            topicDetailBean.save()
+//            topicDetailBean.save()
             val headView = addHeaderView(topicDetailBean)
 
             getReplyByNet(id, headView)
@@ -123,21 +122,21 @@ class TopicDetailFragment : BaseFragment() {
   ) {
     RetrofitRequest.retrofit
         .getReplies(id, 1, 100)
-        .enqueue(object : Callback<RealmList<RepliesShowBean>> {
+        .enqueue(object : Callback<List<RepliesShowBean>> {
           override fun onFailure(
-            call: Call<RealmList<RepliesShowBean>>,
+            call: Call<List<RepliesShowBean>>,
             t: Throwable
           ) {
 
           }
 
           override fun onResponse(
-            call: Call<RealmList<RepliesShowBean>>,
-            response: Response<RealmList<RepliesShowBean>>
+            call: Call<List<RepliesShowBean>>,
+            response: Response<List<RepliesShowBean>>
           ) {
             val replies = response.body()
             if (replies!!.isNotEmpty()) {
-              replies.saveAll()
+//              replies.saveAll()
               topic_detail_comments_list.visibility = View.VISIBLE
               setTopicHeadView(genTopicCommentItemAdapter(replies), headView)
             }

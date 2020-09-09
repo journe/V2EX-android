@@ -2,7 +2,6 @@ package com.journey.android.v2ex.bean.jsoup.parser
 
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.orhanobut.logger.Logger
-import io.realm.RealmList
 import org.jsoup.nodes.Document
 
 /**
@@ -44,7 +43,7 @@ object TopicListParser {
    */
 
   @JvmStatic
-  fun parseTopicList(doc: Document): RealmList<TopicsListItemBean> {
+  fun parseTopicList(doc: Document): List<TopicsListItemBean> {
     val content = doc.body()
         .selectFirst("#Wrapper")
         .selectFirst(".content")
@@ -53,7 +52,7 @@ object TopicListParser {
         .select("table")
         .select("tbody")
         .select("tr")
-    val topicListItem: RealmList<TopicsListItemBean> = RealmList()
+    val topicListItem: MutableList<TopicsListItemBean> = mutableListOf()
     for (element in content) {
 //      Logger.d(element.toString())
       val td = element.select("td")

@@ -15,12 +15,8 @@ import com.journey.android.v2ex.ui.MemberInfoActivity
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.utils.TimeUtil.calculateTime
-import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
-import com.vicpin.krealmextensions.saveAll
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.base.ViewHolder
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
 import okhttp3.ResponseBody
@@ -31,7 +27,7 @@ import retrofit2.Response
 
 class TopicListFragment : BaseFragment() {
 
-  private var topicListItem = RealmList<TopicsListItemBean>()
+  private var topicListItem = listOf<TopicsListItemBean>()
   private var mNodeName: String = "all"
 
   interface NavInterface {
@@ -43,7 +39,7 @@ class TopicListFragment : BaseFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (arguments != null) {
-      mNodeName = arguments!!.getString(TOPIC_NODE)!!
+      mNodeName = requireArguments().getString(TOPIC_NODE)!!
     }
   }
 
@@ -74,13 +70,13 @@ class TopicListFragment : BaseFragment() {
   }
 
   private fun getData(node: String) {
-    val results = TabCache().queryFirst { equalTo("tabName", node) }
-    if (results != null) {
-      topicListItem = results.topicsList
-      topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
-    } else {
-      getDataByNet(node)
-    }
+//    val results = TabCache().queryFirst { equalTo("tabName", node) }
+//    if (results != null) {
+//      topicListItem = results.topicsList
+//      topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
+//    } else {
+//    }
+    getDataByNet(node)
   }
 
   private fun getDataByNet(node: String) {
@@ -102,8 +98,8 @@ class TopicListFragment : BaseFragment() {
               TopicListParser.parseTopicList(Jsoup.parse(response.body()!!.string()))
 
 //            TabCache().delete { equalTo("tabName", node) }
-            topicListItem.saveAll()
-            TabCache(node, topicListItem).save()
+//            topicListItem.saveAll()
+//            TabCache(node, topicListItem).save()
 
             topic_list_recycleview.adapter = genTopicListAdapter(topicListItem)
             topic_list_refreshview.isRefreshing = false
@@ -111,7 +107,7 @@ class TopicListFragment : BaseFragment() {
         })
   }
 
-  private fun genTopicListAdapter(topicListItem: RealmList<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
+  private fun genTopicListAdapter(topicListItem: List<TopicsListItemBean>): CommonAdapter<TopicsListItemBean> {
     return object : CommonAdapter<TopicsListItemBean>(
         activity,
         R.layout.fragment_topic_list_item, topicListItem

@@ -3,8 +3,8 @@ package com.journey.android.v2ex.net
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.journey.android.v2ex.V2exApplication
 import com.journey.android.v2ex.utils.Constants
+import com.journey.android.v2ex.utils.Utils
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -19,7 +19,7 @@ object RetrofitRequest {
   val retrofit: RetrofitService
   val client: OkHttpClient
   private var cookieJar: PersistentCookieJar =
-    PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(V2exApplication.instance))
+    PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getContext()))
 
   init {
     client = OkHttpClient.Builder()
@@ -50,7 +50,7 @@ object RetrofitRequest {
   }
 
   private fun buildCache(): Cache? {
-    val cacheDir = File(V2exApplication.instance.cacheDir, "webCache")
+    val cacheDir = File(Utils.getContext().cacheDir, "webCache")
     val cacheSize = 16 * 1024 * 1024
     return Cache(cacheDir, cacheSize.toLong())
   }

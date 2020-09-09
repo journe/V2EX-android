@@ -3,7 +3,6 @@ package com.journey.android.v2ex.bean.jsoup.parser
 import com.journey.android.v2ex.bean.api.RepliesShowBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.bean.api.TopicShowSubtle
-import io.realm.RealmList
 import org.jsoup.nodes.Document
 
 /**
@@ -43,7 +42,8 @@ object TopicDetailParser {
       }
     }
     if (topic.selectFirst(".cell") != null
-        && topic.selectFirst(".cell").selectFirst(".topic_content") != null
+        && topic.selectFirst(".cell")
+            .selectFirst(".topic_content") != null
     ) {
       topicDetailBean.content = topic.selectFirst(".cell")
           .selectFirst(".topic_content")
@@ -71,7 +71,7 @@ object TopicDetailParser {
 
     topic.select(".subtle")
         ?.let {
-          topicDetailBean.subtles = RealmList<TopicShowSubtle>()
+          topicDetailBean.subtles = mutableListOf()
           for (element in it) {
             val subtle = TopicShowSubtle()
             subtle.title = element.selectFirst(".fade")
@@ -86,16 +86,17 @@ object TopicDetailParser {
     return topicDetailBean
   }
 
-  fun parseComments(doc: Document): RealmList<RepliesShowBean> {
+  fun parseComments(doc: Document): List<RepliesShowBean> {
     val comments = doc.body()
         .selectFirst("#Wrapper")
         .selectFirst(".content")
         .select(".box")[1]
         .select("div[id^=r_]")
-    var commentBeanList = RealmList<RepliesShowBean>()
+    var commentBeanList = mutableListOf<RepliesShowBean>()
     for (item in comments) {
       if (item.selectFirst("table") == null
-          || item.attr("id").isNullOrEmpty()
+          || item.attr("id")
+              .isNullOrEmpty()
       ) {
         continue
       }

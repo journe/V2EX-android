@@ -1,9 +1,5 @@
 package com.journey.android.v2ex.net
 
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.journey.android.v2ex.V2exApplication
 import com.journey.android.v2ex.bean.api.MemberBean
 import com.journey.android.v2ex.bean.api.NodeBean
 import com.journey.android.v2ex.bean.api.RepliesShowBean
@@ -12,13 +8,8 @@ import com.journey.android.v2ex.bean.api.SiteStatsBean
 import com.journey.android.v2ex.bean.api.TopicsListItemBean
 import com.journey.android.v2ex.bean.api.TopicsShowBean
 import com.journey.android.v2ex.utils.Constants
-import io.realm.RealmList
-import okhttp3.Cache
-import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -28,8 +19,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Streaming
 import retrofit2.http.Url
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by journey on 2017/12/29.
@@ -68,7 +57,7 @@ interface RetrofitService {
     @Query("topic_id") id: Int,
     @Query("page") page: Int,
     @Query("page_size") pageSize: Int
-  ): Call<RealmList<RepliesShowBean>>
+  ): Call<List<RepliesShowBean>>
 
   @GET(Constants.MEMBERS)
   fun getMemberInfoByID(@Query("id") id: Int): Call<MemberBean>
