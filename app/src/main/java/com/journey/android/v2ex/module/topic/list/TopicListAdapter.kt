@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.module.topic.list.TopicListAdapter.ViewHolder
-import com.journey.android.v2ex.utils.ImageLoader
 import com.journey.android.v2ex.libs.TimeUtil
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.visible
+import com.journey.android.v2ex.libs.imageEngine.ImageLoader
+import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.*
 
-class TopicListAdapter :
+class TopicListAdapter(val navInterface: NavInterface) :
     PagedListAdapter<TopicsListItemBean, ViewHolder>(
         DIFF_CALLBACK
     ) {
@@ -65,23 +66,17 @@ class TopicListAdapter :
       } else {
         starIv.invisible()
       }
-//      ImageLoader.displayImage(
-//          holder!!.convertView, itemBean.memberAvatar,
-//          holder.getView(R.id.topic_useravatar_item_iv), R.mipmap.ic_launcher_round,
-//          R.dimen.avatar_radius
-//      )
-//
+      ImageLoader.loadImage(memberAvatar, itemBean.memberAvatar)
+
 //      holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
 //        MemberInfoActivity.start(
 //            itemBean.memberName, holder.convertView.context
 //        )
 //      })
-//
-//      holder.convertView.setOnClickListener {
-//        navInterface.navigate(itemBean.id)
-//      }
-//    }
 
+      mView.setOnClickListener {
+        navInterface.navigate(itemBean.id)
+      }
     }
   }
 

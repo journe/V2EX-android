@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils.extension
+package com.journey.android.v2ex.libs.extension
 
 import android.text.Editable
 import android.text.TextWatcher

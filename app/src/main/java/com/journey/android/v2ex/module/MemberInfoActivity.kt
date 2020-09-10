@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseActivity
+import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.utils.ImageLoader
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_member_info.*
 import retrofit2.Call
@@ -32,8 +32,7 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun initView() {
-        ImageLoader.displayImage(mView, mMemberBean.avatar_large,
-                member_info_avatar_iv, R.mipmap.ic_launcher_round, R.dimen.avatar_radius)
+        ImageLoader.loadImage(member_info_avatar_iv, mMemberBean.avatar_large)
         member_info_username_tv.text = mMemberBean.username
         member_info_tagline_tv.text = mMemberBean.tagline
     }

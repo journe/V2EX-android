@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils;
+package com.journey.android.v2ex.libs.imageEngine;
 
 import android.content.Context;
 import android.content.res.Resources;

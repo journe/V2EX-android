@@ -18,8 +18,6 @@ import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
 
 class TopicListFragment(val topicType: String) : BaseFragment() {
 
-  private var mTabName: String = "all"
-
   private val viewModel: TopicListViewModel by viewModels {
     object : ViewModelProvider.Factory {
       override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -42,9 +40,6 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    if (arguments != null) {
-      mTabName = requireArguments().getString(TOPIC_NODE)!!
-    }
   }
 
   override fun onCreateView(
@@ -66,7 +61,7 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
             DividerItemDecoration.VERTICAL
         )
     )
-    val adapter = TopicListAdapter()
+    val adapter = TopicListAdapter(navInterface)
     topic_list_recycleview.adapter = adapter
     viewModel.itemPagedList.observe(viewLifecycleOwner, Observer {
       topic_list_refreshview.isRefreshing = false
@@ -75,16 +70,11 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
   }
 
   companion object {
-    private const val TOPIC_NODE = "TOPIC_NODE"
-
     fun newInstance(
       topicType: String,
       navInterface: NavInterface
     ): TopicListFragment {
       val fragment = TopicListFragment(topicType)
-      val args = Bundle()
-      args.putString(TOPIC_NODE, topicType)
-      fragment.arguments = args
       fragment.navInterface = navInterface
       return fragment
     }

@@ -1,14 +1,9 @@
-package com.journey.android.v2ex.utils.extension
+package com.journey.android.v2ex.libs.extension
 
-import android.app.Activity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.gson.reflect.TypeToken
 import com.journey.android.v2ex.BuildConfig
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.*
-import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 import java.lang.Exception
 import java.lang.reflect.Type
 import kotlin.coroutines.CoroutineContext

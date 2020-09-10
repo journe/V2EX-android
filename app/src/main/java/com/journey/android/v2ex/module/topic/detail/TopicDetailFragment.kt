@@ -14,15 +14,16 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
+import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.utils.ImageLoader
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
+import kotlinx.android.synthetic.main.activity_member_info.member_info_avatar_iv
 import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
@@ -166,10 +167,8 @@ class TopicDetailFragment : BaseFragment() {
           }
           .into(headView.findViewById(R.id.topic_detail_content_tv))
     }
-    ImageLoader.displayImage(
-        view as ViewGroup, topicDetailBean.member.avatar_large,
-        headView.findViewById(R.id.topic_detail_avatar), R.mipmap.ic_launcher_round,
-        R.dimen.avatar_radius
+    ImageLoader.loadImage(
+        headView.findViewById(R.id.topic_detail_avatar), topicDetailBean.member.avatar_large
     )
 
     //附言
@@ -237,10 +236,9 @@ class TopicDetailFragment : BaseFragment() {
         holder.setText(R.id.topic_comment_item_floor_tv, position.toString())
         holder.setText(R.id.topic_comment_item_reply_time_tv, repliesShowBean.created_str)
 
-        ImageLoader.displayImage(
-            holder.convertView, repliesShowBean.member.avatar_large,
-            holder.getView(R.id.topic_comment_item_useravatar_iv), R.mipmap.ic_launcher_round,
-            R.dimen.avatar_radius
+        ImageLoader.loadImage(
+            holder.getView(R.id.topic_comment_item_useravatar_iv),
+            repliesShowBean.member.avatar_large
         )
         holder.convertView.setOnClickListener {
           //            mListener?.onListFragmentInteraction(holder.mItem!!.id)

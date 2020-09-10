@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils
+package com.journey.android.v2ex.libs.imageEngine
 
 import android.content.Context
 import com.bumptech.glide.Glide
@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory
 import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
+import com.journey.android.v2ex.libs.imageEngine.GooglePhotoUrlLoader.Factory
 import com.journey.android.v2ex.net.RetrofitRequest
 import java.io.InputStream
 
@@ -52,7 +53,7 @@ class GlideModule : AppGlideModule() {
         GlideUrl::class.java, InputStream::class.java,
         OkHttpUrlLoader.Factory(RetrofitRequest.client)
     )
-    registry.prepend(String::class.java, InputStream::class.java, GooglePhotoUrlLoader.Factory())
+    registry.prepend(String::class.java, InputStream::class.java, Factory())
   }
 
   override fun isManifestParsingEnabled(): Boolean {

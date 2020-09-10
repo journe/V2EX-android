@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.utils.extension
+package com.journey.android.v2ex.libs.extension
 
 fun String.color(): String =
     "$this?x-oss-process=image/average-hue"

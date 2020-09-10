@@ -1,4 +1,4 @@
-package tech.echoing.libs.imageEngine;
+package com.journey.android.v2ex.libs.imageEngine;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,13 +9,11 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-
 import java.security.MessageDigest;
 
 public class CornerTransform implements Transformation<Bitmap> {

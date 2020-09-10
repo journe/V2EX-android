@@ -40,7 +40,7 @@
       tools:text="最新的 ubuntu 18 在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?"
       />
 
-  <ImageView
+  <com.journey.android.v2ex.libs.CircleImageView
       android:id="@+id/topic_useravatar_item_iv"
       android:layout_width="40dp"
       android:layout_height="40dp"
