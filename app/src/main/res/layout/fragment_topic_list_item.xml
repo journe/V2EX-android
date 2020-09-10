@@ -19,7 +19,7 @@
       android:textSize="12sp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/topic_useravatar_item_iv"
-      tools:text="calm"
+      tools:text="@tools:sample/full_names"
       />
 
   <TextView
@@ -37,7 +37,7 @@
       app:layout_constraintEnd_toStartOf="@+id/topic_replies_item_tv"
       app:layout_constraintStart_toStartOf="@+id/guideline"
       app:layout_constraintTop_toTopOf="parent"
-      tools:text="最新的 ubuntu 18 在哪里能下载到?最新的 ubuntu 18 在哪里能下载到?"
+      tools:text="@tools:sample/lorem/random"
       />
 
   <com.journey.android.v2ex.libs.CircleImageView
@@ -49,7 +49,7 @@
       android:contentDescription="avatar"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@mipmap/ic_launcher_round"
+      tools:src="@tools:sample/avatars"
       />
 
   <TextView
@@ -67,7 +67,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      tools:text="115"
+      tools:text="999"
       />
 
   <TextView

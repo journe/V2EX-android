@@ -76,7 +76,7 @@ class BalanceActivity : AppCompatActivity() {
     mHeaderAndFooterWrapper.addHeaderView(headView)
     mHeaderAndFooterWrapper.addFootView(
         layoutInflater.inflate(
-            R.layout.activity_topic_detail_foot,
+            R.layout.fragment_topic_detail_foot,
             balance_toolbar, false
         )
     )

@@ -23,8 +23,7 @@ import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_member_info.member_info_avatar_iv
-import kotlinx.android.synthetic.main.activity_topic_detail.topic_detail_comments_list
+import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -40,7 +39,7 @@ class TopicDetailFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.activity_topic_detail, container, false)
+    return inflater.inflate(R.layout.fragment_topic_detail, container, false)
   }
 
   override fun onViewCreated(
@@ -150,7 +149,7 @@ class TopicDetailFragment : BaseFragment() {
   private fun addHeaderView(topicDetailBean: TopicsShowBean): View {
     //取得评论数据并添加head view
     val headView = layoutInflater.inflate(
-        R.layout.activity_topic_detail_head,
+        R.layout.fragment_topic_detail_head,
         view as ViewGroup, false
     )
     headView.findViewById<TextView>(R.id.topic_detail_title_tv)
@@ -175,7 +174,7 @@ class TopicDetailFragment : BaseFragment() {
     val subtlesView = headView.findViewById<LinearLayout>(R.id.topic_subtles_ll)
     topicDetailBean.subtles?.forEach {
       val subtleItemView = layoutInflater.inflate(
-          R.layout.activity_topic_detail_subtle_item,
+          R.layout.fragment_topic_detail_subtle_item,
           view as ViewGroup, false
       )
       subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
@@ -206,7 +205,7 @@ class TopicDetailFragment : BaseFragment() {
     mHeaderAndFooterWrapper.addHeaderView(headView)
     mHeaderAndFooterWrapper.addFootView(
         layoutInflater.inflate(
-            R.layout.activity_topic_detail_foot,
+            R.layout.fragment_topic_detail_foot,
             view as ViewGroup, false
         )
     )
@@ -216,7 +215,7 @@ class TopicDetailFragment : BaseFragment() {
 
   private fun genTopicCommentItemAdapter(topicComments: List<RepliesShowBean>): CommonAdapter<RepliesShowBean> {
     return object : CommonAdapter<RepliesShowBean>(
-        context, R.layout.activity_topic_comment_item,
+        context, R.layout.fragment_topic_detail_comment_item,
         topicComments
     ) {
       override fun convert(
