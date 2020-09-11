@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,8 +21,11 @@ import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
+import com.journey.android.v2ex.module.topic.list.TopicListRepository
+import com.journey.android.v2ex.module.topic.list.TopicListViewModel
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.room.AppDatabase
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
@@ -32,7 +39,22 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TopicDetailFragment : BaseFragment() {
-  private var topicId: Int = 0
+
+  val safeArgs: TopicDetailFragmentArgs by navArgs()
+  private var topicId: Int = safeArgs.topicId
+
+  private val viewModel: TopicDetailViewModel by viewModels {
+    object : ViewModelProvider.Factory {
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return TopicDetailViewModel(
+            TopicDetailRepository(
+                AppDatabase.getInstance(),
+                safeArgs.topicId
+            )
+        ) as T
+      }
+    }
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -54,8 +76,6 @@ class TopicDetailFragment : BaseFragment() {
             DividerItemDecoration.VERTICAL
         )
     )
-    val safeArgs: TopicDetailFragmentArgs by navArgs()
-    topicId = safeArgs.topicId
     getData(topicId)
   }
 
@@ -95,7 +115,6 @@ class TopicDetailFragment : BaseFragment() {
             topicDetailBean.subtles?.forEach {
               it.id = id
             }
-//            topicDetailBean.save()
             val headView = addHeaderView(topicDetailBean)
 
             getReplyByNet(id, headView)

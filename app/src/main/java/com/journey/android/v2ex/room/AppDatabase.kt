@@ -6,10 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.journey.android.v2ex.model.api.*
-import com.journey.android.v2ex.room.dao.MeDao
-import com.journey.android.v2ex.room.dao.TopicDetailDao
-import com.journey.android.v2ex.room.dao.TopicListDao
-import com.journey.android.v2ex.room.dao.UserInfoDao
+import com.journey.android.v2ex.room.dao.*
 import com.journey.android.v2ex.utils.Utils
 
 /**
@@ -26,6 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun userInfoDao(): UserInfoDao
   abstract fun topicListDao(): TopicListDao
   abstract fun topicDetailDao(): TopicDetailDao
+  abstract fun topicRepliesDao(): TopicRepliesDao
 
   companion object {
     private const val DATABASE_NAME: String = "v2ex.db"
