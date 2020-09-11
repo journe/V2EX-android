@@ -99,6 +99,6 @@ interface RetrofitService {
   fun getTopicById(@Path("id") id: Int): Call<ResponseBody>
 
   @GET("/t/{id}")
-  fun getTopicByIdSuspend(@Path("id") id: Int): ResponseBody
+  suspend fun getTopicByIdSuspend(@Path("id") id: Int): ResponseBody
 
 }

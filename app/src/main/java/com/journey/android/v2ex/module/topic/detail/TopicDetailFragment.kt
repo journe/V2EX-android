@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,16 +21,14 @@ import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
-import com.journey.android.v2ex.module.topic.list.TopicListRepository
-import com.journey.android.v2ex.module.topic.list.TopicListViewModel
-import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
 import com.zhy.adapter.recyclerview.CommonAdapter
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
+import kotlinx.android.synthetic.main.fragment_topic_detail.*
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -41,7 +39,7 @@ import retrofit2.Response
 class TopicDetailFragment : BaseFragment() {
 
   val safeArgs: TopicDetailFragmentArgs by navArgs()
-  private var topicId: Int = safeArgs.topicId
+//  private var topicId: Int = safeArgs.topicId
 
   private val viewModel: TopicDetailViewModel by viewModels {
     object : ViewModelProvider.Factory {
@@ -76,10 +74,10 @@ class TopicDetailFragment : BaseFragment() {
             DividerItemDecoration.VERTICAL
         )
     )
-    getData(topicId)
+    getData()
   }
 
-  private fun getData(id: Int) {
+  private fun getData() {
 //    val result = TopicsShowBean().queryFirst { equalTo("id", id) }
 //    if (result != null) {
 //      val headView = addHeaderView(result)
@@ -89,7 +87,10 @@ class TopicDetailFragment : BaseFragment() {
 //    } else {
 //      getDataByNet(id)
 //    }
-    getDataByNet(id)
+//    getDataByNet(id)
+    viewModel.topicDetailBean.observe(viewLifecycleOwner, Observer {
+      addHeaderView(it)
+    })
   }
 
   private fun getDataByNet(id: Int) {
@@ -115,9 +116,9 @@ class TopicDetailFragment : BaseFragment() {
             topicDetailBean.subtles?.forEach {
               it.id = id
             }
-            val headView = addHeaderView(topicDetailBean)
-
-            getReplyByNet(id, headView)
+//            val headView = addHeaderView(topicDetailBean)
+//
+//            getReplyByNet(id, headView)
             //评论
 //            getReplyByJsoup(doc, headView)
           }
@@ -165,12 +166,13 @@ class TopicDetailFragment : BaseFragment() {
         })
   }
 
-  private fun addHeaderView(topicDetailBean: TopicsShowBean): View {
+  private fun addHeaderView(topicDetailBean: TopicsShowBean) {
     //取得评论数据并添加head view
-    val headView = layoutInflater.inflate(
-        R.layout.fragment_topic_detail_head,
-        view as ViewGroup, false
-    )
+//    val headView = layoutInflater.inflate(
+//        R.layout.fragment_topic_detail_head,
+//        view as ViewGroup, false
+//    )
+    val headView = topic_detail_head_cl
     headView.findViewById<TextView>(R.id.topic_detail_title_tv)
         .text = topicDetailBean.title
     headView.findViewById<TextView>(R.id.topic_detail_node_tv)
@@ -206,12 +208,12 @@ class TopicDetailFragment : BaseFragment() {
           .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
       subtlesView.addView(subtleItemView)
     }
-    return headView
+//    return headView
   }
 
   private fun showImage(url: String?) {
     val action =
-      TopicDetailFragmentDirections.nextAction(url ?: "")
+      TopicDetailFragmentDirections.topicDetailImage(url ?: "")
     findNavController().navigate(action)
   }
 

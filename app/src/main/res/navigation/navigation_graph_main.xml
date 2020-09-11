@@ -14,7 +14,7 @@
         android:id="@+id/action_main_dest_to_login_dest"
         app:destination="@id/login_dest"/>
     <action
-        android:id="@+id/next_action"
+        android:id="@+id/topic_detail"
         app:destination="@id/topicDetail_dest"/>
     <action
         android:id="@+id/action_main_dest_to_settingsActivity"
@@ -41,7 +41,7 @@
         android:name="topicId"
         app:argType="integer"/>
     <action
-        android:id="@+id/next_action"
+        android:id="@+id/topic_detail_image"
         app:destination="@id/topicImage_dest"/>
     <deepLink app:uri="www.v2ex.com/t/{arg}"/>
   </fragment>

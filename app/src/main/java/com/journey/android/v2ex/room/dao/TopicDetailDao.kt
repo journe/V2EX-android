@@ -9,6 +9,6 @@ import com.journey.android.v2ex.model.api.TopicsShowBean
  */
 @Dao
 interface TopicDetailDao : BaseDao<TopicsShowBean> {
-    @Query("SELECT * FROM TopicsShowBean")
-    fun getAll(): List<TopicsShowBean>
+  @Query("SELECT * FROM TopicsShowBean WHERE id = :topicId")
+  fun getTopicById(topicId: Int): TopicsShowBean?
 }

@@ -26,7 +26,7 @@ class TopicCommentAdapter(val navInterface: NavInterface) :
     viewType: Int
   ): ViewHolder {
     val view = LayoutInflater.from(parent.context)
-        .inflate(R.layout.fragment_topic_list_item, parent, false)
+        .inflate(R.layout.fragment_topic_detail_comment_item, parent, false)
     return ViewHolder(view)
   }
 

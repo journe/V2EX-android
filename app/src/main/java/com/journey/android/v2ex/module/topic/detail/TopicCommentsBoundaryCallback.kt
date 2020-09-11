@@ -33,7 +33,7 @@ class TopicCommentsBoundaryCallback(
   private val insertToDb: KSuspendFunction1<List<RepliesShowBean>, Unit>,
   private val topicId: Int
 ) : PagedList.BoundaryCallback<RepliesShowBean>() {
-  
+
   private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
   private var job: Job = Job()
 
@@ -71,20 +71,18 @@ class TopicCommentsBoundaryCallback(
             call: Call<ResponseBody>,
             response: Response<ResponseBody>
           ) {
-            val doc = Jsoup.parse(
-                response.body()!!
-                    .string()
-            )
-            val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
-            topicDetailBean.id = topicId
-            topicDetailBean.subtles?.forEach {
-              it.id = topicId
-            }
-//            topicDetailBean.save()
-            val headView = addHeaderView(topicDetailBean)
-
-            getReplyByNet(id, headView)
-            //评论
+//            val doc = Jsoup.parse(
+//                response.body()!!
+//                    .string()
+//            )
+//            val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
+//            topicDetailBean.id = topicId
+//            topicDetailBean.subtles?.forEach {
+//              it.id = topicId
+//            }
+//            val headView = addHeaderView(topicDetailBean)
+//
+//            getReplyByNet(id, headView)
 //            getReplyByJsoup(doc, headView)
           }
 

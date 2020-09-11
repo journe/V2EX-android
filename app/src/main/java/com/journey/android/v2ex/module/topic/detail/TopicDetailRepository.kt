@@ -64,14 +64,22 @@ class TopicDetailRepository(
         )
   }
 
-  fun getTopicDetail(): TopicsShowBean {
-    val response = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
-    val doc = Jsoup.parse(response.string())
-    val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
-    topicDetailBean.id = topicId
-    topicDetailBean.subtles?.forEach {
-      it.id = topicId
+  suspend fun getTopicDetail(): TopicsShowBean {
+    val localTopic = db.topicDetailDao().getTopicById(topicId = topicId)
+    if (localTopic != null) {
+      return localTopic
+    }else{
+      val response = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
+      val doc = Jsoup.parse(response.string())
+      val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
+      topicDetailBean.id = topicId
+      topicDetailBean.subtles?.forEach {
+        it.id = topicId
+      }
+      val replies = TopicDetailParser.parseComments(doc)
+      db.topicRepliesDao().insert(replies)
+      db.topicDetailDao().insert(topicDetailBean)
+      return topicDetailBean
     }
-    return topicDetailBean
   }
 }

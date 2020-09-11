@@ -47,7 +47,7 @@ class MainFragment : BaseFragment(),
   }
 
   override fun navigate(id: Int) {
-    val action = MainFragmentDirections.nextAction(id)
+    val action = MainFragmentDirections.topicDetail(id)
     findNavController().navigate(action)
   }
 
