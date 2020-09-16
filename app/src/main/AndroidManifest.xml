@@ -8,7 +8,7 @@
   <uses-permission android:name="android.permission.READ_CONTACTS" />
 
   <application
-      android:name=".V2exApplication"
+      android:name=".V2EXApplication"
       android:allowBackup="true"
       android:fullBackupContent="true"
       android:icon="@mipmap/ic_launcher_v"

@@ -76,8 +76,8 @@ class TopicDetailRepository(
       topicDetailBean.subtles?.forEach {
         it.id = topicId
       }
-      val replies = TopicDetailParser.parseComments(doc)
-      db.topicRepliesDao().insert(replies)
+//      val replies = TopicDetailParser.parseComments(doc)
+//      db.topicRepliesDao().insert(replies)
       db.topicDetailDao().insert(topicDetailBean)
       return topicDetailBean
     }

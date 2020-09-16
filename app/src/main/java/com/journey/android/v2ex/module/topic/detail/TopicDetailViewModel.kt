@@ -11,7 +11,7 @@ class TopicDetailViewModel(private val repository: TopicDetailRepository) : Base
   val topicDetailBean = liveData {
     emit(repository.getTopicDetail())
   }
-  val commentPagedList: LiveData<PagedList<RepliesShowBean>> = repository.getComments(100)
+  val repliesShowBean: LiveData<PagedList<RepliesShowBean>> = repository.getComments(100)
 
 //  fun refresh() {
 ////        itemPagedList.value?.dataSource?.invalidate()

@@ -4,10 +4,7 @@ import android.app.backup.BackupManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.bumptech.glide.Glide.init
-import com.journey.android.v2ex.V2exApplication
 import com.journey.android.v2ex.model.Tab
-import java.io.File
 
 class PrefStore internal constructor(context: Context) : SharedPreferences.OnSharedPreferenceChangeListener {
 

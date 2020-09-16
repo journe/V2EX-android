@@ -2,24 +2,13 @@ package com.journey.android.v2ex.module.topic.detail
 
 import androidx.paging.PagedList
 import androidx.annotation.MainThread
-import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.parser.TopicListParser
-import com.journey.android.v2ex.utils.Constants
-import com.journey.android.v2ex.libs.extension.launchThrowException
 import com.journey.android.v2ex.model.api.RepliesShowBean
-import com.journey.android.v2ex.net.parser.TopicDetailParser
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import org.jsoup.Jsoup
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.reflect.KSuspendFunction1
 
 /**
@@ -36,6 +25,7 @@ class TopicCommentsBoundaryCallback(
 
   private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
   private var job: Job = Job()
+  private var page = 1
 
   /**
    * Database returned 0 items. We should query the backend for more items.
@@ -54,40 +44,13 @@ class TopicCommentsBoundaryCallback(
   @MainThread
   override fun onItemAtEndLoaded(itemAtEnd: RepliesShowBean) {
 //    Logger.d("onItemAtEndLoaded")
-//        requestFeeds()
+//    requestComments()
   }
 
   private suspend fun requestComments(retry: Boolean = true) {
-    RetrofitRequest.apiService
-        .getTopicById(topicId)
-        .enqueue(object : Callback<ResponseBody> {
-          override fun onFailure(
-            call: Call<ResponseBody>,
-            t: Throwable
-          ) {
-          }
-
-          override fun onResponse(
-            call: Call<ResponseBody>,
-            response: Response<ResponseBody>
-          ) {
-//            val doc = Jsoup.parse(
-//                response.body()!!
-//                    .string()
-//            )
-//            val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
-//            topicDetailBean.id = topicId
-//            topicDetailBean.subtles?.forEach {
-//              it.id = topicId
-//            }
-//            val headView = addHeaderView(topicDetailBean)
-//
-//            getReplyByNet(id, headView)
-//            getReplyByJsoup(doc, headView)
-          }
-
-        })
-//    insertToDb(listItemBean.map { it.apply { tab = nodeName } })
+    val replies = RetrofitRequest.apiService
+        .getRepliesSuspend(topicId, page, 100)
+    insertToDb(replies)
   }
 
   override fun onItemAtFrontLoaded(itemAtFront: RepliesShowBean) {

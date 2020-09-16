@@ -29,7 +29,7 @@ class TopicListBoundaryCallback(
   @MainThread
   override fun onZeroItemsLoaded() {
 //    Logger.d("onZeroItemsLoaded")
-    requestFeeds()
+    requestTopics()
   }
 
   /**
@@ -41,7 +41,7 @@ class TopicListBoundaryCallback(
 //        requestFeeds()
   }
 
-  private fun requestFeeds(retry: Boolean = true) {
+  private fun requestTopics(retry: Boolean = true) {
     viewModelScope.launchThrowException {
       val result = RetrofitRequest.apiService.getTopicsByNodeSuspend(Constants.TAB + tabName)
       val listItemBean = TopicListParser.parseTopicList(
@@ -54,8 +54,4 @@ class TopicListBoundaryCallback(
   override fun onItemAtFrontLoaded(itemAtFront: TopicsListItemBean) {
     // ignored, since we only ever append to what's in the DB
   }
-
-//    companion object {
-//        var count = 0
-//    }
 }

@@ -3,10 +3,12 @@ package com.journey.android.v2ex.net
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.journey.android.v2ex.BuildConfig
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.Utils
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -22,6 +24,8 @@ object RetrofitRequest {
     PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getContext()))
 
   init {
+    val logInterceptor = HttpLoggingInterceptor(HttpLogger())
+    logInterceptor.level = HttpLoggingInterceptor.Level.BODY
     client = OkHttpClient.Builder()
         .apply {
           cache(buildCache())
@@ -30,14 +34,17 @@ object RetrofitRequest {
           readTimeout(30, TimeUnit.SECONDS)
           followRedirects(false)
           cookieJar(cookieJar)
-        }
-        .addInterceptor { chain ->
-          val request = chain.request()
-              .newBuilder()
-              .addHeader("User-Agent", Constants.USER_AGENT_ANDROID)
-              .build()
-          val response = chain.proceed(request)
-          response
+          addInterceptor { chain ->
+            val request = chain.request()
+                .newBuilder()
+                .addHeader("User-Agent", Constants.USER_AGENT_ANDROID)
+                .build()
+            val response = chain.proceed(request)
+            response
+          }
+          if (BuildConfig.DEBUG) {
+            addNetworkInterceptor(logInterceptor)
+          }
         }
         .build()
 
@@ -58,4 +65,5 @@ object RetrofitRequest {
   fun cleanCookies() {
     cookieJar.clear()
   }
+
 }

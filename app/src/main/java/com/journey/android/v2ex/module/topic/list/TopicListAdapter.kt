@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,9 @@ import com.journey.android.v2ex.libs.TimeUtil
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
+import com.journey.android.v2ex.module.topic.MainFragmentDirections
 import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
+import com.journey.android.v2ex.router.V2EXRouter
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.*
 
 class TopicListAdapter(val navInterface: NavInterface) :
@@ -75,7 +78,14 @@ class TopicListAdapter(val navInterface: NavInterface) :
 //      })
 
       mView.setOnClickListener {
-        navInterface.navigate(itemBean.id)
+        val action = MainFragmentDirections.topicDetail(itemBean.id)
+
+        val extras = FragmentNavigatorExtras(
+            memberAvatar to "header_title"
+        )
+
+        //        navInterface.navigate(itemBean.id)
+        V2EXRouter.navigate(action, extras)
       }
     }
   }

@@ -8,16 +8,19 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.model.api.TopicsListItemBean
-import com.journey.android.v2ex.libs.TimeUtil
-import com.journey.android.v2ex.libs.extension.invisible
-import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
-import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
-import kotlinx.android.synthetic.main.fragment_topic_list_item.view.*
+import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.router.V2EXRouter
+import com.zzhoujay.richtext.ImageHolder
+import com.zzhoujay.richtext.RichText
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_content_tv
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_floor_tv
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_reply_time_tv
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_useravatar_iv
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_username_tv
 
-class TopicCommentAdapter(val navInterface: NavInterface) :
-    PagedListAdapter<TopicsListItemBean, TopicCommentAdapter.ViewHolder>(
+class TopicCommentAdapter :
+    PagedListAdapter<RepliesShowBean, TopicCommentAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -43,29 +46,28 @@ class TopicCommentAdapter(val navInterface: NavInterface) :
   }
 
   inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-    val title: TextView = mView.topic_title_item_tv
-    val node: TextView = mView.topic_node_item_tv
-    val user: TextView = mView.topic_username_item_tv
-    val replies: TextView = mView.topic_replies_item_tv
-    val replyTime: TextView = mView.topic_reply_time_item_tv
-    val starIv = mView.topic_corner_star_iv
-    val memberAvatar = mView.topic_useravatar_item_iv
-    fun bind(itemBean: TopicsListItemBean) {
-      title.text = itemBean.title
-      node.text = itemBean.nodeName
-      user.text = itemBean.memberName
-      replies.text = itemBean.replies.toString()
-      if (itemBean.last_modified != 0) {
-        itemBean.last_modified_str = TimeUtil.calculateTime(itemBean.last_modified.toLong())
-      }
+    val floor: TextView = mView.topic_comment_item_floor_tv
+    val username: TextView = mView.topic_comment_item_username_tv
+    val replyTime: TextView = mView.topic_comment_item_reply_time_tv
+    val memberAvatar = mView.topic_comment_item_useravatar_iv
+    fun bind(repliesShowBean: RepliesShowBean) {
 
-      replyTime.text = itemBean.last_modified_str ?: ""
-      if (itemBean.last_modified_str.equals("置顶")) {
-        starIv.visible()
-      } else {
-        starIv.invisible()
-      }
-      ImageLoader.loadImage(memberAvatar, itemBean.memberAvatar)
+      RichText.fromHtml(repliesShowBean.content_rendered)
+          .clickable(true)
+          .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
+          .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
+          .imageClick { imageUrls, position ->
+            showImage(imageUrls[position])
+          }
+          .into(mView.topic_comment_item_content_tv)
+      floor.text = repliesShowBean.floor.toString()
+      username.text = repliesShowBean.member.username
+      replyTime.text = repliesShowBean.created_str
+
+      ImageLoader.loadImage(
+          memberAvatar,
+          repliesShowBean.member.avatar_large
+      )
 
 //      holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
 //        MemberInfoActivity.start(
@@ -74,23 +76,29 @@ class TopicCommentAdapter(val navInterface: NavInterface) :
 //      })
 
       mView.setOnClickListener {
-        navInterface.navigate(itemBean.id)
+//        navInterface.navigate(itemBean.id)
       }
+    }
+
+    private fun showImage(url: String?) {
+      val action =
+        TopicDetailFragmentDirections.topicDetailImage(url ?: "")
+      V2EXRouter.navigate(action)
     }
   }
 
   companion object {
-    private val DIFF_CALLBACK = object : ItemCallback<TopicsListItemBean>() {
+    private val DIFF_CALLBACK = object : ItemCallback<RepliesShowBean>() {
       override fun areItemsTheSame(
-        oldItem: TopicsListItemBean,
-        newItem: TopicsListItemBean
+        oldItem: RepliesShowBean,
+        newItem: RepliesShowBean
       ): Boolean {
         return oldItem.id == newItem.id
       }
 
       override fun areContentsTheSame(
-        oldItem: TopicsListItemBean,
-        newItem: TopicsListItemBean
+        oldItem: RepliesShowBean,
+        newItem: RepliesShowBean
       ): Boolean {
         return oldItem.id == newItem.id
       }

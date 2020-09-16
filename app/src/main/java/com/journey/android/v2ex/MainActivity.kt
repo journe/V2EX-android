@@ -10,10 +10,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.journey.android.v2ex.base.BaseActivity
+import com.journey.android.v2ex.router.V2EXRouter
 import com.zzhoujay.richtext.RichText
-import kotlinx.android.synthetic.main.activity_main.drawer_layout
-import kotlinx.android.synthetic.main.activity_main.nav_view
-import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
   private lateinit var appBarConfiguration: AppBarConfiguration
@@ -21,7 +20,7 @@ class MainActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    setSupportActionBar(toolbar)
+    setSupportActionBar(main_toolbar)
 
     val host: NavHostFragment = supportFragmentManager
         .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
@@ -40,6 +39,7 @@ class MainActivity : BaseActivity() {
           drawer_layout.closeDrawers()
         }
 
+    V2EXRouter.init(this,navController)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

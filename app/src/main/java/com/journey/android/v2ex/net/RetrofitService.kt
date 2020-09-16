@@ -59,6 +59,13 @@ interface RetrofitService {
     @Query("page_size") pageSize: Int
   ): Call<List<RepliesShowBean>>
 
+  @GET(Constants.REPLIES)
+  suspend fun getRepliesSuspend(
+    @Query("topic_id") id: Int,
+    @Query("page") page: Int,
+    @Query("page_size") pageSize: Int
+  ): List<RepliesShowBean>
+
   @GET(Constants.MEMBERS)
   fun getMemberInfoByID(@Query("id") id: Int): Call<MemberBean>
 
