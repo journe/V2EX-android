@@ -81,7 +81,8 @@ class TopicListAdapter(val navInterface: NavInterface) :
         val action = MainFragmentDirections.topicDetail(itemBean.id)
 
         val extras = FragmentNavigatorExtras(
-            memberAvatar to "header_title"
+            title to "header_title",
+            memberAvatar to "header_avatar"
         )
 
         //        navInterface.navigate(itemBean.id)

@@ -35,7 +35,7 @@ class MainActivity : BaseActivity() {
 
     nav_view.getHeaderView(0)
         .setOnClickListener {
-          findNavController(R.id.nav_host_fragment).navigate(R.id.login_dest)
+          navController.navigate(R.id.login_dest)
           drawer_layout.closeDrawers()
         }
 

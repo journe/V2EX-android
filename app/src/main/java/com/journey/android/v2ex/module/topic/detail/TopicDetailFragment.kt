@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -77,25 +78,27 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getData() {
-    val adapter = TopicCommentAdapter()
-    topic_detail_comments_list.adapter = adapter
+
+    val topicCommentAdapter = TopicCommentAdapter()
+    val topicHeaderAdapter = TopicHeaderAdapter(TopicsShowBean())
+    val concatAdapter = ConcatAdapter()
+    concatAdapter.addAdapter(topicHeaderAdapter)
+    concatAdapter.addAdapter(topicCommentAdapter)
+    topic_detail_comments_list.adapter = concatAdapter
 
     viewModel.topicDetailBean.observe(viewLifecycleOwner, {
       addHeaderView(it)
+      topicHeaderAdapter.topicDetailBean = it
     })
     viewModel.repliesShowBean.observe(viewLifecycleOwner, {
 //      topic_list_refreshview.isRefreshing = false
-      adapter.submitList(it)
+      topicCommentAdapter.submitList(it)
     })
 
   }
 
   private fun addHeaderView(topicDetailBean: TopicsShowBean) {
     //取得评论数据并添加head view
-//    val headView = layoutInflater.inflate(
-//        R.layout.fragment_topic_detail_head,
-//        view as ViewGroup, false
-//    )
     val headView = topic_detail_head_cl
     headView.findViewById<TextView>(R.id.topic_detail_title_tv)
         .text = topicDetailBean.title
@@ -103,14 +106,14 @@ class TopicDetailFragment : BaseFragment() {
         .text = topicDetailBean.node.name
     headView.findViewById<TextView>(R.id.topic_detail_create_time_tv)
         .text = topicDetailBean.created_str
-    topicDetailBean.content?.let {
-      RichText.fromHtml(it)
-          .clickable(true)
-          .imageClick { imageUrls, position ->
-            showImage(imageUrls[position])
-          }
-          .into(headView.findViewById(R.id.topic_detail_content_tv))
-    }
+//    topicDetailBean.content?.let {
+//      RichText.fromHtml(it)
+//          .clickable(true)
+//          .imageClick { imageUrls, position ->
+//            showImage(imageUrls[position])
+//          }
+//          .into(headView.findViewById(R.id.topic_detail_content_tv))
+//    }
 //    ImageLoader.loadImage(
 //        headView.findViewById(R.id.topic_detail_avatar), topicDetailBean.member.avatar_large
 //    )
