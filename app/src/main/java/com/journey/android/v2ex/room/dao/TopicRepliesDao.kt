@@ -18,4 +18,6 @@ interface TopicRepliesDao : BaseDao<RepliesShowBean> {
   @Query("SELECT * FROM RepliesShowBean WHERE topic_id = :topicId ORDER BY floor ASC")
   fun getTopicReplies(topicId: Int): DataSource.Factory<Int, RepliesShowBean>
 
+  @Query("DELETE FROM RepliesShowBean")
+  suspend fun deleteAll()
 }

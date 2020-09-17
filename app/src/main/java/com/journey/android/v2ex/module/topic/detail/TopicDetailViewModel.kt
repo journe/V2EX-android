@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.net.RetrofitRequest
 
 class TopicDetailViewModel(private val repository: TopicDetailRepository) : BaseViewModel() {
 

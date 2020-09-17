@@ -3,6 +3,7 @@ package com.journey.android.v2ex.net.parser
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.api.TopicShowSubtle
+import com.orhanobut.logger.Logger
 import org.jsoup.nodes.Document
 
 /**
@@ -108,15 +109,30 @@ object TopicDetailParser {
           .selectFirst("td[align = left]")
           .selectFirst(".reply_content")
           .html()
+      commentBean.content_rendered = comment
+          .selectFirst("td[align = left]")
+          .selectFirst(".reply_content")
+          .html()
       commentBean.floor = comment
           .selectFirst("td[align = left]")
+          .selectFirst("div.fr")
           .selectFirst("span.no")
           .text()
           .toInt()
-      commentBean.created_str = comment
+      comment
           .selectFirst("td[align = left]")
-          .selectFirst("span.fade.small")
-          .text()
+          .selectFirst(".fade small")
+          ?.let {
+            Logger.d(it.text())
+            commentBean.created_str = it.text()
+          }
+      comment
+          .selectFirst("td[align = left]")
+          .selectFirst(".small fade")
+          ?.let {
+            Logger.d(it.text())
+            commentBean.heart = it.text().toInt()
+          }
 
       commentBean.member.username = comment
           .selectFirst("td[align = left]")

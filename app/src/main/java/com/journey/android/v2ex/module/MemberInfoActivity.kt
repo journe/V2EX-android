@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseActivity
+import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitRequest
@@ -32,7 +33,7 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun initView() {
-        ImageLoader.loadImage(member_info_avatar_iv, mMemberBean.avatar_large)
+        ImageLoader.loadImage(member_info_avatar_iv, mMemberBean.avatar_large.largeAvatar())
         member_info_username_tv.text = mMemberBean.username
         member_info_tagline_tv.text = mMemberBean.tagline
     }

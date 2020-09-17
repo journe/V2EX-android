@@ -5,8 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.FragmentNavigator
 import com.journey.android.v2ex.base.BaseActivity
+import com.journey.android.v2ex.module.topic.detail.TopicDetailFragmentDirections
 
-object V2EXRouter {
+object Router {
   private lateinit var uri: Uri
   private lateinit var baseActivity: BaseActivity
   lateinit var navController: NavController
@@ -28,5 +29,11 @@ object V2EXRouter {
     } else {
       navController.navigate(action)
     }
+  }
+
+  fun imageDetail(url: String) {
+    val action =
+      TopicDetailFragmentDirections.topicDetailImage(url)
+    navController.navigate(action)
   }
 }

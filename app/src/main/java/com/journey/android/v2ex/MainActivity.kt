@@ -10,7 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.journey.android.v2ex.base.BaseActivity
-import com.journey.android.v2ex.router.V2EXRouter
+import com.journey.android.v2ex.router.Router
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity() {
           drawer_layout.closeDrawers()
         }
 
-    V2EXRouter.init(this,navController)
+    Router.init(this,navController)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

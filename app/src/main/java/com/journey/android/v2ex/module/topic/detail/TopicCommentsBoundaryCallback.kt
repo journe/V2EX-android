@@ -4,6 +4,8 @@ import androidx.paging.PagedList
 import androidx.annotation.MainThread
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.room.AppDatabase
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,7 +34,7 @@ class TopicCommentsBoundaryCallback(
    */
   @MainThread
   override fun onZeroItemsLoaded() {
-//    Logger.d("onZeroItemsLoaded")
+    Logger.d("onZeroItemsLoaded")
     GlobalScope.launch(uiDispatcher + job) {
       requestComments()
     }
@@ -43,18 +45,20 @@ class TopicCommentsBoundaryCallback(
    */
   @MainThread
   override fun onItemAtEndLoaded(itemAtEnd: RepliesShowBean) {
-//    Logger.d("onItemAtEndLoaded")
+    Logger.d("onItemAtEndLoaded")
 //    requestComments()
   }
 
   private suspend fun requestComments(retry: Boolean = true) {
-    val replies = RetrofitRequest.apiService
-        .getRepliesSuspend(topicId, page, 100)
-    insertToDb(replies)
+//    val replies = RetrofitRequest.apiService
+//        .getRepliesSuspend(topicId, page, 100)
+//    insertToDb(replies)
+
   }
 
   override fun onItemAtFrontLoaded(itemAtFront: RepliesShowBean) {
     // ignored, since we only ever append to what's in the DB
+    Logger.d("onItemAtFrontLoaded")
   }
 
 }

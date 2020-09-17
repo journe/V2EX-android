@@ -7,7 +7,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -23,9 +22,10 @@ import com.bumptech.glide.request.target.Target
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.model.api.TopicsShowBean
+import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter
+import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderAdapter
+import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderSubtleAdapter
 import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.router.V2EXRouter
-import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_head_cl
 
@@ -78,17 +78,24 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private fun getData() {
-
-    val topicCommentAdapter = TopicCommentAdapter()
     val topicHeaderAdapter = TopicHeaderAdapter(TopicsShowBean())
-    val concatAdapter = ConcatAdapter()
-    concatAdapter.addAdapter(topicHeaderAdapter)
-    concatAdapter.addAdapter(topicCommentAdapter)
+    val topicHeaderSubtleAdapter = TopicHeaderSubtleAdapter(TopicsShowBean())
+    val topicCommentAdapter = TopicCommentAdapter()
+
+    val concatAdapter = ConcatAdapter().apply {
+      addAdapter(topicHeaderAdapter)
+      addAdapter(topicHeaderSubtleAdapter)
+      addAdapter(topicCommentAdapter)
+    }
+
     topic_detail_comments_list.adapter = concatAdapter
 
     viewModel.topicDetailBean.observe(viewLifecycleOwner, {
       addHeaderView(it)
       topicHeaderAdapter.topicDetailBean = it
+      topicHeaderAdapter.notifyDataSetChanged()
+      topicHeaderSubtleAdapter.topicDetailBean = it
+      topicHeaderSubtleAdapter.notifyDataSetChanged()
     })
     viewModel.repliesShowBean.observe(viewLifecycleOwner, {
 //      topic_list_refreshview.isRefreshing = false
@@ -106,14 +113,6 @@ class TopicDetailFragment : BaseFragment() {
         .text = topicDetailBean.node.name
     headView.findViewById<TextView>(R.id.topic_detail_create_time_tv)
         .text = topicDetailBean.created_str
-//    topicDetailBean.content?.let {
-//      RichText.fromHtml(it)
-//          .clickable(true)
-//          .imageClick { imageUrls, position ->
-//            showImage(imageUrls[position])
-//          }
-//          .into(headView.findViewById(R.id.topic_detail_content_tv))
-//    }
 //    ImageLoader.loadImage(
 //        headView.findViewById(R.id.topic_detail_avatar), topicDetailBean.member.avatar_large
 //    )
@@ -144,30 +143,6 @@ class TopicDetailFragment : BaseFragment() {
           }
         })
         .into(headView.findViewById(R.id.topic_detail_avatar))
-
-    //附言
-    val subtlesView = headView.findViewById<LinearLayout>(R.id.topic_subtles_ll)
-    topicDetailBean.subtles?.forEach {
-      val subtleItemView = layoutInflater.inflate(
-          R.layout.fragment_topic_detail_subtle_item,
-          view as ViewGroup, false
-      )
-      subtleItemView.findViewById<TextView>(R.id.topic_subtle_title_tv)
-          .text = it.title
-      RichText.fromHtml(it.content)
-          .clickable(true)
-          .imageClick { imageUrls, position ->
-            showImage(imageUrls[position])
-          }
-          .into(subtleItemView.findViewById(R.id.topic_subtle_content_tv))
-      subtlesView.addView(subtleItemView)
-    }
-  }
-
-  private fun showImage(url: String?) {
-    val action =
-      TopicDetailFragmentDirections.topicDetailImage(url ?: "")
-    V2EXRouter.navigate(action)
   }
 
 }

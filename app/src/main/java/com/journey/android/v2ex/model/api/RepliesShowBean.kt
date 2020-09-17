@@ -29,7 +29,8 @@ data class RepliesShowBean(
   var created: Int = 0,
   var created_str: String = "",
   var last_modified: Int = 0,
-  var floor: Int = 0
+  var floor: Int = 0,
+  var heart: Int = 0
 )
 
 

@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.module.topic.detail
+package com.journey.android.v2ex.module.topic.detail.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,11 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
-import com.journey.android.v2ex.router.V2EXRouter
+import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter.ViewHolder
+import com.journey.android.v2ex.router.Router
 import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_content_tv
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.to
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_username_tv
 
 class TopicCommentAdapter :
-    PagedListAdapter<RepliesShowBean, TopicCommentAdapter.ViewHolder>(
+    PagedListAdapter<RepliesShowBean, ViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -57,33 +59,20 @@ class TopicCommentAdapter :
           .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
           .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
           .imageClick { imageUrls, position ->
-            showImage(imageUrls[position])
+            Router.imageDetail(imageUrls[position] ?: "")
           }
           .into(mView.topic_comment_item_content_tv)
-      floor.text = repliesShowBean.floor.toString()
+
+      if (repliesShowBean.floor != 0) {
+        floor.text = repliesShowBean.floor.toString()
+      }
       username.text = repliesShowBean.member.username
       replyTime.text = repliesShowBean.created_str
 
       ImageLoader.loadImage(
           memberAvatar,
-          repliesShowBean.member.avatar_large
+          repliesShowBean.member.avatar_large.largeAvatar()
       )
-
-//      holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
-//        MemberInfoActivity.start(
-//            itemBean.memberName, holder.convertView.context
-//        )
-//      })
-
-      mView.setOnClickListener {
-//        navInterface.navigate(itemBean.id)
-      }
-    }
-
-    private fun showImage(url: String?) {
-      val action =
-        TopicDetailFragmentDirections.topicDetailImage(url ?: "")
-      V2EXRouter.navigate(action)
     }
   }
 

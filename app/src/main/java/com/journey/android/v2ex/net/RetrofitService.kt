@@ -44,20 +44,13 @@ interface RetrofitService {
   fun listLatestTopics(): Call<ArrayList<TopicsListItemBean>>
 
   @GET(Constants.TOPICS_SHOW)
-  fun getTopicsById(@Query("id") id: Int): Call<ArrayList<TopicsShowBean>>
+  suspend fun getTopicsById(@Query("id") id: Int): List<TopicsShowBean>
 
   @GET(Constants.TOPICS_SHOW)
   fun getTopicsByUser(@Query("username") username: String): Call<ArrayList<TopicsShowBean>>
 
   @GET(Constants.TOPICS_SHOW)
   fun getTopicsByNode(@Query("node_id") nodeId: Int): Call<ArrayList<TopicsListItemBean>>
-
-  @GET(Constants.REPLIES)
-  fun getReplies(
-    @Query("topic_id") id: Int,
-    @Query("page") page: Int,
-    @Query("page_size") pageSize: Int
-  ): Call<List<RepliesShowBean>>
 
   @GET(Constants.REPLIES)
   suspend fun getRepliesSuspend(
@@ -97,15 +90,9 @@ interface RetrofitService {
   suspend fun getTopicsByNodeSuspend(@Url url: String): ResponseBody
 
   @GET("/t/{id}")
-  fun getTopicById(
+  suspend fun getTopicByIdSuspend(
     @Path("id") id: Int,
-    @Query("p") page: Int
-  ): Call<ResponseBody>
-
-  @GET("/t/{id}")
-  fun getTopicById(@Path("id") id: Int): Call<ResponseBody>
-
-  @GET("/t/{id}")
-  suspend fun getTopicByIdSuspend(@Path("id") id: Int): ResponseBody
+    @Query("p") page: Int = 1
+  ): ResponseBody
 
 }
