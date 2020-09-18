@@ -8,18 +8,19 @@
 
     <TextView
         android:id="@+id/topic_comment_item_username_tv"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:gravity="start"
+        android:gravity="center"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names"/>
+        tools:text="@tools:sample/full_names"
+        />
 
     <TextView
         android:id="@+id/topic_comment_item_content_tv"
@@ -69,13 +70,25 @@
         android:id="@+id/topic_comment_item_reply_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="end"
-        android:textSize="12sp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:textSize="8sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/topic_comment_item_username_tv"
         app:layout_constraintStart_toEndOf="@+id/topic_comment_item_username_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="15分钟前"/>
+        tools:text="15分钟前"
+        />
+
+    <TextView
+        android:id="@+id/topic_comment_item_reply_heart_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:textSize="8sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/topic_comment_item_reply_time_tv"
+        app:layout_constraintStart_toEndOf="@+id/topic_comment_item_reply_time_tv"
+        tools:text="❤ ️1"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

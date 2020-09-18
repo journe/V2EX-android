@@ -1,6 +1,7 @@
 package com.journey.android.v2ex
 
 import android.app.Application
+import androidx.lifecycle.ViewModelProviders
 import com.journey.android.v2ex.utils.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -12,6 +13,7 @@ import com.zzhoujay.richtext.RichText
  */
 
 class V2EXApplication : Application() {
+
   override fun onCreate() {
     super.onCreate()
     Logger.addLogAdapter(object :

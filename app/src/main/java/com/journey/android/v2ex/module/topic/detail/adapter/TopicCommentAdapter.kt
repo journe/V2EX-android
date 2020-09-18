@@ -8,7 +8,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
+import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.largeAvatar
+import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter.ViewHolder
@@ -17,6 +19,7 @@ import com.zzhoujay.richtext.ImageHolder
 import com.zzhoujay.richtext.RichText
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_content_tv
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_floor_tv
+import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_reply_heart_tv
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_reply_time_tv
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_useravatar_iv
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_username_tv
@@ -48,12 +51,13 @@ class TopicCommentAdapter :
   }
 
   inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-    val floor: TextView = mView.topic_comment_item_floor_tv
-    val username: TextView = mView.topic_comment_item_username_tv
-    val replyTime: TextView = mView.topic_comment_item_reply_time_tv
-    val memberAvatar = mView.topic_comment_item_useravatar_iv
-    fun bind(repliesShowBean: RepliesShowBean) {
+    private val floor: TextView = mView.topic_comment_item_floor_tv
+    private val username: TextView = mView.topic_comment_item_username_tv
+    private val replyTime: TextView = mView.topic_comment_item_reply_time_tv
+    private val heartCount: TextView = mView.topic_comment_item_reply_heart_tv
+    private val memberAvatar = mView.topic_comment_item_useravatar_iv
 
+    fun bind(repliesShowBean: RepliesShowBean) {
       RichText.fromHtml(repliesShowBean.content_rendered)
           .clickable(true)
           .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
@@ -68,6 +72,12 @@ class TopicCommentAdapter :
       }
       username.text = repliesShowBean.member.username
       replyTime.text = repliesShowBean.created_str
+      if (repliesShowBean.heart!=0) {
+        heartCount.visible()
+        heartCount.text = "❤ ️${repliesShowBean.heart}"
+      }else{
+        heartCount.invisible()
+      }
 
       ImageLoader.loadImage(
           memberAvatar,

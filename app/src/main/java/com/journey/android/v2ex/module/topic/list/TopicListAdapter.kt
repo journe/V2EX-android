@@ -14,9 +14,11 @@ import com.journey.android.v2ex.module.topic.list.TopicListAdapter.ViewHolder
 import com.journey.android.v2ex.libs.TimeUtil
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.largeAvatar
+import com.journey.android.v2ex.libs.extension.onClick
 import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.module.topic.MainFragmentDirections
+import com.journey.android.v2ex.module.topic.detail.TopicDetailRepository
 import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
 import com.journey.android.v2ex.router.Router
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.*
@@ -78,16 +80,15 @@ class TopicListAdapter(val navInterface: NavInterface) :
 //        )
 //      })
 
-      mView.setOnClickListener {
+      mView.onClick {
         val action = MainFragmentDirections.topicDetail(itemBean.id)
-
         val extras = FragmentNavigatorExtras(
             title to "header_title",
             memberAvatar to "header_avatar"
         )
-
-        //        navInterface.navigate(itemBean.id)
         Router.navigate(action, extras)
+        //        navInterface.navigate(itemBean.id)
+        TopicDetailRepository(topicId = itemBean.id).loadTopicDetail()
       }
     }
   }

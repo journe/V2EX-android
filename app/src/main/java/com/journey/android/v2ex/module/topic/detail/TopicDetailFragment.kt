@@ -90,18 +90,21 @@ class TopicDetailFragment : BaseFragment() {
 
     topic_detail_comments_list.adapter = concatAdapter
 
-    viewModel.topicDetailBean.observe(viewLifecycleOwner, {
-      addHeaderView(it)
-      topicHeaderAdapter.topicDetailBean = it
-      topicHeaderAdapter.notifyDataSetChanged()
-      topicHeaderSubtleAdapter.topicDetailBean = it
-      topicHeaderSubtleAdapter.notifyDataSetChanged()
+    viewModel.topicShowBean.observe(viewLifecycleOwner, {
+      if (it != null) {
+        addHeaderView(it)
+        topicHeaderAdapter.topicDetailBean = it
+        topicHeaderAdapter.notifyDataSetChanged()
+        topicHeaderSubtleAdapter.topicDetailBean = it
+        topicHeaderSubtleAdapter.notifyDataSetChanged()
+      }
     })
     viewModel.repliesShowBean.observe(viewLifecycleOwner, {
 //      topic_list_refreshview.isRefreshing = false
       topicCommentAdapter.submitList(it)
     })
 
+    viewModel.getreply(safeArgs.topicId)
   }
 
   private fun addHeaderView(topicDetailBean: TopicsShowBean) {

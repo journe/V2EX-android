@@ -9,7 +9,7 @@ import com.orhanobut.logger.Logger
 
 class TopicListViewModel(private val repository: TopicListRepository) : BaseViewModel() {
 
-  val itemPagedList: LiveData<PagedList<TopicsListItemBean>> = repository.getFeeds(10)
+  val itemPagedList: LiveData<PagedList<TopicsListItemBean>> = repository.getFeeds(20)
 
   fun refresh() {
 //        itemPagedList.value?.dataSource?.invalidate()

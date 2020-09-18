@@ -7,7 +7,8 @@
   <color name="black">#000000</color>
 
   <color name="black_overlay">#66000000</color>
-  <color name="subtles_bg">#fffffa</color>
+  <color name="subtles_bg">#fffff9</color>
+  <color name="subtles_yellow">#fffbc1</color>
   <color name="floor_text">#cccccc</color>
   <color name="balance_add">#0aa31c</color>
 </resources>

@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.journey.android.v2ex.model.api.*
+import com.journey.android.v2ex.model.jsoup.TopicDetailBean
 import com.journey.android.v2ex.room.dao.*
 import com.journey.android.v2ex.utils.Utils
 
@@ -13,8 +14,9 @@ import com.journey.android.v2ex.utils.Utils
  * Created by journey on 2020/5/18.
  */
 @Database(
-    entities = [TopicsListItemBean::class, TopicsShowBean::class, RepliesShowBean::class, MemberBean::class],
-    version = 2,
+    entities = [TopicsListItemBean::class, TopicsShowBean::class,
+      RepliesShowBean::class, MemberBean::class, TopicDetailBean::class],
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -22,6 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun meDao(): MeDao
   abstract fun userInfoDao(): UserInfoDao
   abstract fun topicListDao(): TopicListDao
+  abstract fun topicShowDao(): TopicShowDao
   abstract fun topicDetailDao(): TopicDetailDao
   abstract fun topicRepliesDao(): TopicRepliesDao
 

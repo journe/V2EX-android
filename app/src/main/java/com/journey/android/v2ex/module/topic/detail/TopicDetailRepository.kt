@@ -1,18 +1,16 @@
 package com.journey.android.v2ex.module.topic.detail
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.journey.android.v2ex.model.api.RepliesShowBean
-import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
+import com.journey.android.v2ex.model.jsoup.TopicDetailBean
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.utils.Constants
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.room.AppDatabase.Companion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import org.jsoup.Jsoup
@@ -25,7 +23,7 @@ import org.jsoup.Jsoup
  *
  */
 class TopicDetailRepository(
-  private val db: AppDatabase,
+  private val db: AppDatabase = AppDatabase.getInstance(),
   private val topicId: Int
 ) {
 
@@ -65,30 +63,35 @@ class TopicDetailRepository(
         )
   }
 
-  suspend fun getTopicDetail(): TopicsShowBean {
-    val localTopic = db.topicDetailDao()
-        .getTopicById(topicId = topicId)
-    if (localTopic != null) {
-      return localTopic
-    } else {
-      val response = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
-      val doc = Jsoup.parse(response.string())
-      val topicDetailBean = TopicDetailParser.parseTopicDetail(doc)
-      topicDetailBean.id = topicId
-      topicDetailBean.subtles?.forEach {
-        it.id = topicId
-      }
-      val replies = TopicDetailParser.parseComments(doc)
-      replies.forEach {
-        it.topic_id = topicId
-      }
-      db.runInTransaction {
-        db.topicRepliesDao()
-            .insert(replies)
-        db.topicDetailDao()
-            .insert(topicDetailBean)
-      }
-      return topicDetailBean
+  suspend fun loadTopicDetail() {
+    val docString = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
+        .string()
+    val doc = Jsoup.parse(docString)
+    val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
+    val replies = TopicDetailParser.parseComments(doc)
+
+    topicsShowBean.id = topicId
+    topicsShowBean.subtles?.forEach {
+      it.id = topicId
     }
+    replies.forEach {
+      it.topic_id = topicId
+    }
+    db.topicDetailDao()
+        .insert(TopicDetailBean(topicId, docString))
+    db.topicRepliesDao()
+        .insert(replies)
+    db.topicShowDao()
+        .insert(topicsShowBean)
+  }
+
+  fun getTopicDetailBean(): LiveData<TopicDetailBean> {
+    return db.topicDetailDao()
+        .getTopicById(topicId)
+  }
+
+  fun getTopicsShowBean(): LiveData<TopicsShowBean?> {
+    return db.topicShowDao()
+        .getTopicById(topicId = topicId)
   }
 }

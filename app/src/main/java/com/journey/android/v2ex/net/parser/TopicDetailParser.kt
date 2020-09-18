@@ -93,7 +93,7 @@ object TopicDetailParser {
         .selectFirst(".content")
         .select(".box")[1]
         .select("div[id^=r_]")
-    var commentBeanList = mutableListOf<RepliesShowBean>()
+    val commentBeanList = mutableListOf<RepliesShowBean>()
     for (item in comments) {
       if (item.selectFirst("table") == null
           || item.attr("id")
@@ -101,17 +101,21 @@ object TopicDetailParser {
       ) {
         continue
       }
+
       val comment = item.selectFirst("table")
           .selectFirst("tbody")
           .selectFirst("tr")
-      var commentBean = RepliesShowBean()
+      val commentBean = RepliesShowBean()
+      commentBean.id = item.id()
+          .replace("r_", "")
+          .toInt()
       commentBean.content = comment
           .selectFirst("td[align = left]")
-          .selectFirst(".reply_content")
-          .html()
+          .selectFirst("div.reply_content")
+          .text()
       commentBean.content_rendered = comment
           .selectFirst("td[align = left]")
-          .selectFirst(".reply_content")
+          .selectFirst("div.reply_content")
           .html()
       commentBean.floor = comment
           .selectFirst("td[align = left]")
@@ -121,17 +125,17 @@ object TopicDetailParser {
           .toInt()
       comment
           .selectFirst("td[align = left]")
-          .selectFirst(".fade small")
+          .selectFirst("span[class = fade small]")
           ?.let {
-            Logger.d(it.text())
             commentBean.created_str = it.text()
           }
       comment
           .selectFirst("td[align = left]")
-          .selectFirst(".small fade")
+          .selectFirst("span[class = small fade]")
           ?.let {
             Logger.d(it.text())
-            commentBean.heart = it.text().toInt()
+            commentBean.heart = it.text()
+                .toInt()
           }
 
       commentBean.member.username = comment
