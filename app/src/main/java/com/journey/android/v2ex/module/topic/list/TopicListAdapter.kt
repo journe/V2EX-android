@@ -1,96 +1,86 @@
 package com.journey.android.v2ex.module.topic.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.model.api.TopicsListItemBean
-import com.journey.android.v2ex.module.topic.list.TopicListAdapter.ViewHolder
 import com.journey.android.v2ex.libs.TimeUtil
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.extension.onClick
 import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
+import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.module.topic.MainFragmentDirections
+import com.journey.android.v2ex.module.topic.detail.TopicDetailFragment
 import com.journey.android.v2ex.module.topic.detail.TopicDetailRepository
-import com.journey.android.v2ex.module.topic.list.TopicListFragment.NavInterface
 import com.journey.android.v2ex.router.Router
-import kotlinx.android.synthetic.main.fragment_topic_list_item.view.*
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_corner_star_iv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_node_item_tv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_replies_item_tv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_reply_time_item_tv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_title_item_tv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_useravatar_item_iv
+import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_username_item_tv
 
-class TopicListAdapter(val navInterface: NavInterface) :
-    PagedListAdapter<TopicsListItemBean, ViewHolder>(
+internal class TopicListAdapter :
+    PagedListAdapter<TopicsListItemBean, TopicListViewHolder>(
         DIFF_CALLBACK
     ) {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): ViewHolder {
-    val view = LayoutInflater.from(parent.context)
-        .inflate(R.layout.fragment_topic_list_item, parent, false)
-    return ViewHolder(view)
+  ): TopicListViewHolder {
+    return TopicListViewHolder(parent).apply {
+      itemView.onClick {
+        val itemBean = getItem(bindingAdapterPosition)!!
+//        TopicDetailRepository(topicId = topicId).initTopicDetail()
+        val action = MainFragmentDirections.topicDetail(
+            itemBean.id, topicTitle = itemBean.title ?: "",
+            avatar = itemBean.memberAvatar.largeAvatar() ?: ""
+        )
+        val extras = FragmentNavigatorExtras(
+            title to TopicDetailFragment.TRANSITION_HEADER_TITLE,
+            itemView to TopicDetailFragment.TRANSITION_BACKGROUND,
+            avatar to TopicDetailFragment.TRANSITION_HEADER_AVATAR
+        )
+        Router.navigate(action, extras)
+      }
+    }
   }
 
   override fun onBindViewHolder(
-    holder: ViewHolder,
+    holder: TopicListViewHolder,
     position: Int
   ) {
-    val item = getItem(position)!!
-    holder.bind(item)
+    val itemBean = getItem(position)!!
+//    holder.bind(item)
 
-    with(holder.mView) {
-      tag = item
+    ViewCompat.setTransitionName(holder.title, "header_title-${itemBean.id}")
+    ViewCompat.setTransitionName(holder.avatar, "header_avatar-${itemBean.id}")
+    ViewCompat.setTransitionName(holder.itemView, "header_item-${itemBean.id}")
+
+    holder.title.text = itemBean.title
+    holder.node.text = itemBean.nodeName
+    holder.user.text = itemBean.memberName
+    holder.replies.text = itemBean.replies.toString()
+    if (itemBean.last_modified != 0) {
+      itemBean.last_modified_str = TimeUtil.calculateTime(itemBean.last_modified.toLong())
     }
-  }
 
-  inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-    val title: TextView = mView.topic_title_item_tv
-    val node: TextView = mView.topic_node_item_tv
-    val user: TextView = mView.topic_username_item_tv
-    val replies: TextView = mView.topic_replies_item_tv
-    val replyTime: TextView = mView.topic_reply_time_item_tv
-    val starIv = mView.topic_corner_star_iv
-    val memberAvatar = mView.topic_useravatar_item_iv
-    fun bind(itemBean: TopicsListItemBean) {
-      title.text = itemBean.title
-      node.text = itemBean.nodeName
-      user.text = itemBean.memberName
-      replies.text = itemBean.replies.toString()
-      if (itemBean.last_modified != 0) {
-        itemBean.last_modified_str = TimeUtil.calculateTime(itemBean.last_modified.toLong())
-      }
-
-      replyTime.text = itemBean.last_modified_str ?: ""
-      if (itemBean.last_modified_str.equals("置顶")) {
-        starIv.visible()
-      } else {
-        starIv.invisible()
-      }
-      ImageLoader.loadImage(memberAvatar, itemBean.memberAvatar.largeAvatar())
-
-//      holder.setOnClickListener(R.id.topic_useravatar_item_iv, View.OnClickListener {
-//        MemberInfoActivity.start(
-//            itemBean.memberName, holder.convertView.context
-//        )
-//      })
-
-      mView.onClick {
-        val action = MainFragmentDirections.topicDetail(itemBean.id)
-        val extras = FragmentNavigatorExtras(
-            title to "header_title",
-            memberAvatar to "header_avatar"
-        )
-        Router.navigate(action, extras)
-        //        navInterface.navigate(itemBean.id)
-        TopicDetailRepository(topicId = itemBean.id).loadTopicDetail()
-      }
+    holder.replyTime.text = itemBean.last_modified_str ?: ""
+    if (itemBean.last_modified_str.equals("置顶")) {
+      holder.starIv.visible()
+    } else {
+      holder.starIv.invisible()
     }
+    ImageLoader.loadImage(holder.avatar, itemBean.memberAvatar.largeAvatar())
   }
 
   companion object {
@@ -110,4 +100,21 @@ class TopicListAdapter(val navInterface: NavInterface) :
       }
     }
   }
+}
+
+internal class TopicListViewHolder(
+  parent: ViewGroup
+) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context)
+        .inflate(R.layout.fragment_topic_list_item, parent, false)
+) {
+
+  val title: TextView = itemView.topic_title_item_tv
+  val node: TextView = itemView.topic_node_item_tv
+  val user: TextView = itemView.topic_username_item_tv
+  val replies: TextView = itemView.topic_replies_item_tv
+  val replyTime: TextView = itemView.topic_reply_time_item_tv
+  val starIv = itemView.topic_corner_star_iv
+  val avatar = itemView.topic_useravatar_item_iv
+
 }

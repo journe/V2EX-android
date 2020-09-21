@@ -34,7 +34,7 @@ class TopicCommentsBoundaryCallback(
    */
   @MainThread
   override fun onZeroItemsLoaded() {
-    Logger.d("onZeroItemsLoaded")
+//    Logger.d("onZeroItemsLoaded")
     GlobalScope.launch(uiDispatcher + job) {
       requestComments()
     }
@@ -45,7 +45,7 @@ class TopicCommentsBoundaryCallback(
    */
   @MainThread
   override fun onItemAtEndLoaded(itemAtEnd: RepliesShowBean) {
-    Logger.d("onItemAtEndLoaded")
+//    Logger.d("onItemAtEndLoaded")
 //    requestComments()
   }
 
@@ -58,7 +58,7 @@ class TopicCommentsBoundaryCallback(
 
   override fun onItemAtFrontLoaded(itemAtFront: RepliesShowBean) {
     // ignored, since we only ever append to what's in the DB
-    Logger.d("onItemAtFrontLoaded")
+//    Logger.d("onItemAtFrontLoaded")
   }
 
 }

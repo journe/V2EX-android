@@ -12,5 +12,5 @@ import com.journey.android.v2ex.model.jsoup.TopicDetailBean
 @Dao
 interface TopicDetailDao : BaseDao<TopicDetailBean> {
   @Query("SELECT * FROM TopicDetailBean WHERE id = :topicId")
-  fun getTopicById(topicId: Int): LiveData<TopicDetailBean>
+  fun getTopicById(topicId: Int): TopicDetailBean?
 }

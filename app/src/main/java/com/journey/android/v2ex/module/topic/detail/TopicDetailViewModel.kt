@@ -11,8 +11,10 @@ import com.orhanobut.logger.Logger
 
 class TopicDetailViewModel(private val repository: TopicDetailRepository) : BaseViewModel() {
 
-  val detailBean = liveData {
-    emitSource(repository.getTopicDetailBean())
+  init {
+    launch({
+      repository.initTopicDetail()
+    })
   }
 
   val topicShowBean = liveData {
@@ -20,13 +22,10 @@ class TopicDetailViewModel(private val repository: TopicDetailRepository) : Base
   }
   val repliesShowBean: LiveData<PagedList<RepliesShowBean>> = repository.getComments(100)
 
-  fun getreply(topicId: Int) {
+  fun initTopicDetail() {
     launch({
-      val a = AppDatabase.getInstance()
-          .topicRepliesDao()
-          .getTopicRepliesSuspend(topicId)
-      Logger.d(a.size)
-    }, {})
+      repository.initTopicDetail()
+    })
   }
 //  fun refresh() {
 ////        itemPagedList.value?.dataSource?.invalidate()

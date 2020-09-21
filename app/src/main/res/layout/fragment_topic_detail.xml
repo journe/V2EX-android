@@ -34,19 +34,18 @@
 
         <TextView
             android:id="@+id/topic_detail_title_tv"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:maxLines="3"
-            android:paddingLeft="64dp"
             android:text=""
             android:textColor="@color/black"
             android:textSize="13sp"
             android:transitionName="header_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/topic_detail_avatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="新人写博客，前天刚把删除功能做出来，今天一看被 google 爬虫全删掉了爬虫全删掉了"
             />

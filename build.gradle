@@ -4,7 +4,7 @@ buildscript {
   ext {
     appCompatVersion = '1.1.0'
 
-    kotlin_version = '1.4.0'
+    kotlin_version = '1.4.10'
     ui_version = '3.2.24'
     androidx_version = '2.2.0'
     navigation_version = '2.3.0'

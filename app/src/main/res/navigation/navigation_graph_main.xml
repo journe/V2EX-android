@@ -40,6 +40,12 @@
     <argument
         android:name="topicId"
         app:argType="integer"/>
+    <argument
+        android:name="topicTitle"
+        app:argType="string"/>
+    <argument
+        android:name="avatar"
+        app:argType="string"/>
     <action
         android:id="@+id/topic_detail_image"
         app:destination="@id/topicImage_dest"/>

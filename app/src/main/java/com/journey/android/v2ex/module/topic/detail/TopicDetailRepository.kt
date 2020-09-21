@@ -63,31 +63,29 @@ class TopicDetailRepository(
         )
   }
 
-  suspend fun loadTopicDetail() {
-    val docString = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
-        .string()
-    val doc = Jsoup.parse(docString)
-    val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
-    val replies = TopicDetailParser.parseComments(doc)
+  suspend fun initTopicDetail() {
+    val localBean = db.topicDetailDao().getTopicById(topicId)
+    if (localBean == null) {
+      val docString = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
+          .string()
+      val doc = Jsoup.parse(docString)
+      val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
+      val replies = TopicDetailParser.parseComments(doc)
 
-    topicsShowBean.id = topicId
-    topicsShowBean.subtles?.forEach {
-      it.id = topicId
+      topicsShowBean.id = topicId
+      topicsShowBean.subtles?.forEach {
+        it.id = topicId
+      }
+      replies.forEach {
+        it.topic_id = topicId
+      }
+      db.topicDetailDao()
+          .insert(TopicDetailBean(topicId, docString))
+      db.topicRepliesDao()
+          .insert(replies)
+      db.topicShowDao()
+          .insert(topicsShowBean)
     }
-    replies.forEach {
-      it.topic_id = topicId
-    }
-    db.topicDetailDao()
-        .insert(TopicDetailBean(topicId, docString))
-    db.topicRepliesDao()
-        .insert(replies)
-    db.topicShowDao()
-        .insert(topicsShowBean)
-  }
-
-  fun getTopicDetailBean(): LiveData<TopicDetailBean> {
-    return db.topicDetailDao()
-        .getTopicById(topicId)
   }
 
   fun getTopicsShowBean(): LiveData<TopicsShowBean?> {
