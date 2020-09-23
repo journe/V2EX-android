@@ -22,17 +22,4 @@ class TopicDetailViewModel(private val repository: TopicDetailRepository) : Base
   }
   val repliesShowBean: LiveData<PagedList<RepliesShowBean>> = repository.getComments(100)
 
-  fun initTopicDetail() {
-    launch({
-      repository.initTopicDetail()
-    })
-  }
-//  fun refresh() {
-////        itemPagedList.value?.dataSource?.invalidate()
-//    launch({
-//      repository.refresh()
-//    }, {
-//      Logger.d(it.message)
-//    })
-//  }
 }
