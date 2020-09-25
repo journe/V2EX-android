@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.journey.android.v2ex.base.BaseActivity
+import com.journey.android.v2ex.libs.extension.animateY
 import com.journey.android.v2ex.libs.transition.EdgeToEdge
 import com.journey.android.v2ex.router.Router
 import com.zzhoujay.richtext.RichText
@@ -24,7 +25,7 @@ class MainActivity : BaseActivity() {
     setSupportActionBar(main_toolbar)
 
     EdgeToEdge.setUpRoot(findViewById(R.id.drawer_layout))
-    EdgeToEdge.setUpAppBar(app_bar,main_toolbar)
+    EdgeToEdge.setUpAppBar(app_bar, main_toolbar)
     EdgeToEdge.setUpScrollingContent(findViewById(R.id.main_constraint))
 
     val host: NavHostFragment = supportFragmentManager
@@ -44,7 +45,17 @@ class MainActivity : BaseActivity() {
           drawer_layout.closeDrawers()
         }
 
-    Router.init(this,navController)
+    Router.init(this, navController)
+
+    //只在一级页面展示app_bar
+//    navController.addOnDestinationChangedListener { _, destination, _ ->
+//      if (destination.id == R.id.topicImage_dest) {
+//        app_bar.animateY(56)
+//      } else {
+//        app_bar.animateY(0)
+//      }
+//    }
+
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

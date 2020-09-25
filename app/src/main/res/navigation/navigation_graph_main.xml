@@ -15,7 +15,9 @@
         app:destination="@id/login_dest"/>
     <action
         android:id="@+id/topic_detail"
-        app:destination="@id/topicDetail_dest"/>
+        app:destination="@id/topicDetail_dest"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:popEnterAnim="@android:anim/slide_in_left" />
     <action
         android:id="@+id/action_main_dest_to_settingsActivity"
         app:destination="@id/settings_dest" />
@@ -55,10 +57,9 @@
   <fragment
       android:id="@+id/topicImage_dest"
       android:name="com.journey.android.v2ex.module.topic.detail.TopicImageFragment"
-      android:label="TopicImageFragment"
+      android:label="@string/app_name"
       tools:layout="@layout/fragment_topic_image">
-    <argument
-        android:name="imageUrl"/>
+    <argument android:name="imageUrl" />
   </fragment>
 
   <fragment

@@ -51,15 +51,15 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    exitTransition = Fade(Fade.OUT).apply {
-      duration = LARGE_EXPAND_DURATION / 2
-      interpolator = FAST_OUT_LINEAR_IN
-    }
-    reenterTransition = Fade(Fade.IN).apply {
-      duration = LARGE_COLLAPSE_DURATION / 2
-      startDelay = LARGE_COLLAPSE_DURATION / 2
-      interpolator = LINEAR_OUT_SLOW_IN
-    }
+//    exitTransition = Fade(Fade.OUT).apply {
+//      duration = LARGE_EXPAND_DURATION / 2
+//      interpolator = FAST_OUT_LINEAR_IN
+//    }
+//    reenterTransition = Fade(Fade.IN).apply {
+//      duration = LARGE_COLLAPSE_DURATION / 2
+//      startDelay = LARGE_COLLAPSE_DURATION / 2
+//      interpolator = LINEAR_OUT_SLOW_IN
+//    }
   }
 
   override fun onCreateView(
@@ -75,20 +75,6 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-
-    ViewCompat.setOnApplyWindowInsetsListener(view.parent as View) { _, insets ->
-//      toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-//        topMargin = insets.systemWindowInsetTop
-//      }
-      topic_list_refreshview.updatePadding(
-          left = insets.systemWindowInsetLeft,
-          right = insets.systemWindowInsetRight,
-          bottom = insets.systemWindowInsetBottom
-      )
-      insets
-    }
-
-
     topic_list_recycleview.addItemDecoration(
         DividerItemDecoration(
             activity,
