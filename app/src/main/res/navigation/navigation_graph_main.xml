@@ -25,9 +25,9 @@
 
   <fragment
       android:id="@+id/login_dest"
-      android:name="com.journey.android.v2ex.module.fragment.LoginFragment"
-      android:label="LoginFragment"
-      tools:layout="@layout/fragment_login"/>
+      android:name="com.journey.android.v2ex.module.login.LoginFragment"
+      android:label="@string/action_sign_in"
+      tools:layout="@layout/fragment_login" />
 
   <fragment
       android:id="@+id/nodeList_dest"

@@ -129,7 +129,7 @@
   <string name="pref_title_content_selectable">可选择内容</string>
   <string name="action_update">更新应用</string>
   <string name="ntf_title_app_update">应用更新</string>
-  <string name="ntf_desc_new_version_of_app">V2EX+ 发布新版本啦</string>
+  <string name="ntf_desc_new_version_of_app">V2EX 发布新版本啦</string>
   <string name="toast_unsupported_url">不支持的链接！</string>
   <string name="action_reset_password">重置密码</string>
   <string name="pref_title_user_info">用户信息</string>
@@ -138,4 +138,5 @@
   <string name="title_two_factor_auth">两步验证</string>
   <string name="toast_node_not_found">节点未找到！</string>
   <string name="toast_access_restricted">访问受限！请在网页版验证手机号。</string>
+  <string name="login_buttom_text">创意工作者们的社区\nWorld is powered by solitude</string>
 </resources>

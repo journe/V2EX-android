@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.module.fragment
+package com.journey.android.v2ex.module.login
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
@@ -16,6 +17,7 @@ import com.journey.android.v2ex.net.HttpStatus
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.utils.PrefStore
 import com.journey.android.v2ex.libs.ToastUtils
+import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_login.login_account
 import kotlinx.android.synthetic.main.fragment_login.login_captcha
@@ -33,6 +35,8 @@ import java.util.HashMap
 class LoginFragment : BaseFragment() {
 
   private lateinit var mLoginBean: LoginBean
+
+  private val viewModel: LoginViewModel by viewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -52,7 +56,7 @@ class LoginFragment : BaseFragment() {
       attemptLogin()
     }
     login_captcha_iv.setOnClickListener {
-      getCaptcha(mLoginBean.genCaptcha())
+//      getCaptcha(mLoginBean.genCaptcha())
     }
     login_refresh.setOnRefreshListener {
       doGetLoginTask()
@@ -60,6 +64,14 @@ class LoginFragment : BaseFragment() {
     doGetLoginTask()
     login_account.setText(PrefStore.instance.userName)
     login_password.setText(PrefStore.instance.userPass)
+
+    viewModel.captchaBitmap.observe(viewLifecycleOwner, {
+      Glide.with(this@LoginFragment)
+          .load(it)
+          .placeholder(R.drawable.ic_sync_white_24dp)
+          .error(R.drawable.ic_sync_problem_white_24dp)
+          .into(login_captcha_iv)
+    })
   }
 
   private fun doGetLoginTask() {
@@ -71,49 +83,18 @@ class LoginFragment : BaseFragment() {
             t: Throwable
           ) {
             Logger.d(t.stackTrace)
-            showProgress(false)
           }
 
           override fun onResponse(
             call: Call<ResponseBody>,
             response: Response<ResponseBody>
           ) {
-            showProgress(false)
-            val doc = Jsoup.parse(response.body()!!.string())
+            val doc = Jsoup.parse(
+                response.body()!!
+                    .string()
+            )
             mLoginBean = LoginParser.parseLoginBean(doc)
-            getCaptcha(mLoginBean.genCaptcha())
-          }
-        })
-  }
-
-  private fun getCaptcha(captchaUrl: String) {
-
-    RetrofitRequest.apiService
-        .getCaptcha(captchaUrl)
-        .enqueue(object : Callback<ResponseBody> {
-          override fun onFailure(
-            call: Call<ResponseBody>,
-            t: Throwable
-          ) {
-            Logger.d(t.message)
-          }
-
-          override fun onResponse(
-            call: Call<ResponseBody>,
-            response: Response<ResponseBody>
-          ) {
-            if (response.code() == 200) {
-              val bitmap = BitmapFactory.decodeStream(response.body()!!.byteStream())
-              if (bitmap == null) {
-                RetrofitRequest.cleanCookies()
-                ToastUtils.showShortToast(R.string.toast_load_captcha_failed)
-              }
-              Glide.with(this@LoginFragment)
-                  .load(bitmap)
-                  .placeholder(R.drawable.ic_sync_white_24dp)
-                  .error(R.drawable.ic_sync_problem_white_24dp)
-                  .into(login_captcha_iv)
-            }
+//            getCaptcha(mLoginBean.genCaptcha())
           }
         })
   }
@@ -217,7 +198,13 @@ class LoginFragment : BaseFragment() {
             response: Response<ResponseBody>
           ) {
             showProgress(false)
-            if (MoreParser.isLogin(Jsoup.parse(response.body()!!.string()))) {
+            if (MoreParser.isLogin(
+                    Jsoup.parse(
+                        response.body()!!
+                            .string()
+                    )
+                )
+            ) {
               Logger.d("success")
 //              finish()
             }
