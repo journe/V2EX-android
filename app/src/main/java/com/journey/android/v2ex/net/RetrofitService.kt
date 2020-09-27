@@ -76,6 +76,11 @@ interface RetrofitService {
   @POST(Constants.SIGNIN)
   fun postSignin(@FieldMap hashMap: HashMap<String, String>): Call<ResponseBody>
 
+  @FormUrlEncoded
+  @Headers("Referer: https://www.v2ex.com/signin")
+  @POST(Constants.SIGNIN)
+  suspend fun postSigninSuspend(@FieldMap hashMap: HashMap<String, String>): ResponseBody
+
   @Streaming
   @GET
   fun getCaptcha(@Url url: String): Call<ResponseBody>
@@ -86,6 +91,9 @@ interface RetrofitService {
 
   @GET(Constants.MORE)
   fun getMore(): Call<ResponseBody>
+
+  @GET(Constants.MORE)
+  suspend fun getMoreSuspend(): ResponseBody
 
   @GET(Constants.BALANCE)
   fun getBalance(): Call<ResponseBody>

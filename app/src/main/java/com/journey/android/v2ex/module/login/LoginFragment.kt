@@ -1,42 +1,39 @@
 package com.journey.android.v2ex.module.login
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.TextUtils
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
-import com.journey.android.v2ex.model.jsoup.LoginBean
-import com.journey.android.v2ex.net.parser.LoginParser
-import com.journey.android.v2ex.net.parser.MoreParser
-import com.journey.android.v2ex.net.HttpStatus
-import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.utils.PrefStore
 import com.journey.android.v2ex.libs.ToastUtils
-import com.journey.android.v2ex.libs.imageEngine.ImageLoader
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.module.login.data.LoggedInUser
+import com.journey.android.v2ex.utils.PrefStore
 import kotlinx.android.synthetic.main.fragment_login.login_account
 import kotlinx.android.synthetic.main.fragment_login.login_captcha
 import kotlinx.android.synthetic.main.fragment_login.login_captcha_iv
 import kotlinx.android.synthetic.main.fragment_login.login_password
 import kotlinx.android.synthetic.main.fragment_login.login_refresh
 import kotlinx.android.synthetic.main.fragment_login.sign_in_button
-import okhttp3.ResponseBody
-import org.jsoup.Jsoup
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.HashMap
 
 class LoginFragment : BaseFragment() {
 
-  private lateinit var mLoginBean: LoginBean
-
-  private val viewModel: LoginViewModel by viewModels()
+  private val viewModel: LoginViewModel by viewModels {
+    object : ViewModelProvider.Factory {
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return LoginViewModel(LoginRepository(LoginDataSource())) as T
+      }
+    }
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -52,19 +49,56 @@ class LoginFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    sign_in_button.setOnClickListener {
-      attemptLogin()
-    }
+
     login_captcha_iv.setOnClickListener {
 //      getCaptcha(mLoginBean.genCaptcha())
     }
     login_refresh.setOnRefreshListener {
-      doGetLoginTask()
+//      doGetLoginTask()
     }
-    doGetLoginTask()
     login_account.setText(PrefStore.instance.userName)
     login_password.setText(PrefStore.instance.userPass)
 
+    login_account.afterTextChanged {
+      viewModel.loginDataChanged(
+          login_account.text.toString(),
+          login_password.text.toString()
+      )
+    }
+
+    login_password.apply {
+      afterTextChanged {
+        viewModel.loginDataChanged(
+            login_account.text.toString(),
+            login_password.text.toString()
+        )
+      }
+
+      setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+          EditorInfo.IME_ACTION_DONE ->
+            viewModel.login(
+                login_account.text.toString(),
+                login_password.text.toString(),
+                login_captcha.text.toString()
+            )
+        }
+        false
+      }
+
+      sign_in_button.setOnClickListener {
+        showProgress(true)
+        viewModel.login(
+            login_account.text.toString(),
+            login_password.text.toString(),
+            login_captcha.text.toString()
+        )
+      }
+    }
+    observe()
+  }
+
+  private fun observe() {
     viewModel.captchaBitmap.observe(viewLifecycleOwner, {
       Glide.with(this@LoginFragment)
           .load(it)
@@ -72,153 +106,42 @@ class LoginFragment : BaseFragment() {
           .error(R.drawable.ic_sync_problem_white_24dp)
           .into(login_captcha_iv)
     })
+
+    viewModel.loginFormState.observe(viewLifecycleOwner, {
+      val loginState = it ?: return@observe
+
+      // disable login button unless both username / password is valid
+      sign_in_button.isEnabled = loginState.isDataValid
+
+      if (loginState.usernameError != null) {
+        login_account.error = getString(loginState.usernameError)
+      }
+      if (loginState.passwordError != null) {
+        login_password.error = getString(loginState.passwordError)
+      }
+    })
+
+    viewModel.loginResult.observe(viewLifecycleOwner, {
+      val loginResult = it ?: return@observe
+
+      showProgress(false)
+      if (loginResult.error != null) {
+        showLoginFailed(loginResult.error)
+      }
+      if (loginResult.success != null) {
+        updateUiWithUser(loginResult.success)
+      }
+    })
   }
 
-  private fun doGetLoginTask() {
-    RetrofitRequest.apiService
-        .getLogin()
-        .enqueue(object : Callback<ResponseBody> {
-          override fun onFailure(
-            call: Call<ResponseBody>,
-            t: Throwable
-          ) {
-            Logger.d(t.stackTrace)
-          }
-
-          override fun onResponse(
-            call: Call<ResponseBody>,
-            response: Response<ResponseBody>
-          ) {
-            val doc = Jsoup.parse(
-                response.body()!!
-                    .string()
-            )
-            mLoginBean = LoginParser.parseLoginBean(doc)
-//            getCaptcha(mLoginBean.genCaptcha())
-          }
-        })
+  private fun updateUiWithUser(model: LoggedInUser) {
+    val welcome = getString(R.string.toast_login_success)
+    val displayName = model.displayName
+    ToastUtils.showLongToast("$welcome $displayName")
   }
 
-  private fun attemptLogin() {
-    // Reset errors.
-    login_account.error = null
-    login_password.error = null
-
-    // Store values at the time of the login attempt.
-    val emailStr = login_account.text.toString()
-    val passwordStr = login_password.text.toString()
-    val captcha = login_captcha.text.toString()
-
-    var cancel = false
-    var focusView: View? = null
-
-    // Check for a valid password, if the user entered one.
-    if (!TextUtils.isEmpty(passwordStr) && !isPasswordValid(passwordStr)) {
-      login_password.error = getString(R.string.error_invalid_password)
-      focusView = login_password
-      cancel = true
-    }
-
-    // Check for a valid email address.
-    if (TextUtils.isEmpty(emailStr)) {
-      login_account.error = getString(R.string.error_field_required)
-      focusView = login_account
-      cancel = true
-    } else if (!isEmailValid(emailStr)) {
-      login_account.error = getString(R.string.error_invalid_email)
-      focusView = login_account
-      cancel = true
-    }
-
-    if (cancel) {
-      // There was an error; don't attempt login and focus the first
-      // form field with an error.
-      focusView?.requestFocus()
-    } else {
-      // Show a progress spinner, and kick off a background task to
-      // perform the user login attempt.
-      showProgress(true)
-      doLogin(emailStr, passwordStr, captcha)
-    }
-  }
-
-  private fun doLogin(
-    emailStr: String,
-    passwordStr: String,
-    captcha: String
-  ) {
-    showProgress(true)
-    PrefStore.instance.userName = emailStr
-    PrefStore.instance.userPass = passwordStr
-    val map = HashMap<String, String>()
-    map[mLoginBean.account] = emailStr
-    map[mLoginBean.password] = passwordStr
-    map[mLoginBean.captcha] = captcha
-    map["once"] = mLoginBean.once.toString()
-    map["next"] = "/mission"
-    RetrofitRequest.apiService
-        .postSignin(map)
-        .enqueue(object : Callback<ResponseBody> {
-          override fun onFailure(
-            call: Call<ResponseBody>,
-            t: Throwable
-          ) {
-            showProgress(false)
-            login_password.error = getString(R.string.error_incorrect_password)
-            login_password.requestFocus()
-          }
-
-          override fun onResponse(
-            call: Call<ResponseBody>,
-            response: Response<ResponseBody>
-          ) {
-            showProgress(false)
-            if (response.code() != HttpStatus.SC_MOVED_TEMPORARILY) {
-              Logger.d("code should not be " + response.code(), response)
-            }
-            doGetMore()
-          }
-        })
-  }
-
-  private fun doGetMore() {
-    RetrofitRequest.apiService
-        .getMore()
-        .enqueue(object : Callback<ResponseBody> {
-          override fun onFailure(
-            call: Call<ResponseBody>,
-            t: Throwable
-          ) {
-            showProgress(false)
-            Logger.d(t.stackTrace)
-          }
-
-          override fun onResponse(
-            call: Call<ResponseBody>,
-            response: Response<ResponseBody>
-          ) {
-            showProgress(false)
-            if (MoreParser.isLogin(
-                    Jsoup.parse(
-                        response.body()!!
-                            .string()
-                    )
-                )
-            ) {
-              Logger.d("success")
-//              finish()
-            }
-          }
-        })
-
-  }
-
-  private fun isEmailValid(email: String): Boolean {
-    return email.isNotEmpty()
-  }
-
-  private fun isPasswordValid(password: String): Boolean {
-    return password.length > 4
+  private fun showLoginFailed(@StringRes errorString: Int) {
+    ToastUtils.showLongToast(errorString)
   }
 
   /**
@@ -228,4 +151,28 @@ class LoginFragment : BaseFragment() {
     login_refresh.isRefreshing = show
   }
 
+}
+
+fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+  this.addTextChangedListener(object : TextWatcher {
+    override fun afterTextChanged(editable: Editable?) {
+      afterTextChanged.invoke(editable.toString())
+    }
+
+    override fun beforeTextChanged(
+      s: CharSequence,
+      start: Int,
+      count: Int,
+      after: Int
+    ) {
+    }
+
+    override fun onTextChanged(
+      s: CharSequence,
+      start: Int,
+      before: Int,
+      count: Int
+    ) {
+    }
+  })
 }

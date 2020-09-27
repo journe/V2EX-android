@@ -1,5 +1,7 @@
 package com.journey.android.v2ex.net.parser
 
+import com.journey.android.v2ex.module.login.data.LoggedInUser
+import com.orhanobut.logger.Logger
 import org.jsoup.nodes.Document
 
 /**
@@ -17,67 +19,21 @@ import org.jsoup.nodes.Document
  */
 object MoreParser {
 
-  /**
-   * 登陆状态下
-   * <div id="Top">
-   *  <div class="content">
-   *  <div style="padding-top: 6px;">
-   *  <table cellpadding="0" cellspacing="0" border="0" width="100%">
-   *    <tbody>
-   *      <tr>
-   *    <td width="5" align="left"></td>
-   *    <td width="80" align="left" style="padding-top: 4px;"><a href="/" name="top"><div id="LogoMobile"></div></a></td>
-   *    <td width="auto" align="right" style="padding-top: 2px;">
-   *      <a href="/member/xxxxxx" class="top"><img src="//cdn.v2ex.com/avatar/d3dd/4434/44444_normal.png?m=444440" style="border-radius: 24px;" width="24" height="24" align="absmiddle"></a>
-   *      &nbsp;&nbsp;&nbsp;
-   *      <a href="/notes" class="top"><img src="/static/img/neue_notepad.png" width="24" border="0" align="absmiddle"></a>
-   *      &nbsp;&nbsp;&nbsp;
-   *      <a href="/t" class="top"><img src="/static/img/neue_comment.png" width="24" border="0" align="absmiddle"></a>
-   *      &nbsp;&nbsp;&nbsp;
-   *      <a href="/settings" class="top"><img src="/static/img/neue_config.png" width="24" border="0" align="absmiddle"></a>
-   *      &nbsp;&nbsp;&nbsp;
-   *      <a href="/more" class="top"><img src="/static/img/flat_more.png" width="24" border="0" align="absmiddle"></a>
-   *     </td>
-   *    <td width="10" align="left"></td>
-   *      </tr>
-   *    </tbody>
-   *  </table>
-   *
-   *  </div>
-   *  </div>
-   * </div>
-   *
-   * 未登录状态
-   * <div id="Top">
-   *  <div class="content">
-   *  <div style="padding-top: 6px;">
-   *  <table cellpadding="0" cellspacing="0" border="0" width="100%">
-   *  <tbody>
-   *    <tr>
-   *      <td width="5" align="left"></td>
-   *      <td width="80" align="left" style="padding-top: 4px;"><a href="/" name="top"><div id="LogoMobile"></div></a></td>
-   *      <td width="auto" align="right" style="padding-top: 2px;">
-   *        <a href="/" class="top">首页</a>&nbsp;&nbsp;&nbsp;
-   *        <a href="/signup" class="top">注册</a>&nbsp;&nbsp;&nbsp;
-   *        <a href="/signin" class="top">登录</a></td>
-   *      <td width="10" align="left"></td>
-   *    </tr>
-   *  </tbody>
-   *  </table>
-   *  </div>
-   *  </div>
-   * </div>
-   */
-
+  //右上角菜单超过两个div元素，说明正确获取到了登录状态
   @JvmStatic
   fun isLogin(doc: Document): Boolean {
     val content = doc.body()
-        .selectFirst("#Top")
-        .selectFirst(".content")
-    val a = content.select("tbody")
-        .select("tr")
-        .select("td[width=auto]")
-        .select("a")
-    return a.size >= 5
+        .selectFirst("#menu-body")
+    val a = content.select(".cell")
+    Logger.d(a.size)
+    return a.size > 2
+  }
+
+  @JvmStatic
+  fun getLoggedInUser(doc: Document): LoggedInUser {
+    val content = doc.body()
+        .selectFirst("#menu-entry")
+        .selectFirst(".avatar mobile")
+    return LoggedInUser(avatar = content.attr("src"), displayName = content.attr("alt"))
   }
 }

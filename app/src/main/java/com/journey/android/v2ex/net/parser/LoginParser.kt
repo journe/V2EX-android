@@ -1,6 +1,6 @@
 package com.journey.android.v2ex.net.parser
 
-import com.journey.android.v2ex.model.jsoup.LoginBean
+import com.journey.android.v2ex.model.jsoup.SignInFormData
 import org.jsoup.nodes.Document
 
 /**
@@ -75,14 +75,14 @@ object LoginParser {
    */
 
   @JvmStatic
-  fun parseLoginBean(doc: Document): LoginBean {
+  fun parseSignInData(doc: Document): SignInFormData {
     val content = doc.body()
         .selectFirst("#Wrapper")
         .selectFirst(".content")
         .selectFirst(".box")
         .selectFirst(".cell")
         .selectFirst("form")
-    val loginBean = LoginBean()
+    val loginBean = SignInFormData()
     loginBean.next = content.select("input[name=next]")
         .attr("value")
     loginBean.once = content.select("input[name=once]")
