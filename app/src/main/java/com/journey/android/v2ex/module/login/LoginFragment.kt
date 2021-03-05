@@ -27,6 +27,8 @@ import kotlinx.android.synthetic.main.fragment_login.sign_in_button
 
 class LoginFragment : BaseFragment() {
 
+  private lateinit var captchaUrl: String
+
   private val viewModel: LoginViewModel by viewModels {
     object : ViewModelProvider.Factory {
       override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -50,11 +52,13 @@ class LoginFragment : BaseFragment() {
   ) {
     super.onViewCreated(view, savedInstanceState)
 
+    viewModel.loadSignPage()
+
     login_captcha_iv.setOnClickListener {
-//      getCaptcha(mLoginBean.genCaptcha())
+      viewModel.getCaptcha(captchaUrl)
     }
     login_refresh.setOnRefreshListener {
-//      doGetLoginTask()
+      viewModel.loadSignPage()
     }
     login_account.setText(PrefStore.instance.userName)
     login_password.setText(PrefStore.instance.userPass)
@@ -66,36 +70,34 @@ class LoginFragment : BaseFragment() {
       )
     }
 
-    login_password.apply {
-      afterTextChanged {
-        viewModel.loginDataChanged(
-            login_account.text.toString(),
-            login_password.text.toString()
-        )
-      }
+    login_password.afterTextChanged {
+      viewModel.loginDataChanged(
+          login_account.text.toString(),
+          login_password.text.toString()
+      )
+    }
 
-      setOnEditorActionListener { _, actionId, _ ->
-        when (actionId) {
-          EditorInfo.IME_ACTION_DONE ->
-            viewModel.login(
-                login_account.text.toString(),
-                login_password.text.toString(),
-                login_captcha.text.toString()
-            )
-        }
-        false
+    login_captcha.setOnEditorActionListener { _, actionId, _ ->
+      when (actionId) {
+        EditorInfo.IME_ACTION_DONE ->
+          doLogin()
       }
+      false
+    }
 
-      sign_in_button.setOnClickListener {
-        showProgress(true)
-        viewModel.login(
-            login_account.text.toString(),
-            login_password.text.toString(),
-            login_captcha.text.toString()
-        )
-      }
+    sign_in_button.setOnClickListener {
+      doLogin()
     }
     observe()
+  }
+
+  private fun doLogin() {
+    showProgress(true)
+    viewModel.login(
+        login_account.text.toString(),
+        login_password.text.toString(),
+        login_captcha.text.toString()
+    )
   }
 
   private fun observe() {
@@ -106,6 +108,11 @@ class LoginFragment : BaseFragment() {
           .error(R.drawable.ic_sync_problem_white_24dp)
           .into(login_captcha_iv)
     })
+
+    viewModel.signInFormData.observe(viewLifecycleOwner) {
+      captchaUrl = it.genCaptcha()
+      viewModel.getCaptcha(captchaUrl)
+    }
 
     viewModel.loginFormState.observe(viewLifecycleOwner, {
       val loginState = it ?: return@observe
@@ -122,16 +129,19 @@ class LoginFragment : BaseFragment() {
     })
 
     viewModel.loginResult.observe(viewLifecycleOwner, {
-      val loginResult = it ?: return@observe
-
       showProgress(false)
-      if (loginResult.error != null) {
-        showLoginFailed(loginResult.error)
-      }
-      if (loginResult.success != null) {
-        updateUiWithUser(loginResult.success)
+      when (it) {
+        is Result.Success -> {
+          updateUiWithUser(it.data)
+        }
+        else -> {
+        }
       }
     })
+
+    viewModel.loadingState.observe(viewLifecycleOwner) {
+      showProgress(it)
+    }
   }
 
   private fun updateUiWithUser(model: LoggedInUser) {

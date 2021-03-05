@@ -133,7 +133,6 @@ object TopicDetailParser {
           .selectFirst("td[align = left]")
           .selectFirst("span[class = small fade]")
           ?.let {
-            Logger.d(it.text())
             commentBean.heart = it.text()
                 .toInt()
           }

@@ -8,20 +8,9 @@ import com.journey.android.v2ex.module.login.data.LoginForm
 import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.net.parser.MoreParser
 import com.journey.android.v2ex.utils.PrefStore
-import com.orhanobut.logger.Logger
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import org.jsoup.Jsoup
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 import java.util.HashMap
-import java.util.UUID
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -63,7 +52,7 @@ class LoginDataSource {
   }
 
   fun logout() {
-    // TODO: revoke authentication
+    RetrofitRequest.cleanCookies()
   }
 }
 

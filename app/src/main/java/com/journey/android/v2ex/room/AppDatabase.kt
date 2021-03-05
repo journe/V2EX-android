@@ -21,7 +21,6 @@ import com.journey.android.v2ex.utils.Utils
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-  abstract fun meDao(): MeDao
   abstract fun userInfoDao(): UserInfoDao
   abstract fun topicListDao(): TopicListDao
   abstract fun topicShowDao(): TopicShowDao
