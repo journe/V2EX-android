@@ -1,7 +1,6 @@
 package com.journey.android.v2ex.module.login
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,14 +12,14 @@ import com.journey.android.v2ex.model.jsoup.SignInFormData
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.journey.android.v2ex.module.login.data.LoginFormState
-import com.journey.android.v2ex.net.RetrofitRequest
-import com.journey.android.v2ex.net.parser.LoginParser
-import org.jsoup.Jsoup
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * Created by journey on 2020/9/25.
  */
-class LoginViewModel(private val loginRepository: LoginRepository) : BaseViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : BaseViewModel() {
 
   private val _loginForm = MutableLiveData<LoginFormState>()
   val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -36,24 +35,13 @@ class LoginViewModel(private val loginRepository: LoginRepository) : BaseViewMod
 
   fun loadSignPage() {
     launch({
-      val response = RetrofitRequest.apiService.getLoginSuspend()
-      val doc = Jsoup.parse(response.string())
-      signInFormData.postValue(LoginParser.parseSignInData(doc))
+      signInFormData.postValue(loginRepository.loadSignPage())
     }, {})
   }
 
   fun getCaptcha(captchaUrl: String) {
     launch({
-      val response = RetrofitRequest.apiService.getCaptchaSuspend(captchaUrl)
-      val bitmap = BitmapFactory.decodeStream(
-          response.byteStream()
-      )
-      if (bitmap == null) {
-        RetrofitRequest.cleanCookies()
-        ToastUtils.showShortToast(R.string.toast_load_captcha_failed)
-      } else {
-        captchaBitmap.postValue(bitmap)
-      }
+      captchaBitmap.postValue(loginRepository.getCaptcha(captchaUrl))
       loadingState.postValue(false)
     }, {
       ToastUtils.showShortToast(R.string.toast_load_captcha_failed)

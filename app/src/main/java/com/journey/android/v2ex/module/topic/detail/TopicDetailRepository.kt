@@ -7,13 +7,13 @@ import androidx.paging.toLiveData
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.jsoup.TopicDetailBean
-import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.room.AppDatabase.Companion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import org.jsoup.Jsoup
+import javax.inject.Inject
 
 /**
  * Created by journey on 2020/5/19.
@@ -22,10 +22,10 @@ import org.jsoup.Jsoup
  * listing that loads in pages.
  *
  */
-class TopicDetailRepository(
-  private val db: AppDatabase = AppDatabase.getInstance(),
-  private val topicId: Int
-) {
+class TopicDetailRepository @Inject constructor(private val db: AppDatabase) {
+
+  @Inject
+  lateinit var apiService: RetrofitService
 
   /**
    * Inserts the response into the database while also assigning position indices to items.
@@ -50,7 +50,10 @@ class TopicDetailRepository(
 //  }
 
   @MainThread
-  fun getComments(pageSize: Int): LiveData<PagedList<RepliesShowBean>> {
+  fun getComments(
+    pageSize: Int,
+    topicId: Int
+  ): LiveData<PagedList<RepliesShowBean>> {
     val boundaryCallback = TopicCommentsBoundaryCallback(
         insertToDb = this::insertResultIntoDb,
         topicId = topicId
@@ -63,10 +66,11 @@ class TopicDetailRepository(
         )
   }
 
-  suspend fun initTopicDetail() {
-    val localBean = db.topicDetailDao().getTopicById(topicId)
+  suspend fun initTopicDetail(topicId: Int) {
+    val localBean = db.topicDetailDao()
+        .getTopicById(topicId)
     if (localBean == null) {
-      val docString = RetrofitRequest.apiService.getTopicByIdSuspend(topicId)
+      val docString = apiService.getTopicByIdSuspend(topicId)
           .string()
       val doc = Jsoup.parse(docString)
       val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
@@ -88,7 +92,7 @@ class TopicDetailRepository(
     }
   }
 
-  fun getTopicsShowBean(): LiveData<TopicsShowBean?> {
+  fun getTopicsShowBean(topicId: Int): LiveData<TopicsShowBean?> {
     return db.topicShowDao()
         .getTopicById(topicId = topicId)
   }

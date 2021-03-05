@@ -7,11 +7,13 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import com.zzhoujay.richtext.RichText
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * Created by journey on 2018/1/26.
  */
 
+@HiltAndroidApp
 class V2EXApplication : Application() {
 
   override fun onCreate() {

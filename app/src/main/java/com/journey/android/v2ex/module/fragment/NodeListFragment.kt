@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.model.api.NodeBean
-import com.journey.android.v2ex.net.RetrofitRequest
-import kotlinx.android.synthetic.main.activity_node_list.node_list_recycle
+import com.journey.android.v2ex.net.RetrofitService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class NodeListFragment : BaseFragment() {
 
@@ -24,6 +24,9 @@ class NodeListFragment : BaseFragment() {
 
   }
 
+  @Inject
+  lateinit var apiService: RetrofitService
+
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
@@ -33,7 +36,7 @@ class NodeListFragment : BaseFragment() {
   }
 
   private fun doGetNodes() {
-    RetrofitRequest.apiService
+    apiService
         .getNodesAll()
         .enqueue(object : Callback<ArrayList<NodeBean>> {
           override fun onFailure(

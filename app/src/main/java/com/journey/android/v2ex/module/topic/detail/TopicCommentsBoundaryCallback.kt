@@ -2,7 +2,6 @@ package com.journey.android.v2ex.module.topic.detail
 
 import androidx.paging.PagedList
 import androidx.annotation.MainThread
-import com.journey.android.v2ex.net.RetrofitRequest
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.room.AppDatabase
 import com.orhanobut.logger.Logger

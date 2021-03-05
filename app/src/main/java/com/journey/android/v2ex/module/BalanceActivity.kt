@@ -1,25 +1,23 @@
 package com.journey.android.v2ex.module
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.model.jsoup.BalanceBean
-import com.journey.android.v2ex.net.parser.BalanceParser
-import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.net.RetrofitService
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_balance.balance_rv
 import kotlinx.android.synthetic.main.activity_balance.balance_toolbar
 import okhttp3.ResponseBody
-import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class BalanceActivity : AppCompatActivity() {
+
+  @Inject
+  lateinit var apiService: RetrofitService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -38,7 +36,7 @@ class BalanceActivity : AppCompatActivity() {
   }
 
   private fun doGetBalance() {
-    RetrofitRequest.apiService
+    apiService
         .getBalance()
         .enqueue(object : Callback<ResponseBody> {
           override fun onFailure(

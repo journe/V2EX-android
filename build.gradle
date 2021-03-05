@@ -4,7 +4,6 @@ buildscript {
   ext {
     appCompatVersion = '1.1.0'
 
-    kotlin_version = '1.4.10'
     ui_version = '3.2.24'
     androidx_version = '2.2.0'
     navigation_version = '2.3.0'
@@ -15,8 +14,9 @@ buildscript {
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:4.1.2'
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31"
     classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
+    classpath 'com.google.dagger:hilt-android-gradle-plugin:2.28.1-alpha'
   }
 }
 

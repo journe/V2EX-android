@@ -52,10 +52,7 @@ class TopicDetailFragment : BaseFragment() {
     object : ViewModelProvider.Factory {
       override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TopicDetailViewModel(
-            TopicDetailRepository(
-                AppDatabase.getInstance(),
-                safeArgs.topicId
-            )
+            TopicDetailRepository(AppDatabase.getInstance())
         ) as T
       }
     }
@@ -83,6 +80,8 @@ class TopicDetailFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
 
     ViewCompat.setTransitionName(coordinatorLayout, TRANSITION_BACKGROUND)
+
+    viewModel.initTopicDetail(safeArgs.topicId)
 
     topic_detail_comments_list.addItemDecoration(
         DividerItemDecoration(

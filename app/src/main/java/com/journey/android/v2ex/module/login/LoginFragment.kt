@@ -29,13 +29,7 @@ class LoginFragment : BaseFragment() {
 
   private lateinit var captchaUrl: String
 
-  private val viewModel: LoginViewModel by viewModels {
-    object : ViewModelProvider.Factory {
-      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return LoginViewModel(LoginRepository(LoginDataSource())) as T
-      }
-    }
-  }
+  private val viewModel: LoginViewModel by viewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,

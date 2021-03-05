@@ -6,12 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.journey.android.v2ex.model.api.TopicsListItemBean
-import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.room.AppDatabase
 import com.journey.android.v2ex.utils.Constants
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
+import javax.inject.Inject
 
 /**
  * Created by journey on 2020/5/19.
@@ -26,6 +27,8 @@ class TopicListRepository(
   private val tabName: String
 ) {
 
+  @Inject
+  lateinit var apiService: RetrofitService
   /**
    * Inserts the response into the database while also assigning position indices to items.
    */
@@ -51,7 +54,7 @@ class TopicListRepository(
    * updated after the database transaction is finished.
    */
   suspend fun refresh() = Dispatchers.IO {
-    val result = RetrofitRequest.apiService.getTopicsByNodeSuspend(Constants.TAB + tabName)
+    val result = apiService.getTopicsByNodeSuspend(Constants.TAB + tabName)
     Logger.d(result.toString())
 //    if (result.rows?.isEmpty() == true) {
 ////            Logger.d(result.size)

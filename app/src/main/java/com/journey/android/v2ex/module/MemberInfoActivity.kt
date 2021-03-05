@@ -10,18 +10,24 @@ import com.journey.android.v2ex.base.BaseActivity
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.MemberBean
-import com.journey.android.v2ex.net.RetrofitRequest
+import com.journey.android.v2ex.net.RetrofitService
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_member_info.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MemberInfoActivity : BaseActivity() {
 
     private lateinit var mMemberBean: MemberBean
     private var mUserName = ""
     private lateinit var mView: View
+
+    @Inject
+    lateinit var apiService: RetrofitService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +45,7 @@ class MemberInfoActivity : BaseActivity() {
     }
 
     private fun getMemberInfo() {
-        val call = RetrofitRequest.apiService.getMemberInfo(mUserName)
+        val call = apiService.getMemberInfo(mUserName)
         call.enqueue(object : Callback<MemberBean> {
             override fun onFailure(call: Call<MemberBean>?, t: Throwable?) {
                 Logger.d(t?.message)

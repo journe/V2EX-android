@@ -1,20 +1,19 @@
 package com.journey.android.v2ex.module.login
 
+import android.graphics.Bitmap
 import com.journey.android.v2ex.model.jsoup.SignInFormData
 import com.journey.android.v2ex.module.login.Result.Success
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import javax.inject.Inject
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(private val dataSource: LoginDataSource) {
+class LoginRepository @Inject constructor(private val dataSource: LoginDataSource) {
   // in-memory cache of the loggedInUser object
   var user: LoggedInUser? = null
     private set
@@ -31,6 +30,18 @@ class LoginRepository(private val dataSource: LoginDataSource) {
   fun logout() {
     user = null
     dataSource.logout()
+  }
+
+  fun getLoginUserInfo() {
+    dataSource.getUserInfoByName()
+  }
+
+  suspend fun loadSignPage(): SignInFormData {
+    return dataSource.loadSignPage()
+  }
+
+  suspend fun getCaptcha(captchaUrl: String): Bitmap? {
+    return dataSource.getCaptcha(captchaUrl)
   }
 
   suspend fun login(

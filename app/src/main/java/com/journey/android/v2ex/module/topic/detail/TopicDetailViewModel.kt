@@ -6,9 +6,9 @@ import androidx.paging.PagedList
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.model.api.RepliesShowBean
-import com.journey.android.v2ex.room.AppDatabase
-import com.orhanobut.logger.Logger
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class TopicDetailViewModel(private val repository: TopicDetailRepository) : BaseViewModel() {
 
   init {
@@ -21,5 +21,11 @@ class TopicDetailViewModel(private val repository: TopicDetailRepository) : Base
     emitSource(repository.getTopicsShowBean())
   }
   val repliesShowBean: LiveData<PagedList<RepliesShowBean>> = repository.getComments(100)
+
+  fun initTopicDetail(topicId: Int) {
+    launch({
+      repository.initTopicDetail(topicId)
+    })
+  }
 
 }

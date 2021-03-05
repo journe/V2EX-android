@@ -6,7 +6,9 @@ import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.libs.extension.launch
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class TopicListViewModel(private val repository: TopicListRepository) : BaseViewModel() {
 
   val itemPagedList: LiveData<PagedList<TopicsListItemBean>> = repository.getFeeds(20)

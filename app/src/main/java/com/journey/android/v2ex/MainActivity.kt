@@ -15,8 +15,10 @@ import com.journey.android.v2ex.libs.extension.animateY
 import com.journey.android.v2ex.libs.transition.EdgeToEdge
 import com.journey.android.v2ex.router.Router
 import com.zzhoujay.richtext.RichText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
   private lateinit var appBarConfiguration: AppBarConfiguration
 

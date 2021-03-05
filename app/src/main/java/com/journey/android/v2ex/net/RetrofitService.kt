@@ -1,5 +1,9 @@
 package com.journey.android.v2ex.net
 
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.journey.android.v2ex.BuildConfig
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.model.api.NodeBean
 import com.journey.android.v2ex.model.api.RepliesShowBean
@@ -8,8 +12,14 @@ import com.journey.android.v2ex.model.api.SiteStatsBean
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.utils.Constants
+import com.journey.android.v2ex.utils.Utils
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -19,11 +29,62 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Streaming
 import retrofit2.http.Url
+import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by journey on 2017/12/29.
  */
 interface RetrofitService {
+
+  companion object {
+
+    private val cookieJar =
+      PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getContext()))
+    private val logInterceptor = HttpLoggingInterceptor(HttpLogger()).apply {
+      level = HttpLoggingInterceptor.Level.BODY
+    }
+    private val client: OkHttpClient = OkHttpClient.Builder()
+        .apply {
+          cache(buildCache())
+          connectTimeout(10, TimeUnit.SECONDS)
+          writeTimeout(10, TimeUnit.SECONDS)
+          readTimeout(30, TimeUnit.SECONDS)
+          followRedirects(false)
+          cookieJar(cookieJar)
+          addInterceptor { chain ->
+            val request = chain.request()
+                .newBuilder()
+                .addHeader("User-Agent", Constants.USER_AGENT_ANDROID)
+                .build()
+            val response = chain.proceed(request)
+            response
+          }
+          if (BuildConfig.DEBUG) {
+            addNetworkInterceptor(logInterceptor)
+          }
+        }
+        .build()
+
+    fun create(): RetrofitService {
+      return Retrofit.Builder()
+          .baseUrl(Constants.BASE_URL)
+          .client(client)
+          .addConverterFactory(GsonConverterFactory.create())
+          .build()
+          .create(RetrofitService::class.java)
+    }
+
+    fun cleanCookies() {
+      cookieJar.clear()
+    }
+
+    private fun buildCache(): Cache? {
+      val cacheDir = File(Utils.getContext().cacheDir, "webCache")
+      val cacheSize = 16 * 1024 * 1024
+      return Cache(cacheDir, cacheSize.toLong())
+    }
+  }
 
   @GET(Constants.SITE_INFO)
   fun getSiteInfo(): Call<SiteInfoBean>
