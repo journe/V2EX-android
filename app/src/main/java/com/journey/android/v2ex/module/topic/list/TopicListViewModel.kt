@@ -5,9 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.journey.android.v2ex.base.BaseViewModel
+import com.journey.android.v2ex.room.AppDatabase
+import com.journey.android.v2ex.room.AppDatabase.Companion
+import javax.inject.Inject
 
 class TopicListViewModel : BaseViewModel() {
 
+  val db :AppDatabase  = AppDatabase.getInstance()
 //  val itemPagedList: LiveData<PagingData<TopicsListItemBean>> = repository.getFeeds(20)
 
 //  fun refresh() {
@@ -19,9 +23,15 @@ class TopicListViewModel : BaseViewModel() {
 //    })
 //  }
 
+//  fun getTopicListBean(tabName: String) =
+//    Pager(PagingConfig(pageSize = 20)) {
+//      TopicListDataSource(tabName)
+//    }.flow.cachedIn(viewModelScope).asLiveData()
+
   fun getTopicListBean(tabName: String) =
     Pager(PagingConfig(pageSize = 20)) {
-      TopicListDataSource(tabName)
+//      TopicListDataSource(tabName)
+      db.topicListDao().pagingSource(tabName)
     }.flow.cachedIn(viewModelScope)
 
 }

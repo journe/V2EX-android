@@ -1,41 +1,25 @@
 package com.journey.android.v2ex.module.topic.list
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Explode
-import androidx.transition.Fade
-import androidx.transition.Slide
 import androidx.transition.TransitionManager
-import com.google.android.material.appbar.AppBarLayout
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
-import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.libs.transition.FAST_OUT_LINEAR_IN
-import com.journey.android.v2ex.libs.transition.LARGE_COLLAPSE_DURATION
-import com.journey.android.v2ex.libs.transition.LARGE_EXPAND_DURATION
-import com.journey.android.v2ex.libs.transition.LINEAR_OUT_SLOW_IN
 import com.journey.android.v2ex.libs.transition.Stagger
-import com.journey.android.v2ex.libs.transition.plusAssign
-import com.journey.android.v2ex.libs.transition.transitionTogether
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class TopicListFragment(val topicType: String) : BaseFragment() {
+class TopicListFragment(private val topicType: String) : BaseFragment() {
 
   private val viewModel: TopicListViewModel by viewModels()
 //  private val viewModel: TopicListViewModel by viewModels {
@@ -95,12 +79,22 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
       }
     }
     val stagger = Stagger()
+//    viewModel.getTopicListBean(topicType)
+//        .observe(viewLifecycleOwner) {
+//          topic_list_refreshview.isRefreshing = false
+//          TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
+//          lifecycleScope.launch {
+//            adapter.submitData(pagingData = it)
+//          }
+//        }
     lifecycleScope.launch {
-      viewModel.getTopicListBean(topicType).collectLatest{
-        topic_list_refreshview.isRefreshing = false
-        TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
-        adapter.submitData(it)
-      }
+      viewModel.getTopicListBean(topicType)
+          .collectLatest {
+            topic_list_refreshview.isRefreshing = false
+            TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
+            adapter.submitData(it)
+            Logger.d(it)
+          }
     }
 //    viewModel.itemPagedList.observe(viewLifecycleOwner, {
 //      topic_list_refreshview.isRefreshing = false

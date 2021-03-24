@@ -16,8 +16,8 @@ interface TopicRepliesDao : BaseDao<RepliesShowBean> {
   @Query("SELECT * FROM RepliesShowBean")
   fun getAll(): List<RepliesShowBean>
 
-//  @Query("SELECT * FROM RepliesShowBean WHERE topic_id = :topicId ORDER BY floor ASC")
-//  fun getTopicReplies(topicId: Int): PagingSource<Int, RepliesShowBean>
+  @Query("SELECT * FROM RepliesShowBean WHERE topic_id = :topicId ORDER BY floor ASC")
+  fun pagingSource(topicId: Int): PagingSource<Int, RepliesShowBean>
 
   @Query("SELECT * FROM RepliesShowBean WHERE topic_id = :topicId")
   suspend fun getTopicRepliesSuspend(topicId: Int): List<RepliesShowBean>
