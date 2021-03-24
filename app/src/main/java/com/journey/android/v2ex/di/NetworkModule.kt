@@ -10,6 +10,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
+
   @Singleton
   @Provides
   fun provideUnsplashService(): RetrofitService {

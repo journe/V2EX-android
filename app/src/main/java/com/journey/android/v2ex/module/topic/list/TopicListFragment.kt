@@ -32,22 +32,25 @@ import com.journey.android.v2ex.libs.transition.plusAssign
 import com.journey.android.v2ex.libs.transition.transitionTogether
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
 import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class TopicListFragment(val topicType: String) : BaseFragment() {
 
-  private val viewModel: TopicListViewModel by viewModels {
-    object : ViewModelProvider.Factory {
-      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TopicListViewModel(
-            TopicListRepository(
-                AppDatabase.getInstance(),
-                lifecycleScope,
-                topicType
-            )
-        ) as T
-      }
-    }
-  }
+  private val viewModel: TopicListViewModel by viewModels()
+//  private val viewModel: TopicListViewModel by viewModels {
+//    object : ViewModelProvider.Factory {
+//      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//        return TopicListViewModel(
+//            TopicListRepository(
+//                AppDatabase.getInstance(),
+//                lifecycleScope,
+//                topicType
+//            )
+//        ) as T
+//      }
+//    }
+//  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -92,11 +95,18 @@ class TopicListFragment(val topicType: String) : BaseFragment() {
       }
     }
     val stagger = Stagger()
-    viewModel.itemPagedList.observe(viewLifecycleOwner, Observer {
-      topic_list_refreshview.isRefreshing = false
-      TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
-      adapter.submitList(it)
-    })
+    lifecycleScope.launch {
+      viewModel.getTopicListBean(topicType).collectLatest{
+        topic_list_refreshview.isRefreshing = false
+        TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
+        adapter.submitData(it)
+      }
+    }
+//    viewModel.itemPagedList.observe(viewLifecycleOwner, {
+//      topic_list_refreshview.isRefreshing = false
+//      TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
+//      adapter.submitData(it)
+//    })
   }
 
   companion object {

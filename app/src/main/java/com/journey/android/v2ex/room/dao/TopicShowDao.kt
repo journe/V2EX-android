@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.journey.android.v2ex.model.api.TopicsShowBean
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by journey on 2020/5/19.
@@ -11,6 +12,6 @@ import com.journey.android.v2ex.model.api.TopicsShowBean
 @Dao
 interface TopicShowDao : BaseDao<TopicsShowBean> {
   @Query("SELECT * FROM TopicsShowBean WHERE id = :topicId")
-  fun getTopicById(topicId: Int): LiveData<TopicsShowBean?>
+  fun getTopicById(topicId: Int): Flow<TopicsShowBean>
 
 }

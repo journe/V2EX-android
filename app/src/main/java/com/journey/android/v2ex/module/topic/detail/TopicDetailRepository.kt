@@ -1,9 +1,7 @@
 package com.journey.android.v2ex.module.topic.detail
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
-import androidx.paging.toLiveData
+import androidx.paging.PagingSource
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.jsoup.TopicDetailBean
@@ -11,6 +9,7 @@ import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.invoke
 import org.jsoup.Jsoup
 import javax.inject.Inject
@@ -22,10 +21,12 @@ import javax.inject.Inject
  * listing that loads in pages.
  *
  */
-class TopicDetailRepository @Inject constructor(private val db: AppDatabase) {
+class TopicDetailRepository {
 
   @Inject
   lateinit var apiService: RetrofitService
+  @Inject
+  lateinit var db: AppDatabase
 
   /**
    * Inserts the response into the database while also assigning position indices to items.
@@ -49,22 +50,14 @@ class TopicDetailRepository @Inject constructor(private val db: AppDatabase) {
 //    val result = RetrofitRequest.apiService.getTopicsByNodeSuspend(Constants.TAB + tabName)
 //  }
 
-  @MainThread
-  fun getComments(
-    pageSize: Int,
-    topicId: Int
-  ): LiveData<PagedList<RepliesShowBean>> {
-    val boundaryCallback = TopicCommentsBoundaryCallback(
-        insertToDb = this::insertResultIntoDb,
-        topicId = topicId
-    )
-    return db.topicRepliesDao()
-        .getTopicReplies(topicId)
-        .toLiveData(
-            pageSize = pageSize,
-            boundaryCallback = boundaryCallback
-        )
-  }
+//  @MainThread
+//  fun getComments(
+//    pageSize: Int,
+//    topicId: Int
+//  ): PagingSource<Int, RepliesShowBean> {
+//    return db.topicRepliesDao()
+//        .getTopicReplies(topicId)
+//  }
 
   suspend fun initTopicDetail(topicId: Int) {
     val localBean = db.topicDetailDao()
@@ -92,7 +85,7 @@ class TopicDetailRepository @Inject constructor(private val db: AppDatabase) {
     }
   }
 
-  fun getTopicsShowBean(topicId: Int): LiveData<TopicsShowBean?> {
+  fun getTopicsShowBean(topicId: Int): Flow<TopicsShowBean> {
     return db.topicShowDao()
         .getTopicById(topicId = topicId)
   }

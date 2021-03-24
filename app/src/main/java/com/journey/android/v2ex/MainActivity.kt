@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
   private lateinit var appBarConfiguration: AppBarConfiguration
 
-  val viewModel:MainViewModel by viewModels()
+//  val viewModel:MainViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

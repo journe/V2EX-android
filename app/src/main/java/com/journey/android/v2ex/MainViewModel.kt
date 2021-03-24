@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 /**
  * Created by journey on 2020/9/17.
  */
-@HiltViewModel
 class MainViewModel(application: Application) : AndroidViewModel(application) {
   private var wifiManager: WifiManager =
     application.getSystemService(Context.WIFI_SERVICE) as WifiManager

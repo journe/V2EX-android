@@ -10,8 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -26,12 +25,13 @@ import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderSubtleAdapter
-import com.journey.android.v2ex.room.AppDatabase
 import kotlinx.android.synthetic.main.fragment_topic_detail.coordinatorLayout
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_avatar
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_head_cl
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_title_tv
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class TopicDetailFragment : BaseFragment() {
 
@@ -46,17 +46,19 @@ class TopicDetailFragment : BaseFragment() {
     const val TRANSITION_BODY = "body"
   }
 
-  val safeArgs: TopicDetailFragmentArgs by navArgs()
+  private val safeArgs: TopicDetailFragmentArgs by navArgs()
 
-  private val viewModel: TopicDetailViewModel by viewModels {
-    object : ViewModelProvider.Factory {
-      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TopicDetailViewModel(
-            TopicDetailRepository(AppDatabase.getInstance())
-        ) as T
-      }
-    }
-  }
+//  private val viewModel: TopicDetailViewModel by viewModels {
+//    object : ViewModelProvider.Factory {
+//      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//        return TopicDetailViewModel(
+//            TopicDetailRepository(AppDatabase.getInstance())
+//        ) as T
+//      }
+//    }
+//  }
+
+  private val viewModel: TopicDetailViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -144,10 +146,19 @@ class TopicDetailFragment : BaseFragment() {
         topicHeaderSubtleAdapter.notifyDataSetChanged()
       }
     })
-    viewModel.repliesShowBean.observe(viewLifecycleOwner, {
-//      topic_list_refreshview.isRefreshing = false
-      topicCommentAdapter.submitList(it)
-    })
+
+    lifecycleScope.launch {
+      viewModel.getTopicReplyBean(safeArgs.topicId)
+          .collectLatest {
+            topicCommentAdapter.submitData(it)
+          }
+
+    }
+
+//    viewModel.repliesShowBean.observe(viewLifecycleOwner, {
+////      topic_list_refreshview.isRefreshing = false
+//      topicCommentAdapter.submitList(it)
+//    })
   }
 
   private fun addHeaderView(topicDetailBean: TopicsShowBean) {

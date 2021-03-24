@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.to
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_username_tv
 
 class TopicCommentAdapter :
-    PagedListAdapter<RepliesShowBean, ViewHolder>(
+    PagingDataAdapter<RepliesShowBean, ViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -72,10 +72,10 @@ class TopicCommentAdapter :
       }
       username.text = repliesShowBean.member.username
       replyTime.text = repliesShowBean.created_str
-      if (repliesShowBean.heart!=0) {
+      if (repliesShowBean.heart != 0) {
         heartCount.visible()
         heartCount.text = "❤ ️${repliesShowBean.heart}"
-      }else{
+      } else {
         heartCount.invisible()
       }
 

@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.android.v2ex.R
@@ -18,7 +19,6 @@ import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.module.topic.MainFragmentDirections
 import com.journey.android.v2ex.module.topic.detail.TopicDetailFragment
-import com.journey.android.v2ex.module.topic.detail.TopicDetailRepository
 import com.journey.android.v2ex.router.Router
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_corner_star_iv
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_node_item_tv
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_userav
 import kotlinx.android.synthetic.main.fragment_topic_list_item.view.topic_username_item_tv
 
 internal class TopicListAdapter :
-    PagedListAdapter<TopicsListItemBean, TopicListViewHolder>(
+    PagingDataAdapter<TopicsListItemBean, TopicListViewHolder>(
         DIFF_CALLBACK
     ) {
 
