@@ -1,6 +1,6 @@
 package com.journey.android.v2ex.module.topic.detail
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -8,19 +8,17 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.libs.extension.launch
-import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.room.AppDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-abstract class TopicDetailViewModel(private val repository: TopicDetailRepository = TopicDetailRepository()) :
-    BaseViewModel() {
-
+class TopicDetailViewModel : BaseViewModel() {
+  private val repository: TopicDetailRepository = TopicDetailRepository()
 //  val topicShowBean = liveData {
 //    emitSource(repository.getTopicsShowBean())
 //  }
 
-  abstract var topicShowBean: LiveData<TopicsShowBean>
+//  var topicShowBean: LiveData<TopicsShowBean>
 //  val repliesShowBean: LiveData<PagingData<RepliesShowBean>> = repository.getComments(100)
 
   fun initTopicDetail(topicId: Int) {

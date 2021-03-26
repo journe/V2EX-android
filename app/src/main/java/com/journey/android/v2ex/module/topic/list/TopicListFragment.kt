@@ -93,7 +93,6 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
             topic_list_refreshview.isRefreshing = false
             TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
             adapter.submitData(it)
-            Logger.d(it)
           }
     }
 //    viewModel.itemPagedList.observe(viewLifecycleOwner, {

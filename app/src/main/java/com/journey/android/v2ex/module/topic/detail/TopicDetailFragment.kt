@@ -137,7 +137,7 @@ class TopicDetailFragment : BaseFragment() {
 
     topic_detail_comments_list.adapter = concatAdapter
 
-    viewModel.topicShowBean.observe(viewLifecycleOwner, {
+    viewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner, {
       if (it != null) {
         addHeaderView(it)
         topicHeaderAdapter.topicDetailBean = it
