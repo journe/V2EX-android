@@ -12,11 +12,11 @@
       tools:layout="@layout/fragment_main">
     <action
         android:id="@+id/action_main_dest_to_login_dest"
-        app:destination="@id/login_dest"/>
+        app:destination="@id/login_dest" />
     <action
         android:id="@+id/topic_detail"
         app:destination="@id/topicDetail_dest"
-        app:enterAnim="@anim/fragment_fade_enter"
+        app:enterAnim="@anim/fade_in"
         app:popEnterAnim="@android:anim/slide_in_left" />
     <action
         android:id="@+id/action_main_dest_to_settingsActivity"
@@ -33,7 +33,7 @@
       android:id="@+id/nodeList_dest"
       android:name="com.journey.android.v2ex.module.fragment.NodeListFragment"
       android:label="NodeListFragment"
-      tools:layout="@layout/activity_node_list"/>
+      tools:layout="@layout/activity_node_list" />
   <fragment
       android:id="@+id/topicDetail_dest"
       android:name="com.journey.android.v2ex.module.topic.detail.TopicDetailFragment"
@@ -41,17 +41,17 @@
       tools:layout="@layout/fragment_topic_detail">
     <argument
         android:name="topicId"
-        app:argType="integer"/>
+        app:argType="integer" />
     <argument
         android:name="topicTitle"
-        app:argType="string"/>
+        app:argType="string" />
     <argument
         android:name="avatar"
-        app:argType="string"/>
+        app:argType="string" />
     <action
         android:id="@+id/topic_detail_image"
-        app:destination="@id/topicImage_dest"/>
-    <deepLink app:uri="www.v2ex.com/t/{arg}"/>
+        app:destination="@id/topicImage_dest" />
+    <deepLink app:uri="www.v2ex.com/t/{arg}" />
   </fragment>
 
   <fragment
@@ -69,13 +69,13 @@
       tools:layout="@layout/fragment_topic_list">
     <action
         android:id="@+id/action_topicList_dest_to_topicDetail_dest"
-        app:destination="@id/topicDetail_dest"/>
+        app:destination="@id/topicDetail_dest" />
   </fragment>
   <activity
       android:id="@+id/nav_test_dest"
       android:name="com.journey.android.v2ex.module.TestActivity"
       android:label="test"
-      tools:layout="@layout/activity_test"/>
+      tools:layout="@layout/activity_test" />
   <activity
       android:id="@+id/settings_dest"
       android:name="com.journey.android.v2ex.module.SettingsActivity"
