@@ -10,14 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class TopicListViewModel @Inject constructor(
-  val db: AppDatabase
-) : BaseViewModel() {
-
-//class TopicListViewModel : BaseViewModel() {
-
-//  @Inject lateinit var db: AppDatabase
-//  val db: AppDatabase = AppDatabase.getInstance()
+class TopicListViewModel @Inject constructor(val db: AppDatabase) : BaseViewModel() {
 
 //  val itemPagedList: LiveData<PagingData<TopicsListItemBean>> = repository.getFeeds(20)
 

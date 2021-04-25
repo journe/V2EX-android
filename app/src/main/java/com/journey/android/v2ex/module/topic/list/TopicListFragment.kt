@@ -5,22 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentTopicListBinding
+import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.net.parser.TopicListParser
 import com.journey.android.v2ex.room.AppDatabase
+import com.journey.android.v2ex.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.invoke
-import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
 
 @AndroidEntryPoint
 class TopicListFragment(private val topicType: String) : BaseFragment() {
@@ -28,19 +30,6 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
   override val binding get() = _binding!! as FragmentTopicListBinding
 
   private val viewModel: TopicListViewModel by viewModels()
-//  private val viewModel: TopicListViewModel by viewModels {
-//    object : ViewModelProvider.Factory {
-//      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//        return TopicListViewModel(
-//            TopicListRepository(
-//                AppDatabase.getInstance(),
-//                lifecycleScope,
-//                topicType
-//            )
-//        ) as T
-//      }
-//    }
-//  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -97,12 +86,13 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
 //            adapter.submitData(pagingData = it)
 //          }
 //        }
-    lifecycleScope.launch {
-//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
-//      val listItemBean = TopicListParser.parseTopicList(
-//          Jsoup.parse(result.string())
-//      )
-//      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
+
+    launch({
+      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
+      val listItemBean = TopicListParser.parseTopicList(
+          Jsoup.parse(result.string())
+      )
+      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
 
       viewModel.getTopicListBean(topicType)
           .collectLatest {
@@ -110,7 +100,7 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
             TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
             adapter.submitData(it)
           }
-    }
+    })
 //    viewModel.itemPagedList.observe(viewLifecycleOwner, {
 //      topic_list_refreshview.isRefreshing = false
 //      TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
@@ -132,7 +122,6 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
           .insert(items)
     }
   }
-
 
   companion object {
     fun newInstance(
