@@ -15,14 +15,11 @@ import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitService
-import com.journey.android.v2ex.net.parser.TopicListParser
 import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.invoke
-import org.jsoup.Jsoup
 
 @AndroidEntryPoint
 class TopicListFragment(private val topicType: String) : BaseFragment() {
@@ -78,21 +75,13 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
       }
     }
     val stagger = Stagger()
-//    viewModel.getTopicListBean(topicType)
-//        .observe(viewLifecycleOwner) {
-//          topic_list_refreshview.isRefreshing = false
-//          TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
-//          lifecycleScope.launch {
-//            adapter.submitData(pagingData = it)
-//          }
-//        }
 
     launch({
-      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
-      val listItemBean = TopicListParser.parseTopicList(
-          Jsoup.parse(result.string())
-      )
-      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
+//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
+//      val listItemBean = TopicListParser.parseTopicList(
+//          Jsoup.parse(result.string())
+//      )
+//      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
 
       viewModel.getTopicListBean(topicType)
           .collectLatest {
@@ -101,11 +90,6 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
             adapter.submitData(it)
           }
     })
-//    viewModel.itemPagedList.observe(viewLifecycleOwner, {
-//      topic_list_refreshview.isRefreshing = false
-//      TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
-//      adapter.submitData(it)
-//    })
   }
 
   private suspend fun insertToDb(body: List<TopicsListItemBean>) = Dispatchers.IO {

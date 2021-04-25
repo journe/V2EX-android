@@ -3,6 +3,7 @@ package com.journey.android.v2ex
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,7 +24,7 @@ class MainActivity : BaseActivity() {
 
   private lateinit var appBarConfiguration: AppBarConfiguration
 
-//  val viewModel:MainViewModel by viewModels()
+  val viewModel:MainViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,16 +56,6 @@ class MainActivity : BaseActivity() {
         }
 
     Router.init(this, navController)
-
-    //只在一级页面展示app_bar
-//    navController.addOnDestinationChangedListener { _, destination, _ ->
-//      if (destination.id == R.id.topicImage_dest) {
-//        app_bar.animateY(56)
-//      } else {
-//        app_bar.animateY(0)
-//      }
-//    }
-
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

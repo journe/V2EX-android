@@ -19,7 +19,8 @@ import javax.inject.Inject
  * Created by journey on 2020/9/25.
  */
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : BaseViewModel() {
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
+    BaseViewModel() {
 
   private val _loginForm = MutableLiveData<LoginFormState>()
   val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -36,7 +37,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
   fun loadSignPage() {
     launch({
       signInFormData.postValue(loginRepository.loadSignPage())
-    }, {})
+    })
   }
 
   fun getCaptcha(captchaUrl: String) {
