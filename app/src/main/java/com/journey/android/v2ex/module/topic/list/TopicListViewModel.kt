@@ -6,10 +6,19 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.room.AppDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TopicListViewModel : BaseViewModel() {
+@HiltViewModel
+class TopicListViewModel @Inject constructor(
+  val db: AppDatabase
+) : BaseViewModel() {
 
-  val db: AppDatabase = AppDatabase.getInstance()
+//class TopicListViewModel : BaseViewModel() {
+
+//  @Inject lateinit var db: AppDatabase
+//  val db: AppDatabase = AppDatabase.getInstance()
+
 //  val itemPagedList: LiveData<PagingData<TopicsListItemBean>> = repository.getFeeds(20)
 
 //  fun refresh() {

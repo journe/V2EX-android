@@ -30,14 +30,14 @@ class PrefStore internal constructor(context: Context) : SharedPreferences.OnSha
     get() = mPreferences.getBoolean(PREF_CONTENT_SELECTABLE, false)
 
   var userName: String
-    get() = mPreferences.getString(NAME, "")
+    get() = mPreferences.getString(NAME, "") ?: ""
     set(value) {
       mPreferences.edit()
           .putString(NAME, value)
           .apply()
     }
   var userPass: String
-    get() = mPreferences.getString(PASS, "")
+    get() = mPreferences.getString(PASS, "") ?: ""
     set(value) {
       mPreferences.edit()
           .putString(PASS, value)

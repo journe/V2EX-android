@@ -34,7 +34,7 @@ class MemberInfoActivity : BaseActivity() {
         mView = this.layoutInflater.inflate(R.layout.activity_member_info, null as ViewGroup?, false)
         setContentView(R.layout.activity_member_info)
 //        mMembersShowBean = intent.extras[MemberInfoActivity.MEMBERBEAN] as MembersShowBean
-        mUserName = intent.extras[USERNAME] as String
+        mUserName = intent.extras?.get(USERNAME) as String
         getMemberInfo()
     }
 

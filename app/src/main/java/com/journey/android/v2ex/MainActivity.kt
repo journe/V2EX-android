@@ -3,7 +3,6 @@ package com.journey.android.v2ex
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,26 +10,31 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.journey.android.v2ex.base.BaseActivity
-import com.journey.android.v2ex.libs.extension.animateY
+import com.journey.android.v2ex.databinding.ActivityMainBinding
 import com.journey.android.v2ex.libs.transition.EdgeToEdge
 import com.journey.android.v2ex.router.Router
 import com.zzhoujay.richtext.RichText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
+
+  private lateinit var binding: ActivityMainBinding
+
   private lateinit var appBarConfiguration: AppBarConfiguration
 
 //  val viewModel:MainViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    setSupportActionBar(main_toolbar)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    val view = binding.root
+    setContentView(view)
+
+    setSupportActionBar(binding.mainToolbar)
 
     EdgeToEdge.setUpRoot(findViewById(R.id.drawer_layout))
-    EdgeToEdge.setUpAppBar(app_bar, main_toolbar)
+    EdgeToEdge.setUpAppBar(binding.appBar, binding.mainToolbar)
     EdgeToEdge.setUpScrollingContent(findViewById(R.id.main_constraint))
 
     val host: NavHostFragment = supportFragmentManager
@@ -39,15 +43,15 @@ class MainActivity : BaseActivity() {
 
     appBarConfiguration = AppBarConfiguration(
         setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest),//顶层导航设置
-        drawer_layout
+        binding.drawerLayout
     )
     setupActionBarWithNavController(navController, appBarConfiguration)
-    nav_view?.setupWithNavController(navController)
+    binding.navView.setupWithNavController(navController)
 
-    nav_view.getHeaderView(0)
+    binding.navView.getHeaderView(0)
         .setOnClickListener {
           navController.navigate(R.id.login_dest)
-          drawer_layout.closeDrawers()
+          binding.drawerLayout.closeDrawers()
         }
 
     Router.init(this, navController)

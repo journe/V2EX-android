@@ -10,16 +10,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
-import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
+import com.journey.android.v2ex.databinding.FragmentTopicListBinding
 import com.journey.android.v2ex.libs.transition.Stagger
-import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_recycleview
-import kotlinx.android.synthetic.main.fragment_topic_list.topic_list_refreshview
+import com.journey.android.v2ex.model.api.TopicsListItemBean
+import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.room.AppDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class TopicListFragment(private val topicType: String) : BaseFragment() {
+
+  override val binding get() = _binding!! as FragmentTopicListBinding
 
   private val viewModel: TopicListViewModel by viewModels()
 //  private val viewModel: TopicListViewModel by viewModels {
@@ -53,25 +59,29 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return inflater.inflate(R.layout.fragment_topic_list, container, false)
+  ): View {
+    _binding = FragmentTopicListBinding.inflate(inflater, container, false)
+    return binding.root
   }
+
+  val apiService: RetrofitService = RetrofitService.create()
 
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    topic_list_recycleview.addItemDecoration(
-        DividerItemDecoration(
-            activity,
-            DividerItemDecoration.VERTICAL
+    binding.topicListRecycleview
+        .addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                DividerItemDecoration.VERTICAL
+            )
         )
-    )
     val adapter = TopicListAdapter()
-    topic_list_recycleview.adapter = adapter
+    binding.topicListRecycleview.adapter = adapter
     // We animate item additions on our side, so disable it in RecyclerView.
-    topic_list_recycleview.itemAnimator = object : DefaultItemAnimator() {
+    binding.topicListRecycleview.itemAnimator = object : DefaultItemAnimator() {
       override fun animateAdd(holder: RecyclerView.ViewHolder?): Boolean {
         dispatchAddFinished(holder)
         dispatchAddStarting(holder)
@@ -88,10 +98,16 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
 //          }
 //        }
     lifecycleScope.launch {
+//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
+//      val listItemBean = TopicListParser.parseTopicList(
+//          Jsoup.parse(result.string())
+//      )
+//      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
+
       viewModel.getTopicListBean(topicType)
           .collectLatest {
-            topic_list_refreshview.isRefreshing = false
-            TransitionManager.beginDelayedTransition(topic_list_refreshview, stagger)
+            binding.topicListRefreshview.isRefreshing = false
+            TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
             adapter.submitData(it)
           }
     }
@@ -101,6 +117,22 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
 //      adapter.submitData(it)
 //    })
   }
+
+  private suspend fun insertToDb(body: List<TopicsListItemBean>) = Dispatchers.IO {
+    val db = AppDatabase.getInstance()
+    db.runInTransaction {
+      val start = db.topicListDao()
+          .getNextIndex()
+      val items = body.mapIndexed { index, child ->
+        child.indexInResponse = start + index
+        child.tab = topicType
+        child
+      }
+      db.topicListDao()
+          .insert(items)
+    }
+  }
+
 
   companion object {
     fun newInstance(

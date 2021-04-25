@@ -16,9 +16,7 @@ import javax.inject.Inject
  * Created by journey on 3/24/21.
  */
 
-class TopicListDataSource(
-  private val tabName: String
-) : PagingSource<Int, TopicsListItemBean>() {
+class TopicListDataSource(private val tabName: String) : PagingSource<Int, TopicsListItemBean>() {
 
   @Inject
   lateinit var db: AppDatabase
