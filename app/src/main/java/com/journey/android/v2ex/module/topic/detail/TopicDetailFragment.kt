@@ -1,38 +1,33 @@
 package com.journey.android.v2ex.module.topic.detail
 
 import android.R.transition
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.journey.android.v2ex.R
+import coil.imageLoader
+import coil.load
+import coil.request.ImageRequest
 import com.journey.android.v2ex.base.BaseFragment
+import com.journey.android.v2ex.databinding.FragmentTopicDetailBinding
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderSubtleAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_topic_detail.coordinatorLayout
-import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_avatar
 import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
-import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_head_cl
-import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_title_tv
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class TopicDetailFragment : BaseFragment() {
 
   companion object {
@@ -47,24 +42,14 @@ class TopicDetailFragment : BaseFragment() {
   }
 
   private val safeArgs: TopicDetailFragmentArgs by navArgs()
-
-//  private val viewModel: TopicDetailViewModel by viewModels {
-//    object : ViewModelProvider.Factory {
-//      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//        return TopicDetailViewModel(
-//            TopicDetailRepository(AppDatabase.getInstance())
-//        ) as T
-//      }
-//    }
-//  }
-
   private val viewModel: TopicDetailViewModel by viewModels()
+  override val binding get() = _binding!! as FragmentTopicDetailBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     postponeEnterTransition()
     sharedElementEnterTransition = TransitionInflater.from(context)
-        .inflateTransition(transition.move)
+      .inflateTransition(transition.move)
   }
 
   override fun onCreateView(
@@ -72,7 +57,8 @@ class TopicDetailFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_topic_detail, container, false)
+    _binding = FragmentTopicDetailBinding.inflate(inflater, container, false)
+    return binding.root
   }
 
   override fun onViewCreated(
@@ -85,41 +71,36 @@ class TopicDetailFragment : BaseFragment() {
 
     viewModel.initTopicDetail(safeArgs.topicId)
 
-    topic_detail_comments_list.addItemDecoration(
-        DividerItemDecoration(
-            context,
-            DividerItemDecoration.VERTICAL
-        )
+    binding.topicDetailCommentsList.addItemDecoration(
+      DividerItemDecoration(
+        context,
+        DividerItemDecoration.VERTICAL
+      )
     )
-    topic_detail_title_tv.text = safeArgs.topicTitle
+    binding.topicDetailTitleTv.text = safeArgs.topicTitle
 //    startPostponedEnterTransition()
 //    topic_detail_title_tv.transitionName = "header_title"
 //    topic_detail_avatar.transitionName = "header_avatar"
-    Glide.with(this)
-        .load(safeArgs.avatar)
-        .listener(object : RequestListener<Drawable> {
-          override fun onResourceReady(
-            resource: Drawable?,
-            model: Any?,
-            target: Target<Drawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-          ): Boolean {
-            startPostponedEnterTransition()
-            return false
-          }
 
-          override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<Drawable>?,
-            isFirstResource: Boolean
-          ): Boolean {
-            startPostponedEnterTransition()
-            return false
-          }
-        })
-        .into(topic_detail_avatar)
+    val request = ImageRequest.Builder(requireContext())
+      .data(safeArgs.avatar)
+      .target(
+        onStart = { placeholder ->
+          // Handle the placeholder drawable.
+        },
+        onSuccess = { result ->
+          // Handle the successful result.
+          startPostponedEnterTransition()
+          binding.topicDetailAvatar.load(result)
+        },
+        onError = { error ->
+          // Handle the error drawable.
+          startPostponedEnterTransition()
+        }
+      )
+      .build()
+    requireContext().imageLoader.enqueue(request)
+
     getData()
   }
 
@@ -139,7 +120,9 @@ class TopicDetailFragment : BaseFragment() {
 
     viewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner, {
       if (it != null) {
-        addHeaderView(it)
+        binding.topicDetailNodeTv.text = it.node.name
+        binding.topicDetailCreateTimeTv.text = it.created_str
+
         topicHeaderAdapter.topicDetailBean = it
         topicHeaderAdapter.notifyDataSetChanged()
         topicHeaderSubtleAdapter.topicDetailBean = it
@@ -147,57 +130,14 @@ class TopicDetailFragment : BaseFragment() {
       }
     })
 
-    lifecycleScope.launch {
-      viewModel.getTopicReplyBean(safeArgs.topicId)
-          .collectLatest {
-            topicCommentAdapter.submitData(it)
-          }
-
-    }
-
-//    viewModel.repliesShowBean.observe(viewLifecycleOwner, {
-////      topic_list_refreshview.isRefreshing = false
-//      topicCommentAdapter.submitList(it)
-//    })
-  }
-
-  private fun addHeaderView(topicDetailBean: TopicsShowBean) {
-    val headView = topic_detail_head_cl
-    headView.findViewById<TextView>(R.id.topic_detail_node_tv)
-        .text = topicDetailBean.node.name
-    headView.findViewById<TextView>(R.id.topic_detail_create_time_tv)
-        .text = topicDetailBean.created_str
-
-//    ImageLoader.loadImage(
-//        headView.findViewById(R.id.topic_detail_avatar), topicDetailBean.member.avatar_large
-//    )
-//    Glide.with(this)
-//        .load(topicDetailBean.member.avatar_large)
-//        .centerCrop()
-//        .dontAnimate()
-//        .listener(object : RequestListener<Drawable> {
-//          override fun onResourceReady(
-//            resource: Drawable?,
-//            model: Any?,
-//            target: Target<Drawable>?,
-//            dataSource: DataSource?,
-//            isFirstResource: Boolean
-//          ): Boolean {
-//            startPostponedEnterTransition()
-//            return false
-//          }
+//    lifecycleScope.launch {
+//      viewModel.getTopicReplyBean(safeArgs.topicId)
+//        .collectLatest {
+//          topicCommentAdapter.submitData(it)
+//        }
 //
-//          override fun onLoadFailed(
-//            e: GlideException?,
-//            model: Any?,
-//            target: Target<Drawable>?,
-//            isFirstResource: Boolean
-//          ): Boolean {
-//            startPostponedEnterTransition()
-//            return false
-//          }
-//        })
-//        .into(headView.findViewById(R.id.topic_detail_avatar))
+//    }
+
   }
 
 }

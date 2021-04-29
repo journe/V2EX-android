@@ -1,7 +1,5 @@
 package com.journey.android.v2ex.module.topic.detail
 
-import androidx.annotation.MainThread
-import androidx.paging.PagingSource
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.jsoup.TopicDetailBean
@@ -21,12 +19,10 @@ import javax.inject.Inject
  * listing that loads in pages.
  *
  */
-class TopicDetailRepository {
-
-  @Inject
-  lateinit var apiService: RetrofitService
-  @Inject
-  lateinit var db: AppDatabase
+class TopicDetailRepository @Inject constructor(
+  private val db: AppDatabase,
+  private val apiService: RetrofitService
+) {
 
   /**
    * Inserts the response into the database while also assigning position indices to items.
@@ -35,7 +31,7 @@ class TopicDetailRepository {
     Dispatchers.IO {
       db.runInTransaction {
         db.topicRepliesDao()
-            .insert(body)
+          .insert(body)
       }
     }
 
@@ -61,10 +57,10 @@ class TopicDetailRepository {
 
   suspend fun initTopicDetail(topicId: Int) {
     val localBean = db.topicDetailDao()
-        .getTopicById(topicId)
+      .getTopicById(topicId)
     if (localBean == null) {
       val docString = apiService.getTopicByIdSuspend(topicId)
-          .string()
+        .string()
       val doc = Jsoup.parse(docString)
       val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
       val replies = TopicDetailParser.parseComments(doc)
@@ -77,16 +73,16 @@ class TopicDetailRepository {
         it.topic_id = topicId
       }
       db.topicDetailDao()
-          .insert(TopicDetailBean(topicId, docString))
+        .insert(TopicDetailBean(topicId, docString))
       db.topicRepliesDao()
-          .insert(replies)
+        .insert(replies)
       db.topicShowDao()
-          .insert(topicsShowBean)
+        .insert(topicsShowBean)
     }
   }
 
   fun getTopicsShowBean(topicId: Int): Flow<TopicsShowBean> {
     return db.topicShowDao()
-        .getTopicById(topicId = topicId)
+      .getTopicById(topicId = topicId)
   }
 }

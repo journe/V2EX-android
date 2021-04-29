@@ -15,14 +15,17 @@ import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitService
+import com.journey.android.v2ex.net.parser.TopicListParser
 import com.journey.android.v2ex.room.AppDatabase
+import com.journey.android.v2ex.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.invoke
+import org.jsoup.Jsoup
 
 @AndroidEntryPoint
-class TopicListFragment(private val topicType: String) : BaseFragment() {
+class TopicListFragment(private val nodeName: String) : BaseFragment() {
 
   override val binding get() = _binding!! as FragmentTopicListBinding
 
@@ -77,13 +80,13 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
     val stagger = Stagger()
 
     launch({
-//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + topicType)
+//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + nodeName)
 //      val listItemBean = TopicListParser.parseTopicList(
 //          Jsoup.parse(result.string())
 //      )
 //      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
 
-      viewModel.getTopicListBean(topicType)
+      viewModel.getTopicListBean(nodeName)
           .collectLatest {
             binding.topicListRefreshview.isRefreshing = false
             TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
@@ -99,7 +102,7 @@ class TopicListFragment(private val topicType: String) : BaseFragment() {
           .getNextIndex()
       val items = body.mapIndexed { index, child ->
         child.indexInResponse = start + index
-        child.tab = topicType
+        child.tab = nodeName
         child
       }
       db.topicListDao()

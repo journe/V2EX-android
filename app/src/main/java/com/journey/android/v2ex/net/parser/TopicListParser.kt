@@ -44,50 +44,53 @@ object TopicListParser {
   @JvmStatic
   fun parseTopicList(doc: Document): List<TopicsListItemBean> {
     val content = doc.body()
-        .selectFirst("#Wrapper")
-        .selectFirst(".content")
-        .selectFirst(".box")
-        .select(".cell.item")
-        .select("table")
-        .select("tbody")
-        .select("tr")
-    val topicListItem: MutableList<TopicsListItemBean> = mutableListOf()
+      .selectFirst("#Wrapper")
+      .selectFirst(".content")
+      .selectFirst(".box")
+      .select(".cell.item")
+      .select("table")
+      .select("tbody")
+      .select("tr")
+    val topicList: MutableList<TopicsListItemBean> = mutableListOf()
     for (element in content) {
 //      Logger.d(element.toString())
       val td = element.select("td")
-      val topicListBean = TopicsListItemBean()
-      topicListBean.memberName = td[0].select("a")
+      val topicListBean = TopicsListItemBean().apply {
+        memberName = td[0].select("a")
           .attr("href")
           .substringAfterLast("/")
-      topicListBean.memberAvatar = td[0].select("a")
+        memberAvatar = td[0].select("a")
           .select("img")
           .attr("src")
-      topicListBean.url = td[2].select(".item_title")
+        url = td[2].select(".item_title")
           .select("a")
           .attr("href")
-      topicListBean.id = PATTERN_NUMBERS.find(topicListBean.url!!)!!.value.toInt()
-      topicListBean.title = td[2].select(".item_title")
+        id = PATTERN_NUMBERS.find(url!!)!!.value.toInt()
+        title = td[2].select(".item_title")
           .select("a")
           .text()
-      topicListBean.nodeName = td[2].selectFirst(".small.fade")
+        nodeName = td[2].selectFirst(".small.fade")
           .select(".node")
           .text()
-      val replies = td[3].select("a")
-          .text()
-      if (replies.isEmpty()) {
-        topicListBean.replies = 0
-      } else {
-        topicListBean.replies = td[3].select("a")
+        replies = if (td[3].select("a")
+            .text()
+            .isEmpty()
+        ) {
+          0
+        } else {
+          td[3].select("a")
             .text()
             .toInt()
-      }
+        }
 
-      var strList: List<String> = td[2].select(".small.fade")[1]
+        var strList: List<String> = td[2].select(".small.fade")[1]
           .text()
           .split(" • ")
-      topicListBean.last_modified_str = strList[0]
-      topicListItem.add(topicListBean)
+        last_modified_str = strList[0]
+      }
+
+      topicList.add(topicListBean)
     }
-    return topicListItem
+    return topicList
   }
 }

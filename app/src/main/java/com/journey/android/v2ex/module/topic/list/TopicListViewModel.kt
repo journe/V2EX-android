@@ -12,22 +12,6 @@ import javax.inject.Inject
 @HiltViewModel
 class TopicListViewModel @Inject constructor(val db: AppDatabase) : BaseViewModel() {
 
-//  val itemPagedList: LiveData<PagingData<TopicsListItemBean>> = repository.getFeeds(20)
-
-//  fun refresh() {
-////        itemPagedList.value?.dataSource?.invalidate()
-//    launch({
-//      repository.refresh()
-//    }, {
-//      Logger.d(it.message)
-//    })
-//  }
-
-//  fun getTopicListBean(tabName: String) =
-//    Pager(PagingConfig(pageSize = 20)) {
-//      TopicListDataSource(tabName)
-//    }.flow.cachedIn(viewModelScope).asLiveData()
-
   fun getTopicListBean(tabName: String) =
     Pager(PagingConfig(pageSize = 20)) {
 //      TopicListDataSource(tabName)
