@@ -8,6 +8,7 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.libs.ToastUtils
 import com.journey.android.v2ex.libs.extension.launch
+import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.model.jsoup.SignInFormData
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.module.login.data.LoginForm

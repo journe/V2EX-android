@@ -15,6 +15,7 @@ import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentLoginBinding
 import com.journey.android.v2ex.libs.ToastUtils
+import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.utils.PrefStore
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,8 +108,7 @@ class LoginFragment : BaseFragment() {
     }
 
     viewModel.loginFormState.observe(viewLifecycleOwner, {
-      val loginState = it ?: return@observe
-
+      val loginState = it
       // disable login button unless both username / password is valid
       binding.signInButton.isEnabled = loginState.isDataValid
 
@@ -124,9 +124,10 @@ class LoginFragment : BaseFragment() {
       showProgress(false)
       when (it) {
         is Result.Success -> {
-          updateUiWithUser(it.data)
+          loginSuccess(it.data)
         }
         else -> {
+          showLoginFailed(R.string.toast_remote_exception)
         }
       }
     })
@@ -136,7 +137,7 @@ class LoginFragment : BaseFragment() {
     }
   }
 
-  private fun updateUiWithUser(model: LoggedInUser) {
+  private fun loginSuccess(model: LoggedInUser) {
     val welcome = getString(R.string.toast_login_success)
     val displayName = model.displayName
     ToastUtils.showLongToast("$welcome $displayName")

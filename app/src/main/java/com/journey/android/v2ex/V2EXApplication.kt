@@ -8,6 +8,7 @@ import com.journey.android.v2ex.utils.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.tencent.mmkv.MMKV
 import com.zzhoujay.richtext.RichText
 import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
@@ -30,6 +31,8 @@ class V2EXApplication : Application(), ImageLoaderFactory {
       })
       RichText.initCacheDir(this)
       Utils.init(this)
+
+      MMKV.initialize(this)
     }
 
   override fun newImageLoader(): ImageLoader {

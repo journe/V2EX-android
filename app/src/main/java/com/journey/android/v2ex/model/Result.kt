@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.module.login
+package com.journey.android.v2ex.model
 
 /**
  * A generic class that holds a value with its loading status.

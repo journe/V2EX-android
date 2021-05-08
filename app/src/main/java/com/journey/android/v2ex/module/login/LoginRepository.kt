@@ -1,8 +1,9 @@
 package com.journey.android.v2ex.module.login
 
 import android.graphics.Bitmap
+import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.model.jsoup.SignInFormData
-import com.journey.android.v2ex.module.login.Result.Success
+import com.journey.android.v2ex.model.Result.Success
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.orhanobut.logger.Logger

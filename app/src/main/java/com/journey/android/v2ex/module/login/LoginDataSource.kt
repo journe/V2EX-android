@@ -2,9 +2,10 @@ package com.journey.android.v2ex.module.login
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.model.jsoup.SignInFormData
-import com.journey.android.v2ex.module.login.Result.Error
-import com.journey.android.v2ex.module.login.Result.Success
+import com.journey.android.v2ex.model.Result.Error
+import com.journey.android.v2ex.model.Result.Success
 import com.journey.android.v2ex.module.login.data.LoggedInUser
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.journey.android.v2ex.net.RetrofitService
@@ -47,8 +48,8 @@ class LoginDataSource @Inject constructor(private val apiService: RetrofitServic
     map[signInFormData.password] = passwordStr
     map[signInFormData.captcha] = captcha
     map["once"] = signInFormData.once.toString()
-    map["next"] = "/mission"
-    val signIn = apiService.postSigninSuspend(map)
+    map["next"] = "/more"
+//    val signIn = apiService.postSigninSuspend(map)
     val more = apiService.getMoreSuspend()
     return if (MoreParser.isLogin(Jsoup.parse(more.string()))) {
       MoreParser.getLoggedInUser(Jsoup.parse(more.string()))

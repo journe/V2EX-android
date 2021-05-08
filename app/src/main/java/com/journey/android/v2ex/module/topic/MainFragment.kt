@@ -1,29 +1,14 @@
 package com.journey.android.v2ex.module.topic
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentTransaction
-import androidx.transition.Explode
-import androidx.transition.Fade
-import androidx.transition.Slide
-import com.google.android.material.appbar.AppBarLayout
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
-import com.journey.android.v2ex.libs.transition.FAST_OUT_LINEAR_IN
-import com.journey.android.v2ex.libs.transition.LARGE_COLLAPSE_DURATION
-import com.journey.android.v2ex.libs.transition.LARGE_EXPAND_DURATION
-import com.journey.android.v2ex.libs.transition.LINEAR_OUT_SLOW_IN
-import com.journey.android.v2ex.libs.transition.plusAssign
-import com.journey.android.v2ex.libs.transition.transitionTogether
 import com.journey.android.v2ex.model.Tab
 import com.journey.android.v2ex.module.topic.list.TopicListFragment
 import com.journey.android.v2ex.utils.PrefStore
@@ -61,10 +46,11 @@ class MainFragment : BaseFragment() {
 
   }
 
-  inner class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+  inner class MainPagerAdapter(fm: FragmentManager) :
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val mTabs: List<Tab> = PrefStore.instance
-        .tabsToShow
+      .tabsToShow
 
     override fun getItem(position: Int): Fragment {
       return fragments[position]

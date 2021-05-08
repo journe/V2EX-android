@@ -70,16 +70,16 @@ dependencies {
   implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
   //room数据库
-  def room_version = "2.3.0-rc01"
+  def room_version = "2.3.0"
   implementation "androidx.room:room-runtime:$room_version"
   kapt "androidx.room:room-compiler:$room_version"
   implementation "androidx.room:room-ktx:$room_version"
 
   //hilt
-  implementation "com.google.dagger:hilt-android:2.33-beta"
-  kapt "com.google.dagger:hilt-android-compiler:2.33-beta"
+  implementation "com.google.dagger:hilt-android:$hilt_version"
+  kapt "com.google.dagger:hilt-compiler:$hilt_version"
   implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-  kapt 'androidx.hilt:hilt-compiler:1.0.0-beta01'
+  kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
   implementation 'com.google.guava:guava:28.1-jre'
 
@@ -100,4 +100,6 @@ dependencies {
   implementation 'com.github.chrisbanes:PhotoView:2.2.0'
   implementation 'cat.ereza:customactivityoncrash:2.3.0'
   implementation "io.coil-kt:coil:1.2.1"
+  implementation 'com.tencent:mmkv-static:1.2.8'
+
 }
