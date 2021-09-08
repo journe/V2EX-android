@@ -39,7 +39,7 @@ kapt {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20"
 
   //核心 基础库
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
