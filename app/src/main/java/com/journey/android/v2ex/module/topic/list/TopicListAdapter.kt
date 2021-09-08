@@ -5,17 +5,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.paging.PagedListAdapter
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.libs.TimeUtil
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.extension.onClick
 import com.journey.android.v2ex.libs.extension.visible
-import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.module.topic.MainFragmentDirections
 import com.journey.android.v2ex.module.topic.detail.TopicDetailFragment
@@ -80,7 +79,7 @@ internal class TopicListAdapter :
     } else {
       holder.starIv.invisible()
     }
-    ImageLoader.loadImage(holder.avatar, itemBean.memberAvatar.largeAvatar())
+    holder.avatar.load(itemBean.memberAvatar.largeAvatar())
   }
 
   companion object {

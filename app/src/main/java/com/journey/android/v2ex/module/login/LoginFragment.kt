@@ -10,7 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
+import coil.load
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentLoginBinding
@@ -95,11 +95,12 @@ class LoginFragment : BaseFragment() {
 
   private fun observe() {
     viewModel.captchaBitmap.observe(viewLifecycleOwner, {
-      Glide.with(this@LoginFragment)
-          .load(it)
-          .placeholder(R.drawable.ic_sync_white_24dp)
-          .error(R.drawable.ic_sync_problem_white_24dp)
-          .into(binding.loginCaptchaIv)
+//      Glide.with(this@LoginFragment)
+//          .load(it)
+//          .placeholder(R.drawable.ic_sync_white_24dp)
+//          .error(R.drawable.ic_sync_problem_white_24dp)
+//          .into(binding.loginCaptchaIv)
+      binding.loginCaptchaIv.load(it)
     })
 
     viewModel.signInFormData.observe(viewLifecycleOwner) {

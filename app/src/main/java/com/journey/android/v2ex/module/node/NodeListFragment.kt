@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.module.fragment
+package com.journey.android.v2ex.module.node
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -13,16 +13,9 @@ import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentTopicListBinding
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
-import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitService
-import com.journey.android.v2ex.net.parser.TopicListParser
-import com.journey.android.v2ex.room.AppDatabase
-import com.journey.android.v2ex.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.invoke
-import org.jsoup.Jsoup
 
 @AndroidEntryPoint
 class TopicListFragment(private val nodeName: String) : BaseFragment() {
@@ -42,6 +35,7 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
 //      startDelay = LARGE_COLLAPSE_DURATION / 2
 //      interpolator = LINEAR_OUT_SLOW_IN
 //    }
+    viewModel.refresh(nodeName)
   }
 
   override fun onCreateView(
@@ -61,13 +55,16 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding.topicListRecycleview
-        .addItemDecoration(
-            DividerItemDecoration(
-                activity,
-                DividerItemDecoration.VERTICAL
-            )
+      .addItemDecoration(
+        DividerItemDecoration(
+          activity,
+          DividerItemDecoration.VERTICAL
         )
+      )
     val adapter = TopicListAdapter()
+    binding.topicListRefreshview.setOnRefreshListener {
+      viewModel.refresh(nodeName)
+    }
     binding.topicListRecycleview.adapter = adapter
     // We animate item additions on our side, so disable it in RecyclerView.
     binding.topicListRecycleview.itemAnimator = object : DefaultItemAnimator() {
@@ -80,34 +77,13 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
     val stagger = Stagger()
 
     launch({
-//      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + nodeName)
-//      val listItemBean = TopicListParser.parseTopicList(
-//          Jsoup.parse(result.string())
-//      )
-//      insertToDb(listItemBean.map { it.apply { tab = nodeName } })
-
       viewModel.getTopicListBean(nodeName)
-          .collectLatest {
-            binding.topicListRefreshview.isRefreshing = false
-            TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
-            adapter.submitData(it)
-          }
+        .collectLatest {
+          binding.topicListRefreshview.isRefreshing = false
+          TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
+          adapter.submitData(it)
+        }
     })
-  }
-
-  private suspend fun insertToDb(body: List<TopicsListItemBean>) = Dispatchers.IO {
-    val db = AppDatabase.getInstance()
-    db.runInTransaction {
-      val start = db.topicListDao()
-          .getNextIndex()
-      val items = body.mapIndexed { index, child ->
-        child.indexInResponse = start + index
-        child.tab = nodeName
-        child
-      }
-      db.topicListDao()
-          .insert(items)
-    }
   }
 
   companion object {

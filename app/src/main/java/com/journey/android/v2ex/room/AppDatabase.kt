@@ -5,19 +5,26 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.journey.android.v2ex.model.api.*
+import com.journey.android.v2ex.model.api.MemberBean
+import com.journey.android.v2ex.model.api.RepliesShowBean
+import com.journey.android.v2ex.model.api.TopicsListItemBean
+import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.jsoup.TopicDetailBean
-import com.journey.android.v2ex.room.dao.*
+import com.journey.android.v2ex.room.dao.TopicDetailDao
+import com.journey.android.v2ex.room.dao.TopicListDao
+import com.journey.android.v2ex.room.dao.TopicRepliesDao
+import com.journey.android.v2ex.room.dao.TopicShowDao
+import com.journey.android.v2ex.room.dao.UserInfoDao
 import com.journey.android.v2ex.utils.Utils
 
 /**
  * Created by journey on 2020/5/18.
  */
 @Database(
-    entities = [TopicsListItemBean::class, TopicsShowBean::class,
-      RepliesShowBean::class, MemberBean::class, TopicDetailBean::class],
-    version = 4,
-    exportSchema = false
+  entities = [TopicsListItemBean::class, TopicsShowBean::class,
+    RepliesShowBean::class, MemberBean::class, TopicDetailBean::class],
+  version = 4,
+  exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -36,10 +43,8 @@ abstract class AppDatabase : RoomDatabase() {
     fun getInstance(context: Context = Utils.getContext()): AppDatabase {
       return instance ?: synchronized(this) {
         instance
-            ?: buildDatabase(
-                context
-            )
-                .also { instance = it }
+          ?: buildDatabase(context)
+            .also { instance = it }
       }
     }
 
@@ -47,11 +52,11 @@ abstract class AppDatabase : RoomDatabase() {
     // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
     private fun buildDatabase(context: Context): AppDatabase {
       return Room.databaseBuilder(
-          context, AppDatabase::class.java,
-          DATABASE_NAME
+        context, AppDatabase::class.java,
+        DATABASE_NAME
       )
-          .fallbackToDestructiveMigration()
-          .allowMainThreadQueries()
+        .fallbackToDestructiveMigration()
+        .allowMainThreadQueries()
 //          .addCallback(object : RoomDatabase.Callback() {
 //            override fun onCreate(db: SupportSQLiteDatabase) {
 //              super.onCreate(db)
@@ -60,7 +65,7 @@ abstract class AppDatabase : RoomDatabase() {
 //                  .enqueue(request)
 //            }
 //          })
-          .build()
+        .build()
     }
   }
 }

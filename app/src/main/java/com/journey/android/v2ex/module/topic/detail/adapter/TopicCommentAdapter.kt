@@ -7,11 +7,11 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.libs.extension.invisible
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.extension.visible
-import com.journey.android.v2ex.libs.imageEngine.ImageLoader
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter.ViewHolder
 import com.journey.android.v2ex.router.Router
@@ -25,16 +25,16 @@ import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.to
 import kotlinx.android.synthetic.main.fragment_topic_detail_comment_item.view.topic_comment_item_username_tv
 
 class TopicCommentAdapter :
-    PagingDataAdapter<RepliesShowBean, ViewHolder>(
-        DIFF_CALLBACK
-    ) {
+  PagingDataAdapter<RepliesShowBean, ViewHolder>(
+    DIFF_CALLBACK
+  ) {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
   ): ViewHolder {
     val view = LayoutInflater.from(parent.context)
-        .inflate(R.layout.fragment_topic_detail_comment_item, parent, false)
+      .inflate(R.layout.fragment_topic_detail_comment_item, parent, false)
     return ViewHolder(view)
   }
 
@@ -59,13 +59,13 @@ class TopicCommentAdapter :
 
     fun bind(repliesShowBean: RepliesShowBean) {
       RichText.fromHtml(repliesShowBean.content_rendered)
-          .clickable(true)
-          .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
-          .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
-          .imageClick { imageUrls, position ->
-            Router.imageDetail(imageUrls[position] ?: "")
-          }
-          .into(mView.topic_comment_item_content_tv)
+        .clickable(true)
+        .scaleType(ImageHolder.ScaleType.none) // 图片缩放方式
+        .size(ImageHolder.WRAP_CONTENT, ImageHolder.WRAP_CONTENT)
+        .imageClick { imageUrls, position ->
+          Router.imageDetail(imageUrls[position] ?: "")
+        }
+        .into(mView.topic_comment_item_content_tv)
 
       if (repliesShowBean.floor != 0) {
         floor.text = repliesShowBean.floor.toString()
@@ -79,10 +79,7 @@ class TopicCommentAdapter :
         heartCount.invisible()
       }
 
-      ImageLoader.loadImage(
-          memberAvatar,
-          repliesShowBean.member.avatar_large.largeAvatar()
-      )
+      memberAvatar.load(repliesShowBean.member.avatar_large.largeAvatar())
     }
   }
 

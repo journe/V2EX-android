@@ -1,9 +1,11 @@
 package com.journey.android.v2ex
 
 import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.util.CoilUtils
+import com.journey.android.v2ex.libs.ProcessLifecycleObserver
 import com.journey.android.v2ex.utils.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -21,6 +23,9 @@ import okhttp3.OkHttpClient
 class V2EXApplication : Application(), ImageLoaderFactory {
     override fun onCreate() {
       super.onCreate()
+
+      ProcessLifecycleOwner.get().lifecycle.addObserver(ProcessLifecycleObserver())
+
       Logger.addLogAdapter(object :
         AndroidLogAdapter(
           PrettyFormatStrategy.newBuilder().tag("V2EX").build()
@@ -29,7 +34,9 @@ class V2EXApplication : Application(), ImageLoaderFactory {
           return BuildConfig.DEBUG
         }
       })
+
       RichText.initCacheDir(this)
+
       Utils.init(this)
 
       MMKV.initialize(this)

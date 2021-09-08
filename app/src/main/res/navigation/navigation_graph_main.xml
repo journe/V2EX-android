@@ -31,7 +31,7 @@
 
   <fragment
       android:id="@+id/nodeList_dest"
-      android:name="com.journey.android.v2ex.module.fragment.NodeListFragment"
+      android:name="com.journey.android.v2ex.module.node.NodeListFragment"
       android:label="NodeListFragment"
       tools:layout="@layout/activity_node_list" />
   <fragment
