@@ -28,7 +28,7 @@ class TopicListRepository @Inject constructor(
 
   suspend fun requsetData(tabName: String) {
     if (db.topicListDao().topicCount(tabName) > 0) {
-      getList(tabName)
+//      getList(tabName)
     } else {
       insertResultIntoDb(request(tabName))
     }

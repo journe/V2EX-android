@@ -1,9 +1,5 @@
 package com.journey.android.v2ex.module.topic.list
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,15 +14,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-class TopicListFragment(private val nodeName: String) : BaseFragment() {
+class TopicListFragment(private val nodeName: String) :
+  BaseFragment<FragmentTopicListBinding, TopicListViewModel>() {
 
-  override val binding get() = _binding!! as FragmentTopicListBinding
+  override val mViewModel: TopicListViewModel by viewModels()
 
-  private val viewModel: TopicListViewModel by viewModels()
+  val apiService: RetrofitService = RetrofitService.create()
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-//    exitTransition = Fade(Fade.OUT).apply {
+  companion object {
+    fun newInstance(
+      topicType: String,
+    ): TopicListFragment {
+      return TopicListFragment(topicType)
+    }
+  }
+
+  override fun FragmentTopicListBinding.initView() {
+    //    exitTransition = Fade(Fade.OUT).apply {
 //      duration = LARGE_EXPAND_DURATION / 2
 //      interpolator = FAST_OUT_LINEAR_IN
 //    }
@@ -35,26 +39,8 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
 //      startDelay = LARGE_COLLAPSE_DURATION / 2
 //      interpolator = LINEAR_OUT_SLOW_IN
 //    }
-    viewModel.refresh(nodeName)
-  }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
-    _binding = FragmentTopicListBinding.inflate(inflater, container, false)
-    return binding.root
-  }
-
-  val apiService: RetrofitService = RetrofitService.create()
-
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
-    binding.topicListRecycleview
+    mBinding.topicListRecycleview
       .addItemDecoration(
         DividerItemDecoration(
           activity,
@@ -62,12 +48,12 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
         )
       )
     val adapter = TopicListAdapter()
-    binding.topicListRefreshview.setOnRefreshListener {
-      viewModel.refresh(nodeName)
+    mBinding.topicListRefreshview.setOnRefreshListener {
+      mViewModel.refresh(nodeName)
     }
-    binding.topicListRecycleview.adapter = adapter
+    mBinding.topicListRecycleview.adapter = adapter
     // We animate item additions on our side, so disable it in RecyclerView.
-    binding.topicListRecycleview.itemAnimator = object : DefaultItemAnimator() {
+    mBinding.topicListRecycleview.itemAnimator = object : DefaultItemAnimator() {
       override fun animateAdd(holder: RecyclerView.ViewHolder?): Boolean {
         dispatchAddFinished(holder)
         dispatchAddStarting(holder)
@@ -75,22 +61,21 @@ class TopicListFragment(private val nodeName: String) : BaseFragment() {
       }
     }
     val stagger = Stagger()
-
     launch({
-      viewModel.getTopicListBean(nodeName)
+      mViewModel.getTopicListBean(nodeName)
         .collectLatest {
-          binding.topicListRefreshview.isRefreshing = false
-          TransitionManager.beginDelayedTransition(binding.topicListRefreshview, stagger)
+          mBinding.topicListRefreshview.isRefreshing = false
+          TransitionManager.beginDelayedTransition(mBinding.topicListRefreshview, stagger)
           adapter.submitData(it)
         }
     })
+
   }
 
-  companion object {
-    fun newInstance(
-      topicType: String,
-    ): TopicListFragment {
-      return TopicListFragment(topicType)
-    }
+  override fun initObserve() {
+  }
+
+  override fun initRequestData() {
+    mViewModel.request(nodeName)
   }
 }

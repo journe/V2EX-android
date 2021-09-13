@@ -8,11 +8,11 @@ import android.preference.PreferenceFragment
 import android.preference.SwitchPreference
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.journey.android.v2ex.BuildConfig
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.base.BaseActivity
 
-class SettingsActivity : BaseActivity() {
+class SettingsActivity : AppCompatActivity() {
   private val mFragment = PrefsFragment()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,11 +20,11 @@ class SettingsActivity : BaseActivity() {
 
     // Display the fragment as the main content.
     fragmentManager.beginTransaction()
-        .replace(
-            android.R.id.content,
-            mFragment
-        )
-        .commit()
+      .replace(
+        android.R.id.content,
+        mFragment
+      )
+      .commit()
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
@@ -94,11 +94,11 @@ class SettingsActivity : BaseActivity() {
 
     private fun showPlayServicesErrorToast(errMsg: String) {
       Toast.makeText(
-          activity,
-          getString(R.string.toast_check_google_play_services_failed, errMsg),
-          Toast.LENGTH_LONG
+        activity,
+        getString(R.string.toast_check_google_play_services_failed, errMsg),
+        Toast.LENGTH_LONG
       )
-          .show()
+        .show()
     }
 
     private fun initGeneral() {

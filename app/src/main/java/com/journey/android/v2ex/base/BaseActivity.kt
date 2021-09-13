@@ -1,16 +1,28 @@
 package com.journey.android.v2ex.base
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 
 /**
  * Created by journey on 2018/1/26.
  */
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameActivity<VB, VM>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+  /**
+   * 设置状态栏
+   * 子类需要自定义时重写该方法即可
+   * @return Unit
+   */
+  override fun setStatusBar() {
+//    val themeColor = ContextCompat.getColor(this, R.color.common_theme)
+//    StatusBarUtil.setColor(this, themeColor, 0)
+  }
+
+  override fun onResume() {
+    super.onResume()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+  }
 }
-

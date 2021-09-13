@@ -1,33 +1,25 @@
 package com.journey.android.v2ex.module.topic.detail
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import coil.load
-import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_topic_image.photo_view
+import com.journey.android.v2ex.base.EmptyViewModel
+import com.journey.android.v2ex.databinding.FragmentTopicImageBinding
 
-class TopicImageFragment : BaseFragment() {
+class TopicImageFragment : BaseFragment<FragmentTopicImageBinding, EmptyViewModel>() {
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    return inflater.inflate(R.layout.fragment_topic_image, container, false)
+  override val mViewModel: EmptyViewModel by viewModels()
 
+  override fun FragmentTopicImageBinding.initView() {
+    val safeArgs: TopicImageFragmentArgs by navArgs()
+    mBinding.photoView.load(safeArgs.imageUrl)
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
-    val safeArgs: TopicImageFragmentArgs by navArgs()
-    photo_view.load(safeArgs.imageUrl)
+  override fun initObserve() {
+  }
+
+  override fun initRequestData() {
   }
 
 }

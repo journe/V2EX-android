@@ -1,11 +1,7 @@
 package com.journey.android.v2ex.module.login
 
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.annotation.StringRes
@@ -21,121 +17,19 @@ import com.journey.android.v2ex.utils.PrefStore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment() {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
   private lateinit var captchaUrl: String
 
-  private val viewModel: LoginViewModel by viewModels()
-
-  override val binding get() = _binding!! as FragmentLoginBinding
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    _binding = FragmentLoginBinding.inflate(inflater, container, false)
-    return binding.root
-
-  }
-
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
-
-    viewModel.loadSignPage()
-
-    binding.loginCaptchaIv.setOnClickListener {
-      viewModel.getCaptcha(captchaUrl)
-    }
-    binding.loginRefresh.setOnRefreshListener {
-      viewModel.loadSignPage()
-    }
-    binding.loginAccount.setText(PrefStore.instance.userName)
-    binding.loginPassword.setText(PrefStore.instance.userPass)
-
-    binding.loginAccount.afterTextChanged {
-      viewModel.loginDataChanged(
-          binding.loginAccount.text.toString(),
-          binding.loginPassword.text.toString()
-      )
-    }
-
-    binding.loginPassword.afterTextChanged {
-      viewModel.loginDataChanged(
-          binding.loginAccount.text.toString(),
-          binding.loginPassword.text.toString()
-      )
-    }
-
-    binding.loginCaptcha.setOnEditorActionListener { _, actionId, _ ->
-      when (actionId) {
-        EditorInfo.IME_ACTION_DONE ->
-          doLogin()
-      }
-      false
-    }
-
-    binding.signInButton.setOnClickListener {
-      doLogin()
-    }
-    observe()
-  }
+  override val mViewModel: LoginViewModel by viewModels()
 
   private fun doLogin() {
     showProgress(true)
-    viewModel.login(
-        binding.loginAccount.text.toString(),
-        binding.loginPassword.text.toString(),
-        binding.loginCaptcha.text.toString()
+    mViewModel.login(
+      mBinding.loginAccount.text.toString(),
+      mBinding.loginPassword.text.toString(),
+      mBinding.loginCaptcha.text.toString()
     )
-  }
-
-  private fun observe() {
-    viewModel.captchaBitmap.observe(viewLifecycleOwner, {
-//      Glide.with(this@LoginFragment)
-//          .load(it)
-//          .placeholder(R.drawable.ic_sync_white_24dp)
-//          .error(R.drawable.ic_sync_problem_white_24dp)
-//          .into(binding.loginCaptchaIv)
-      binding.loginCaptchaIv.load(it)
-    })
-
-    viewModel.signInFormData.observe(viewLifecycleOwner) {
-      captchaUrl = it.genCaptcha()
-      viewModel.getCaptcha(captchaUrl)
-    }
-
-    viewModel.loginFormState.observe(viewLifecycleOwner, {
-      val loginState = it
-      // disable login button unless both username / password is valid
-      binding.signInButton.isEnabled = loginState.isDataValid
-
-      if (loginState.usernameError != null) {
-        binding.loginAccount.error = getString(loginState.usernameError)
-      }
-      if (loginState.passwordError != null) {
-        binding.loginPassword.error = getString(loginState.passwordError)
-      }
-    })
-
-    viewModel.loginResult.observe(viewLifecycleOwner, {
-      showProgress(false)
-      when (it) {
-        is Result.Success -> {
-          loginSuccess(it.data)
-        }
-        else -> {
-          showLoginFailed(R.string.toast_remote_exception)
-        }
-      }
-    })
-
-    viewModel.loadingState.observe(viewLifecycleOwner) {
-      showProgress(it)
-    }
   }
 
   private fun loginSuccess(model: LoggedInUser) {
@@ -152,7 +46,94 @@ class LoginFragment : BaseFragment() {
    * Shows the progress UI and hides the login form.
    */
   private fun showProgress(show: Boolean) {
-    binding.loginRefresh.isRefreshing = show
+    mBinding.loginRefresh.isRefreshing = show
+  }
+
+  override fun FragmentLoginBinding.initView() {
+
+    mBinding.loginCaptchaIv.setOnClickListener {
+      mViewModel.getCaptcha(captchaUrl)
+    }
+    mBinding.loginRefresh.setOnRefreshListener {
+      mViewModel.loadSignPage()
+    }
+    mBinding.loginAccount.setText(PrefStore.instance.userName)
+    mBinding.loginPassword.setText(PrefStore.instance.userPass)
+
+    mBinding.loginAccount.afterTextChanged {
+      mViewModel.loginDataChanged(
+        mBinding.loginAccount.text.toString(),
+        mBinding.loginPassword.text.toString()
+      )
+    }
+
+    mBinding.loginPassword.afterTextChanged {
+      mViewModel.loginDataChanged(
+        mBinding.loginAccount.text.toString(),
+        mBinding.loginPassword.text.toString()
+      )
+    }
+
+    mBinding.loginCaptcha.setOnEditorActionListener { _, actionId, _ ->
+      when (actionId) {
+        EditorInfo.IME_ACTION_DONE ->
+          doLogin()
+      }
+      false
+    }
+
+    mBinding.signInButton.setOnClickListener {
+      doLogin()
+    }
+  }
+
+  override fun initObserve() {
+    mViewModel.captchaBitmap.observe(viewLifecycleOwner, {
+//      Glide.with(this@LoginFragment)
+//          .load(it)
+//          .placeholder(R.drawable.ic_sync_white_24dp)
+//          .error(R.drawable.ic_sync_problem_white_24dp)
+//          .into(mBinding.loginCaptchaIv)
+      mBinding.loginCaptchaIv.load(it)
+    })
+
+    mViewModel.signInFormData.observe(viewLifecycleOwner) {
+      captchaUrl = it.genCaptcha()
+      mViewModel.getCaptcha(captchaUrl)
+    }
+
+    mViewModel.loginFormState.observe(viewLifecycleOwner, {
+      val loginState = it
+      // disable login button unless both username / password is valid
+      mBinding.signInButton.isEnabled = loginState.isDataValid
+
+      if (loginState.usernameError != null) {
+        mBinding.loginAccount.error = getString(loginState.usernameError)
+      }
+      if (loginState.passwordError != null) {
+        mBinding.loginPassword.error = getString(loginState.passwordError)
+      }
+    })
+
+    mViewModel.loginResult.observe(viewLifecycleOwner, {
+      showProgress(false)
+      when (it) {
+        is Result.Success -> {
+          loginSuccess(it.data)
+        }
+        else -> {
+          showLoginFailed(R.string.toast_remote_exception)
+        }
+      }
+    })
+
+    mViewModel.loadingState.observe(viewLifecycleOwner) {
+      showProgress(it)
+    }
+  }
+
+  override fun initRequestData() {
+    mViewModel.loadSignPage()
   }
 
 }

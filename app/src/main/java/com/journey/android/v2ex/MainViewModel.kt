@@ -13,8 +13,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
   val loginRepository: LoginRepository,
   val db: AppDatabase
-) :
-  BaseViewModel() {
+) : BaseViewModel() {
   fun deleteCache() {
     db.topicListDao().deleteAll()
   }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.journey.android.v2ex.R
 import com.journey.android.v2ex.base.BaseActivity
@@ -20,7 +21,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MemberInfoActivity : BaseActivity() {
+class MemberInfoActivity : AppCompatActivity() {
 
     private lateinit var mMemberBean: MemberBean
     private var mUserName = ""

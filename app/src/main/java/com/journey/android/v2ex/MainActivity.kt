@@ -1,6 +1,5 @@
 package com.journey.android.v2ex
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -18,45 +17,11 @@ import com.zzhoujay.richtext.RichText
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
-
-  private lateinit var binding: ActivityMainBinding
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
   private lateinit var appBarConfiguration: AppBarConfiguration
 
-  val viewModel:MainViewModel by viewModels()
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    val view = binding.root
-    setContentView(view)
-
-    setSupportActionBar(binding.mainToolbar)
-
-    EdgeToEdge.setUpRoot(findViewById(R.id.drawer_layout))
-    EdgeToEdge.setUpAppBar(binding.appBar, binding.mainToolbar)
-    EdgeToEdge.setUpScrollingContent(findViewById(R.id.main_constraint))
-
-    val host: NavHostFragment = supportFragmentManager
-        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
-    val navController = host.navController
-
-    appBarConfiguration = AppBarConfiguration(
-        setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest),//顶层导航设置
-        binding.drawerLayout
-    )
-    setupActionBarWithNavController(navController, appBarConfiguration)
-    binding.navView.setupWithNavController(navController)
-
-    binding.navView.getHeaderView(0)
-        .setOnClickListener {
-          navController.navigate(R.id.login_dest)
-          binding.drawerLayout.closeDrawers()
-        }
-
-    Router.init(this, navController)
-  }
+  override val mViewModel: MainViewModel by viewModels()
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
@@ -81,7 +46,40 @@ class MainActivity : BaseActivity() {
   override fun onDestroy() {
     super.onDestroy()
     RichText.recycle()
-    viewModel.deleteCache()
+    mViewModel.deleteCache()
+  }
+
+  override fun ActivityMainBinding.initView() {
+    setSupportActionBar(mBinding.mainToolbar)
+
+    EdgeToEdge.setUpRoot(findViewById(R.id.drawer_layout))
+    EdgeToEdge.setUpAppBar(mBinding.appBar, mBinding.mainToolbar)
+    EdgeToEdge.setUpScrollingContent(findViewById(R.id.main_constraint))
+
+    val host: NavHostFragment = supportFragmentManager
+      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+    val navController = host.navController
+
+    appBarConfiguration = AppBarConfiguration(
+      setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest),//顶层导航设置
+      mBinding.drawerLayout
+    )
+    setupActionBarWithNavController(navController, appBarConfiguration)
+    mBinding.navView.setupWithNavController(navController)
+
+    mBinding.navView.getHeaderView(0)
+      .setOnClickListener {
+        navController.navigate(R.id.login_dest)
+        mBinding.drawerLayout.closeDrawers()
+      }
+
+    Router.init(navController)
+  }
+
+  override fun initObserve() {
+  }
+
+  override fun initRequestData() {
   }
 
 }
