@@ -7,7 +7,7 @@ import androidx.room.Update
 
 interface BaseDao<T> {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insertSuspend(vararg obj: T)
+  suspend fun insertListSuspend(list: List<T>)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insert(vararg obj: T)

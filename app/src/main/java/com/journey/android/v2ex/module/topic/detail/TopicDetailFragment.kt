@@ -13,12 +13,13 @@ import coil.load
 import coil.request.ImageRequest
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentTopicDetailBinding
+import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderSubtleAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_topic_detail.topic_detail_comments_list
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetailViewModel>() {
@@ -37,6 +38,10 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
   private val safeArgs: TopicDetailFragmentArgs by navArgs()
   override val mViewModel: TopicDetailViewModel by viewModels()
 
+  private val topicHeaderAdapter = TopicHeaderAdapter(TopicsShowBean())
+  private val topicHeaderSubtleAdapter = TopicHeaderSubtleAdapter(TopicsShowBean())
+  private val topicCommentAdapter = TopicCommentAdapter()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     postponeEnterTransition()
@@ -44,44 +49,16 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
       .inflateTransition(transition.move)
   }
 
-  private fun getData() {
-    val topicHeaderAdapter = TopicHeaderAdapter(TopicsShowBean())
-    val topicHeaderSubtleAdapter = TopicHeaderSubtleAdapter(TopicsShowBean())
-    val topicCommentAdapter = TopicCommentAdapter()
+  override fun FragmentTopicDetailBinding.initView() {
+    mBinding.topicDetailTitleTv.text = safeArgs.topicTitle
 
-    val concatAdapter = ConcatAdapter().apply {
+    ViewCompat.setTransitionName(coordinatorLayout, TRANSITION_BACKGROUND)
+
+    mBinding.topicDetailCommentsList.adapter = ConcatAdapter().apply {
       addAdapter(topicHeaderAdapter)
       addAdapter(topicHeaderSubtleAdapter)
       addAdapter(topicCommentAdapter)
     }
-
-    topic_detail_comments_list.adapter = concatAdapter
-
-    mViewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner, {
-      if (it != null) {
-        mBinding.topicDetailNodeTv.text = it.node.name
-        mBinding.topicDetailCreateTimeTv.text = it.created_str
-
-        topicHeaderAdapter.topicDetailBean = it
-        topicHeaderAdapter.notifyDataSetChanged()
-        topicHeaderSubtleAdapter.topicDetailBean = it
-        topicHeaderSubtleAdapter.notifyDataSetChanged()
-      }
-    })
-
-//    lifecycleScope.launch {
-//      viewModel.getTopicReplyBean(safeArgs.topicId)
-//        .collectLatest {
-//          topicCommentAdapter.submitData(it)
-//        }
-//
-//    }
-
-  }
-
-  override fun FragmentTopicDetailBinding.initView() {
-
-    ViewCompat.setTransitionName(coordinatorLayout, TRANSITION_BACKGROUND)
 
     mBinding.topicDetailCommentsList.addItemDecoration(
       DividerItemDecoration(
@@ -89,19 +66,7 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
         DividerItemDecoration.VERTICAL
       )
     )
-    mBinding.topicDetailTitleTv.text = safeArgs.topicTitle
 
-//    startPostponedEnterTransition()
-//    topic_detail_title_tv.transitionName = "header_title"
-//    topic_detail_avatar.transitionName = "header_avatar"
-
-  }
-
-  override fun initObserve() {
-  }
-
-  override fun initRequestData() {
-    mViewModel.initTopicDetail(safeArgs.topicId)
     val request = ImageRequest.Builder(requireContext())
       .data(safeArgs.avatar)
       .target(
@@ -120,7 +85,36 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
       )
       .build()
     requireContext().imageLoader.enqueue(request)
-    getData()
+//    startPostponedEnterTransition()
+//    topic_detail_title_tv.transitionName = "header_title"
+//    topic_detail_avatar.transitionName = "header_avatar"
+
+  }
+
+  override fun initObserve() {
+
+    mViewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner, {
+      if (it != null) {
+        mBinding.topicDetailNodeTv.text = it.node.name
+        mBinding.topicDetailCreateTimeTv.text = it.created_str
+
+        topicHeaderAdapter.topicDetailBean = it
+        topicHeaderAdapter.notifyDataSetChanged()
+        topicHeaderSubtleAdapter.topicDetailBean = it
+        topicHeaderSubtleAdapter.notifyDataSetChanged()
+      }
+    })
+
+    launch({
+      mViewModel.getTopicReplyPager(safeArgs.topicId)
+        .collectLatest {
+          topicCommentAdapter.submitData(it)
+        }
+    })
+  }
+
+  override fun initRequestData() {
+    mViewModel.initTopicDetail(safeArgs.topicId)
   }
 
 }

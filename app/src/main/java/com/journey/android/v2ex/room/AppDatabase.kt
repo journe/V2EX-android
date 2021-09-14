@@ -9,8 +9,6 @@ import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
-import com.journey.android.v2ex.model.jsoup.TopicDetailBean
-import com.journey.android.v2ex.room.dao.TopicDetailDao
 import com.journey.android.v2ex.room.dao.TopicListDao
 import com.journey.android.v2ex.room.dao.TopicRepliesDao
 import com.journey.android.v2ex.room.dao.TopicShowDao
@@ -22,8 +20,8 @@ import com.journey.android.v2ex.utils.Utils
  */
 @Database(
   entities = [TopicsListItemBean::class, TopicsShowBean::class,
-    RepliesShowBean::class, MemberBean::class, TopicDetailBean::class],
-  version = 4,
+    RepliesShowBean::class, MemberBean::class],
+  version = 5,
   exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -31,7 +29,6 @@ abstract class AppDatabase : RoomDatabase() {
   abstract fun userInfoDao(): UserInfoDao
   abstract fun topicListDao(): TopicListDao
   abstract fun topicShowDao(): TopicShowDao
-  abstract fun topicDetailDao(): TopicDetailDao
   abstract fun topicRepliesDao(): TopicRepliesDao
 
   companion object {

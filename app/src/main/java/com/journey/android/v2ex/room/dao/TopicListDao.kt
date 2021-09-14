@@ -4,7 +4,6 @@ import androidx.paging.DataSource
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 
 /**
@@ -20,6 +19,9 @@ interface TopicListDao : BaseDao<TopicsListItemBean> {
 
   @Query("SELECT COUNT(id) FROM TopicsListItemBean WHERE tab=:tab ")
   fun topicCount(tab: String): Int
+
+  @Query("SELECT * FROM TopicsListItemBean WHERE id=:id ")
+  fun getTopicById(id: Int): TopicsListItemBean
 
   @Query("SELECT MAX(indexInResponse) + 1 FROM TopicsListItemBean")
   fun getNextIndex(): Int

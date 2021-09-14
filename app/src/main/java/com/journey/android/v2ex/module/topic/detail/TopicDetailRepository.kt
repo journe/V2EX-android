@@ -1,8 +1,12 @@
 package com.journey.android.v2ex.module.topic.detail
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.room.withTransaction
+import com.journey.android.v2ex.base.BaseRepository
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
-import com.journey.android.v2ex.model.jsoup.TopicDetailBean
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
@@ -22,7 +26,7 @@ import javax.inject.Inject
 class TopicDetailRepository @Inject constructor(
   private val db: AppDatabase,
   private val apiService: RetrofitService
-) {
+) : BaseRepository() {
 
   /**
    * Inserts the response into the database while also assigning position indices to items.
@@ -56,33 +60,37 @@ class TopicDetailRepository @Inject constructor(
 //  }
 
   suspend fun initTopicDetail(topicId: Int) {
-    val localBean = db.topicDetailDao()
-      .getTopicById(topicId)
-    if (localBean == null) {
-      val docString = apiService.getTopicByIdSuspend(topicId)
-        .string()
+//    val localBean = db.topicDetailDao().getTopicById(topicId)
+//    if (localBean == null) {
+      val docString = apiService.getTopicByIdSuspend(topicId).string()
       val doc = Jsoup.parse(docString)
-      val topicsShowBean = TopicDetailParser.parseTopicDetail(doc)
+      val topicsDetailBean = TopicDetailParser.parseTopicDetail(doc)
       val replies = TopicDetailParser.parseComments(doc)
 
-      topicsShowBean.id = topicId
-      topicsShowBean.subtles?.forEach {
-        it.id = topicId
+      topicsDetailBean.id = topicId
+      topicsDetailBean.subtles?.forEach { it.id = topicId }
+      replies.forEach { it.topic_id = topicId }
+
+      db.withTransaction {
+        val topicListItem = db.topicListDao().getTopicById(topicId)
+        topicListItem.replies = topicsDetailBean.replies
+        db.topicListDao().update(topicListItem)
+//        db.topicDetailDao().insert(TopicDetailBean(topicId, docString))
+        db.topicShowDao().insert(topicsDetailBean)
+        db.topicRepliesDao().insert(replies)
       }
-      replies.forEach {
-        it.topic_id = topicId
-      }
-      db.topicDetailDao()
-        .insert(TopicDetailBean(topicId, docString))
-      db.topicRepliesDao()
-        .insert(replies)
-      db.topicShowDao()
-        .insert(topicsShowBean)
-    }
+//    }
   }
 
+  @OptIn(ExperimentalPagingApi::class)
+  fun getReplyBeanPagerFlow(topicId: Int, pageSize: Int) = Pager(
+    config = PagingConfig(pageSize),
+    remoteMediator = PageKeyedRemoteMediator(db, apiService, topicId)
+  ) {
+    db.topicRepliesDao().pagingSource(topicId)
+  }.flow
+
   fun getTopicsShowBean(topicId: Int): Flow<TopicsShowBean> {
-    return db.topicShowDao()
-      .getTopicById(topicId = topicId)
+    return db.topicShowDao().getTopicById(topicId = topicId)
   }
 }

@@ -2,6 +2,7 @@ package com.journey.android.v2ex.module.topic.list
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.journey.android.v2ex.base.BaseRepository
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.parser.TopicListParser
@@ -24,7 +25,7 @@ import javax.inject.Singleton
 class TopicListRepository @Inject constructor(
   private val db: AppDatabase,
   private val apiService: RetrofitService
-) {
+) : BaseRepository() {
 
   suspend fun requsetData(tabName: String) {
     if (db.topicListDao().topicCount(tabName) > 0) {

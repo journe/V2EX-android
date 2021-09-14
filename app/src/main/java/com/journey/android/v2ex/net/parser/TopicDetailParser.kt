@@ -1,9 +1,8 @@
 package com.journey.android.v2ex.net.parser
 
 import com.journey.android.v2ex.model.api.RepliesShowBean
-import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.model.api.TopicShowSubtle
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.model.api.TopicsShowBean
 import org.jsoup.nodes.Document
 
 /**
@@ -24,9 +23,9 @@ object TopicDetailParser {
   @JvmStatic
   fun parseTopicDetail(doc: Document): TopicsShowBean {
     val mainContent = doc.body()
-        .selectFirst("#Wrapper")
-        .selectFirst(".content")
-        .select(".box")
+      .selectFirst("#Wrapper")
+      .selectFirst(".content")
+      .select(".box")
     val topic = mainContent[0]
     var topicDetailBean = TopicsShowBean()
 //    Logger.d(topic.toString())
@@ -34,7 +33,7 @@ object TopicDetailParser {
       return topicDetailBean
     } else {
       val title = topic.selectFirst(".header")
-          ?.selectFirst("h1")
+        ?.selectFirst("h1")
       if (title == null) {
         topicDetailBean.title = "需要登录"
         return topicDetailBean
@@ -43,109 +42,120 @@ object TopicDetailParser {
       }
     }
     if (topic.selectFirst(".cell") != null
-        && topic.selectFirst(".cell")
-            .selectFirst(".topic_content") != null
+      && topic.selectFirst(".cell")
+        .selectFirst(".topic_content") != null
     ) {
       topicDetailBean.content = topic.selectFirst(".cell")
-          .selectFirst(".topic_content")
-          .html()
+        .selectFirst(".topic_content")
+        .html()
     }
 
     topicDetailBean.member.username = topic.selectFirst(".header")
-        .selectFirst("small.gray")
-        .selectFirst("a")
-        .text()
+      .selectFirst("small.gray")
+      .selectFirst("a")
+      .text()
     topicDetailBean.member.avatar_large = topic.selectFirst(".header")
-        .selectFirst(".fr")
-        .select("img")
-        .attr("src")
+      .selectFirst(".fr")
+      .select("img")
+      .attr("src")
 
     topicDetailBean.node.name = topic.selectFirst(".header")
-        .select("a")[2]
-        .text()
+      .select("a")[2]
+      .text()
     topicDetailBean.node.url = topic.selectFirst(".header")
-        .select("a")[2]
-        .attr("href")
+      .select("a")[2]
+      .attr("href")
     topicDetailBean.created_str = topic.selectFirst(".header")
-        .selectFirst("small.gray")
-        .text()
+      .selectFirst("small.gray")
+      .text()
+
+    val replyString = doc.body()
+      .selectFirst("#Wrapper")
+      .selectFirst(".content")
+      .select(".box")[1]
+      .selectFirst(".cell")
+      .selectFirst(".gray")
+      .text().let {
+        it.substring(0, it.indexOf("条回复")).trim()
+      }
+    topicDetailBean.replies = if (replyString.isNullOrEmpty()) 0 else replyString.toInt()
 
     topic.select(".subtle")
-        ?.let {
-          topicDetailBean.subtles = mutableListOf()
-          for (element in it) {
-            val subtle = TopicShowSubtle()
-            subtle.title = element.selectFirst(".fade")
-                .text()
-            subtle.content = element.selectFirst(".topic_content")
-                .html()
+      ?.let {
+        topicDetailBean.subtles = mutableListOf()
+        for (element in it) {
+          val subtle = TopicShowSubtle()
+          subtle.title = element.selectFirst(".fade")
+            .text()
+          subtle.content = element.selectFirst(".topic_content")
+            .html()
 //            Logger.d(subtle.title + subtle.content)
-            topicDetailBean.subtles!!.add(subtle)
-          }
+          topicDetailBean.subtles!!.add(subtle)
         }
+      }
 
     return topicDetailBean
   }
 
   fun parseComments(doc: Document): List<RepliesShowBean> {
     val comments = doc.body()
-        .selectFirst("#Wrapper")
-        .selectFirst(".content")
-        .select(".box")[1]
-        .select("div[id^=r_]")
+      .selectFirst("#Wrapper")
+      .selectFirst(".content")
+      .select(".box")[1]
+      .select("div[id^=r_]")
     val commentBeanList = mutableListOf<RepliesShowBean>()
     for (item in comments) {
       if (item.selectFirst("table") == null
-          || item.attr("id")
-              .isNullOrEmpty()
+        || item.attr("id")
+          .isNullOrEmpty()
       ) {
         continue
       }
 
       val comment = item.selectFirst("table")
-          .selectFirst("tbody")
-          .selectFirst("tr")
+        .selectFirst("tbody")
+        .selectFirst("tr")
       val commentBean = RepliesShowBean()
       commentBean.id = item.id()
-          .replace("r_", "")
-          .toInt()
+        .replace("r_", "")
+        .toInt()
       commentBean.content = comment
-          .selectFirst("td[align = left]")
-          .selectFirst("div.reply_content")
-          .text()
+        .selectFirst("td[align = left]")
+        .selectFirst("div.reply_content")
+        .text()
       commentBean.content_rendered = comment
-          .selectFirst("td[align = left]")
-          .selectFirst("div.reply_content")
-          .html()
+        .selectFirst("td[align = left]")
+        .selectFirst("div.reply_content")
+        .html()
       commentBean.floor = comment
-          .selectFirst("td[align = left]")
-          .selectFirst("div.fr")
-          .selectFirst("span.no")
-          .text()
-          .toInt()
+        .selectFirst("td[align = left]")
+        .selectFirst("div.fr")
+        .selectFirst("span.no")
+        .text()
+        .toInt()
       comment
-          .selectFirst("td[align = left]")
-          .selectFirst("span[class = fade small]")
-          ?.let {
-            commentBean.created_str = it.text()
-          }
+        .selectFirst("td[align = left]")
+        .selectFirst("span[class = fade small]")
+        ?.let {
+          commentBean.created_str = it.text()
+        }
       comment
-          .selectFirst("td[align = left]")
-          .selectFirst("span[class = small fade]")
-          ?.let {
-            commentBean.heart = it.text()
-                .toInt()
-          }
+        .selectFirst("td[align = left]")
+        .selectFirst("span[class = small fade]")
+        ?.let {
+          commentBean.heart = it.text()
+            .toInt()
+        }
 
       commentBean.member.username = comment
-          .selectFirst("td[align = left]")
-          .selectFirst("strong")
-          .selectFirst("a")
-          .text()
+        .selectFirst("td[align = left]")
+        .selectFirst("strong")
+        .selectFirst("a")
+        .text()
       commentBean.member.avatar_large = comment
-          .selectFirst("td")
-          .selectFirst("img")
-          .attr("src")
+        .selectFirst("td")
+        .selectFirst("img")
+        .attr("src")
 
       commentBeanList.add(commentBean)
     }
