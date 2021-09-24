@@ -41,7 +41,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, EmptyViewModel>() {
   override fun FragmentMainBinding.initView() {
     val myPagerAdapter = MainPagerAdapter(childFragmentManager)
     mBinding.mainViewpager.adapter = myPagerAdapter
-    mBinding.mainTab.setupWithViewPager(main_viewpager)
+    mBinding.mainTab.setupWithViewPager(mBinding.mainViewpager)
   }
 
   override fun initObserve() {
