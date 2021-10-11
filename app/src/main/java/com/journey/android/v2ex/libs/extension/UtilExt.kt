@@ -21,9 +21,9 @@ fun CoroutineScope.launchThrowException(block: suspend CoroutineScope.() -> Unit
 }
 
 fun launchCoroutine(
-    block: suspend (CoroutineScope) -> Unit,
     error: ((e: Exception) -> Unit)? = null,
-    context: CoroutineContext = Dispatchers.Main
+    context: CoroutineContext = Dispatchers.Main,
+    block: suspend (CoroutineScope) -> Unit
 ): Job {
     return GlobalScope.launch(context + CoroutineExceptionHandler { _, e ->
         Logger.e("==>coroutineException", e.message)    //1

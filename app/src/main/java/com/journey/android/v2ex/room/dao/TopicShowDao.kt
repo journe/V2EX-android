@@ -17,7 +17,7 @@ interface TopicShowDao : BaseDao<TopicsShowBean> {
   fun getTopicById(topicId: Int): Flow<TopicsShowBean>
 
 
-  @Query("SELECT * FROM TopicsShowBean")
+  @Query("SELECT * FROM TopicsShowBean ORDER BY local_touched DESC")
   fun historyPagingSource(): PagingSource<Int, TopicsShowBean>
 
 }

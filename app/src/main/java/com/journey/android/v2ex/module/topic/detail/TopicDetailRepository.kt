@@ -5,15 +5,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.withTransaction
 import com.journey.android.v2ex.base.BaseRepository
+import com.journey.android.v2ex.libs.extension.launchCoroutine
 import com.journey.android.v2ex.model.api.RepliesShowBean
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.net.parser.TopicDetailParser
 import com.journey.android.v2ex.room.AppDatabase
 import com.journey.android.v2ex.utils.Constants
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.invoke
 import org.jsoup.Jsoup
 import java.util.*
 import javax.inject.Inject
@@ -61,10 +61,25 @@ class TopicDetailRepository @Inject constructor(
 //        .getTopicReplies(topicId)
 //  }
 
+    suspend fun asd(): String {
+        return apiService.getTopicByIdSuspend(1).string()
+    }
+
     suspend fun initTopicDetail(topicId: Int) {
 //    val localBean = db.topicDetailDao().getTopicById(topicId)
 //    if (localBean == null) {
+
+        launchCoroutine(context = Dispatchers.IO) {
+            val a = it.async { apiService.getTopicByIdSuspend(topicId).string() }
+            val apiBean = it.async { apiService.getTopicsById(topicId).first() }
+        }
+
+        GlobalScope.launch {
+            val a = async { apiService.getTopicByIdSuspend(topicId).string() }
+            val apiBean = async { apiService.getTopicsById(topicId).first() }
+        }
         val docString = apiService.getTopicByIdSuspend(topicId).string()
+        val apiBean = apiService.getTopicsById(topicId).first()
         val doc = Jsoup.parse(docString)
         val jsoupBean = TopicDetailParser.parseTopicDetail(doc)
         val replies = TopicDetailParser.parseComments(doc)
@@ -74,7 +89,7 @@ class TopicDetailRepository @Inject constructor(
         jsoupBean.subtles?.forEach { it.id = topicId }
         replies.forEach { it.topic_id = topicId }
 
-        val apiBean = apiService.getTopicsById(topicId).first()
+
         jsoupBean.created = apiBean.created
         jsoupBean.last_modified = apiBean.last_modified
         jsoupBean.last_touched = apiBean.last_touched
