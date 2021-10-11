@@ -80,4 +80,13 @@
       android:id="@+id/settings_dest"
       android:name="com.journey.android.v2ex.module.SettingsActivity"
       android:label="SettingsActivity" />
+  <fragment
+      android:id="@+id/history_dest"
+      android:name="com.journey.android.v2ex.module.topic.history.TopicHistoryFragment"
+      android:label="@string/drawer_history"
+      tools:layout="@layout/fragment_topic_list" >
+    <action
+        android:id="@+id/action_history_dest_to_topicDetail_dest"
+        app:destination="@id/topicDetail_dest" />
+  </fragment>
 </navigation>

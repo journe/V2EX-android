@@ -21,7 +21,7 @@ import com.journey.android.v2ex.utils.Utils
 @Database(
   entities = [TopicsListItemBean::class, TopicsShowBean::class,
     RepliesShowBean::class, MemberBean::class],
-  version = 5,
+  version = 7,
   exportSchema = false
 )
 @TypeConverters(Converters::class)

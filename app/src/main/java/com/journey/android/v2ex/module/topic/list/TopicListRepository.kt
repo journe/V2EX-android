@@ -27,7 +27,7 @@ class TopicListRepository @Inject constructor(
   private val apiService: RetrofitService
 ) : BaseRepository() {
 
-  suspend fun requsetData(tabName: String) {
+  suspend fun requestData(tabName: String) {
     if (db.topicListDao().topicCount(tabName) > 0) {
 //      getList(tabName)
     } else {

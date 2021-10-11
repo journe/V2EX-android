@@ -22,19 +22,20 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class TopicsShowBean(
-  @PrimaryKey
-  var id: Int = 0,
-  var title: String? = null,
-  var url: String? = null,
-  var content: String? = null,
-  var content_rendered: String? = null,
-  var replies: Int = 0,
-  var member: MemberBean = MemberBean(),
-  var node: NodeBean = NodeBean(),
-  var created: Int = 0,
-  var last_modified: Int = 0,
-  var last_touched: Int = 0,
-  var created_str: String = "",
-  var subtles: MutableList<TopicShowSubtle>? = null
+    @PrimaryKey
+    var id: Int = 0,
+    var title: String? = null,
+    var url: String? = null,
+    var content: String? = null,
+    var content_rendered: String? = null,
+    var replies: Int = 0,
+    var member: MemberBean = MemberBean(),
+    var node: NodeBean = NodeBean(),
+    var created: Long = 0,
+    var last_modified: Long = 0,
+    var last_touched: Long = 0,
+    var local_touched: Long = 0,
+    var created_str: String = "",
+    var subtles: MutableList<TopicShowSubtle>? = null
 
 )

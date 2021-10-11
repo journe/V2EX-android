@@ -14,7 +14,7 @@ class TopicListViewModel @Inject constructor(
 
   fun request(tabName: String) {
     launch({
-      repository.requsetData(tabName)
+      repository.requestData(tabName)
     })
 
   }

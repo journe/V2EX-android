@@ -61,7 +61,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     val navController = host.navController
 
     appBarConfiguration = AppBarConfiguration(
-      setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest),//顶层导航设置
+      setOf(R.id.main_dest, R.id.nodeList_dest, R.id.settings_dest,R.id.history_dest),//顶层导航设置
       mBinding.drawerLayout
     )
     setupActionBarWithNavController(navController, appBarConfiguration)
