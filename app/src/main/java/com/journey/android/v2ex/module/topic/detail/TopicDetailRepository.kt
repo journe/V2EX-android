@@ -61,50 +61,75 @@ class TopicDetailRepository @Inject constructor(
 //        .getTopicReplies(topicId)
 //  }
 
-    suspend fun asd(): String {
-        return apiService.getTopicByIdSuspend(1).string()
-    }
 
     suspend fun initTopicDetail(topicId: Int) {
 //    val localBean = db.topicDetailDao().getTopicById(topicId)
 //    if (localBean == null) {
 
         launchCoroutine(context = Dispatchers.IO) {
-            val a = it.async { apiService.getTopicByIdSuspend(topicId).string() }
+            val htmlStr = it.async { apiService.getTopicByIdSuspend(topicId).string() }
+
+            val doc = Jsoup.parse(htmlStr.await())
+
+            val jsoupBean = TopicDetailParser.parseTopicDetail(doc)
+            val replies = TopicDetailParser.parseComments(doc)
+
             val apiBean = it.async { apiService.getTopicsById(topicId).first() }
-        }
 
-        GlobalScope.launch {
-            val a = async { apiService.getTopicByIdSuspend(topicId).string() }
-            val apiBean = async { apiService.getTopicsById(topicId).first() }
-        }
-        val docString = apiService.getTopicByIdSuspend(topicId).string()
-        val apiBean = apiService.getTopicsById(topicId).first()
-        val doc = Jsoup.parse(docString)
-        val jsoupBean = TopicDetailParser.parseTopicDetail(doc)
-        val replies = TopicDetailParser.parseComments(doc)
+            jsoupBean.id = topicId
+            jsoupBean.url = Constants.BASE_URL + "/t/$topicId"
+            jsoupBean.subtles?.forEach { it.id = topicId }
+            replies.forEach { it.topic_id = topicId }
 
-        jsoupBean.id = topicId
-        jsoupBean.url = Constants.BASE_URL + "/t/$topicId"
-        jsoupBean.subtles?.forEach { it.id = topicId }
-        replies.forEach { it.topic_id = topicId }
+            jsoupBean.created = apiBean.await().created
+            jsoupBean.last_modified = apiBean.await().last_modified
+            jsoupBean.last_touched = apiBean.await().last_touched
 
+            jsoupBean.local_touched = Date().time
 
-        jsoupBean.created = apiBean.created
-        jsoupBean.last_modified = apiBean.last_modified
-        jsoupBean.last_touched = apiBean.last_touched
-
-        jsoupBean.local_touched = Date().time
-
-        db.withTransaction {
-            val topicListItem = db.topicListDao().getTopicById(topicId)
-            topicListItem.replies = jsoupBean.replies
-            db.topicListDao().update(topicListItem)
+            db.withTransaction {
+                val topicListItem = db.topicListDao().getTopicById(topicId)
+                topicListItem.replies = jsoupBean.replies
+                db.topicListDao().update(topicListItem)
 //        db.topicDetailDao().insert(TopicDetailBean(topicId, docString))
-            db.topicShowDao().insert(jsoupBean)
-            db.topicRepliesDao().insert(replies)
+                db.topicShowDao().insert(jsoupBean)
+                db.topicRepliesDao().insert(replies)
+            }
+
         }
-//    }
+
+//        GlobalScope.launch {
+//            val a = async { apiService.getTopicByIdSuspend(topicId).string() }
+//            val apiBean = async { apiService.getTopicsById(topicId).first() }
+//        }
+
+//        val docString = apiService.getTopicByIdSuspend(topicId).string()
+//        val apiBean = apiService.getTopicsById(topicId).first()
+//
+//        val doc = Jsoup.parse(docString)
+//
+//        val jsoupBean = TopicDetailParser.parseTopicDetail(doc)
+//        val replies = TopicDetailParser.parseComments(doc)
+//
+//        jsoupBean.id = topicId
+//        jsoupBean.url = Constants.BASE_URL + "/t/$topicId"
+//        jsoupBean.subtles?.forEach { it.id = topicId }
+//        replies.forEach { it.topic_id = topicId }
+//
+//        jsoupBean.created = apiBean.created
+//        jsoupBean.last_modified = apiBean.last_modified
+//        jsoupBean.last_touched = apiBean.last_touched
+//
+//        jsoupBean.local_touched = Date().time
+//
+//        db.withTransaction {
+//            val topicListItem = db.topicListDao().getTopicById(topicId)
+//            topicListItem.replies = jsoupBean.replies
+//            db.topicListDao().update(topicListItem)
+////        db.topicDetailDao().insert(TopicDetailBean(topicId, docString))
+//            db.topicShowDao().insert(jsoupBean)
+//            db.topicRepliesDao().insert(replies)
+//        }
     }
 
     @OptIn(ExperimentalPagingApi::class)

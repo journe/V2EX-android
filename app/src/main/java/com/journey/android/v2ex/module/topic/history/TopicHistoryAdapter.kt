@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.journey.android.v2ex.databinding.FragmentTopicListItemBinding
-import com.journey.android.v2ex.libs.string
+import com.journey.android.v2ex.libs.extension.string
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.module.topic.detail.TopicDetailFragment
 import com.journey.android.v2ex.router.Router

@@ -32,8 +32,7 @@ object MoreParser {
   @JvmStatic
   fun getLoggedInUser(doc: Document): LoggedInUser {
     val content = doc.body()
-        .selectFirst("#menu-entry")
-        .selectFirst(".avatar mobile")
+        .selectFirst("img.avatar mobile")
     return LoggedInUser(avatar = content.attr("src"), displayName = content.attr("alt"))
   }
 }

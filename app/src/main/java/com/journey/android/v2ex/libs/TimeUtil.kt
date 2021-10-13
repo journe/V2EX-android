@@ -22,7 +22,3 @@ object TimeUtil {
         return text.toString()
     }
 }
-
-fun Date.string(format: String = "yyyy-MM-dd HH:mm"): String {
-    return SimpleDateFormat(format, Locale.getDefault()).format(this)
-}

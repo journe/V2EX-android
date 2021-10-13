@@ -140,7 +140,7 @@ interface RetrofitService {
   @FormUrlEncoded
   @Headers("Referer: https://www.v2ex.com/signin")
   @POST(Constants.SIGNIN)
-  suspend fun postSigninSuspend(@FieldMap hashMap: HashMap<String, String>): ResponseBody
+  suspend fun postLoginSuspend(@FieldMap hashMap: HashMap<String, String>): ResponseBody
 
   @Streaming
   @GET
