@@ -1,7 +1,9 @@
 package com.journey.android.v2ex.net.parser
 
-import com.journey.android.v2ex.module.login.data.LoggedInUser
-import com.orhanobut.logger.Logger
+import com.journey.android.v2ex.libs.SpKey
+import com.journey.android.v2ex.libs.SpUtils
+import com.journey.android.v2ex.model.Avatar
+import com.journey.android.v2ex.module.login.data.LoginResult
 import org.jsoup.nodes.Document
 
 /**
@@ -17,22 +19,26 @@ import org.jsoup.nodes.Document
  *  [attr~=regex]: 利用属性值匹配正则表达式来查找元素，比如： img[src~=(?i)\.(png|jpe?g)]
  *   *: 这个符号将匹配所有元素
  */
-object MoreParser {
+object CommonParser {
 
-  //右上角菜单超过两个div元素，说明正确获取到了登录状态
-  @JvmStatic
-  fun isLogin(doc: Document): Boolean {
-    val content = doc.body()
-        .selectFirst("#menu-body")
-    val a = content.select(".cell")
-    Logger.d(a.size)
-    return a.size > 2
-  }
+	//右上角菜单超过两个div元素，说明正确获取到了登录状态
+	@JvmStatic
+	fun isLogin(doc: Document): Boolean {
+		val content = doc.body()
+			.selectFirst("#menu-body")
+		val bool = content.select(".cell").size > 2
+		SpUtils.put(SpKey.IS_LOGIN, bool)
+		return bool
+	}
 
-  @JvmStatic
-  fun getLoggedInUser(doc: Document): LoggedInUser {
-    val content = doc.body()
-        .selectFirst("img.avatar mobile")
-    return LoggedInUser(avatar = content.attr("src"), displayName = content.attr("alt"))
-  }
+	@JvmStatic
+	fun loginResult(doc: Document): LoginResult {
+		val content = doc.body()
+			.selectFirst("img.avatar mobile")
+		return LoginResult(
+			avatar = Avatar.Builder().setUrl(content.attr("src")).build(),
+			username = content.attr("alt")
+		)
+	}
+
 }

@@ -9,7 +9,7 @@ import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.model.jsoup.SignInFormData
-import com.journey.android.v2ex.module.login.data.LoggedInUser
+import com.journey.android.v2ex.module.login.data.LoginResult
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.journey.android.v2ex.module.login.data.LoginFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +25,8 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
-    private val _loginResult = MutableLiveData<Result<LoggedInUser>>()
-    val loginResult: LiveData<Result<LoggedInUser>> = _loginResult
+    private val _loginResult = MutableLiveData<Result<LoginResult>>()
+    val loginResult: LiveData<Result<LoginResult>> = _loginResult
 
     val signInFormData = MutableLiveData<SignInFormData>()
 
@@ -70,6 +70,9 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
 
     }
 
+    fun logout(){
+        loginRepository.logout()
+    }
     fun loginDataChanged(
         username: String,
         password: String

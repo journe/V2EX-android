@@ -1,6 +1,5 @@
 package com.journey.android.v2ex.model.jsoup
 
-import com.journey.android.v2ex.model.Avatar
 import com.journey.android.v2ex.utils.Constants
 
 data class SignInFormData(
@@ -16,4 +15,3 @@ data class SignInFormData(
 	}
 }
 
-data class LoginResult(val username: String, val avatar: Avatar)

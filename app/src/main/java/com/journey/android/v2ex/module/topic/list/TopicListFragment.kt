@@ -19,8 +19,6 @@ class TopicListFragment(private val nodeName: String) :
 
   override val mViewModel: TopicListViewModel by viewModels()
 
-  val apiService: RetrofitService = RetrofitService.create()
-
   companion object {
     fun newInstance(
       topicType: String,

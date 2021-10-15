@@ -1,4 +1,4 @@
-package com.journey.android.v2ex.net.parser
+package com.journey.android.v2ex.utils
 
 import android.util.LruCache
 import com.google.common.graph.Traverser

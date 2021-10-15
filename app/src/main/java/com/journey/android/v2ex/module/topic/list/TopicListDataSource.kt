@@ -31,7 +31,7 @@ class TopicListDataSource(private val tabName: String) : PagingSource<Int, Topic
       // Start refresh at page 1 if undefined.
       val nextPageNumber = params.key ?: 1
 
-      val result = apiService.getTopicsByNodeSuspend(Constants.TAB + tabName)
+      val result = apiService.requestSuspend(Constants.TAB + tabName)
       val listItemBean = TopicListParser.parseTopicList(
           Jsoup.parse(result.string())
       )

@@ -1,74 +1,77 @@
 package com.journey.android.v2ex.utils
 
-import android.widget.Toast
 import com.journey.android.v2ex.libs.SpKey
 import com.journey.android.v2ex.libs.SpUtils
+import com.journey.android.v2ex.model.Avatar
+import com.journey.android.v2ex.net.RetrofitService
 
 object UserState {
-	var username: String? = null
+	var username: String = ""
 		private set
 	private var mHasUnread: Boolean = false
 	private var mHasAward: Boolean = false
 
-	val islogin = SpUtils.getBoolean(SpKey.IS_LOGIN, false)
+	val islogin = SpUtils.getBoolean(SpKey.IS_LOGIN, false)!!
 
 	fun init() {
 //        RxBus.post(NewUnreadEvent(0))
 
-		username = SpUtils.getString(SpKey.KEY_USERNAME, "")
+		username = SpUtils.getString(SpKey.KEY_USERNAME, "")!!
 
 //		RxBus.subscribe<DailyAwardEvent> {
 //			mHasAward = it.mHasAward
 //		}
 	}
 
-	fun handleInfo(info: MyselfParser.MySelfInfo?, pageType: PageType) {
-		if (info == null) {
-			logout()
-			return
-		}
-
-		if (pageType === PageType.Topic) {
-			return
-		}
-
-		if (info.unread > 0) {
-			mHasUnread = true
-			RxBus.post(NewUnreadEvent(info.unread))
-		}
-		if (pageType === PageType.Tab && info.hasAward != mHasAward) {
-			RxBus.post(DailyAwardEvent(info.hasAward))
-		}
-	}
+//	fun handleInfo(info: MyselfParser.MySelfInfo?, pageType: PageType) {
+//		if (info == null) {
+//			logout()
+//			return
+//		}
+//
+//		if (pageType === PageType.Topic) {
+//			return
+//		}
+//
+//		if (info.unread > 0) {
+//			mHasUnread = true
+//			RxBus.post(NewUnreadEvent(info.unread))
+//		}
+//		if (pageType === PageType.Tab && info.hasAward != mHasAward) {
+//			RxBus.post(DailyAwardEvent(info.hasAward))
+//		}
+//	}
 
 	fun login(username: String, avatar: Avatar) {
-		ConfigDao.put(ConfigDao.KEY_AVATAR, avatar.baseUrl)
-		ConfigDao.put(ConfigDao.KEY_USERNAME, username)
+		this.username = username
 
-		UserState.username = username
-		TrackerUtils.setUserId(username)
+		SpUtils.put(SpKey.KEY_AVATAR, avatar.baseUrl)
+		SpUtils.put(SpKey.KEY_USERNAME, username)
 
-		AppCtx.eventBus.post(LoginEvent(username))
-		ExecutorUtils.execute { UserUtils.checkDailyAward() }
+
+//		TrackerUtils.setUserId(username)
+//
+//		AppCtx.eventBus.post(LoginEvent(username))
+//		ExecutorUtils.execute { UserUtils.checkDailyAward() }
 	}
 
 	fun logout() {
-		username = null
-		RequestHelper.cleanCookies()
+		username = ""
+		SpUtils.put(SpKey.IS_LOGIN, false)
+		SpUtils.put(SpKey.KEY_AVATAR, "")
+		SpUtils.put(SpKey.KEY_USERNAME, "")
+		RetrofitService.cleanCookies()
 
-		ConfigDao.remove(ConfigDao.KEY_USERNAME)
-		ConfigDao.remove(ConfigDao.KEY_AVATAR)
-
-		TrackerUtils.setUserId(null)
-		CrashlyticsUtils.setUserState(false)
-
-		ExecutorUtils.runInUiThread {
-			Toast.makeText(
-				AppCtx.instance, R.string.toast_has_sign_out,
-				Toast.LENGTH_LONG
-			).show()
-		}
-		AppCtx.eventBus.post(LoginEvent())
+//		TrackerUtils.setUserId(null)
+//		CrashlyticsUtils.setUserState(false)
+//
+//		ExecutorUtils.runInUiThread {
+//			Toast.makeText(
+//				AppCtx.instance, R.string.toast_has_sign_out,
+//				Toast.LENGTH_LONG
+//			).show()
+//		}
+//		AppCtx.eventBus.post(LoginEvent())
 	}
 
 	fun isLoggedIn(): Boolean {
@@ -81,7 +84,7 @@ object UserState {
 
 	fun clearUnread() {
 		mHasUnread = false
-		RxBus.post(NewUnreadEvent(0))
+//		RxBus.post(NewUnreadEvent(0))
 	}
 
 	fun hasAward(): Boolean {

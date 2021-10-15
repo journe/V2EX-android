@@ -65,6 +65,7 @@ object SpUtils {
 object SpKey {
 	const val IS_LOGIN = "is_login"
 	const val KEY_USERNAME = "key_username"
+	const val KEY_USERPASS = "key_userpass"
 	const val KEY_AVATAR = "avatar"
 	const val KEY_NODE_ETAG = "node_etag"
 }

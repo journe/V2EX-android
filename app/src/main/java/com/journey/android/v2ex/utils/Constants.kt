@@ -2,8 +2,6 @@ package com.journey.android.v2ex.utils
 
 import android.os.Build
 import com.journey.android.v2ex.BuildConfig
-import com.journey.android.v2ex.libs.SpKey
-import com.journey.android.v2ex.libs.SpUtils
 
 /**
  * Created by journey on 2018/1/23.
@@ -36,7 +34,7 @@ object Constants {
 	const val TWO_FACTOR_AUTH = "/2fa"
 	const val NEW_TOPIC = "/new/%s"
 
-	private const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
+	const val USER_AGENT = "V2EX+/" + BuildConfig.VERSION_NAME
 	val USER_AGENT_ANDROID = "$USER_AGENT (Android ${Build.VERSION.RELEASE})"
 }
 

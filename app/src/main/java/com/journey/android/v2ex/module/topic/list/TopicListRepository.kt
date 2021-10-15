@@ -41,7 +41,7 @@ class TopicListRepository @Inject constructor(
     }.flow
 
   suspend fun request(nodeName: String): List<TopicsListItemBean> {
-    val result = apiService.getTopicsByNodeSuspend(Constants.TAB + nodeName)
+    val result = apiService.requestSuspend(Constants.TAB + nodeName)
     val listItemBean = TopicListParser.parseTopicList(
       Jsoup.parse(result.string())
     ).map {
