@@ -16,7 +16,6 @@ import com.journey.android.v2ex.net.parser.LoginParser
 import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.PrefStore
 import com.journey.android.v2ex.utils.RequestException
-import com.journey.android.v2ex.utils.UserState
 import org.jsoup.Jsoup
 import java.util.*
 import javax.inject.Inject
@@ -45,25 +44,32 @@ class LoginNetDataSource @Inject constructor(private val apiService: RetrofitSer
 			map["next"] = nextUrl
 
 			val response = apiService.postLoginSuspend(map)
+
 			// v2ex will redirect if login success
-			if (response.code != HttpStatus.SC_MOVED_TEMPORARILY) {
-				throw RequestException("code should not be " + response.code, response)
+			if (response.code() != HttpStatus.SC_MOVED_TEMPORARILY) {
+				if (response.code() == HttpStatus.SC_OK) {
+					val loginDoc = response.body()!!.toJsoup()
+					val errorResult = LoginParser.parseLoginError(loginDoc)
+					return Error(Exception(errorResult.problem, null))
+				} else {
+					throw RequestException("code should not be " + response.code(), response.raw())
+				}
 			}
 
-			val location = checkNotNull(response.header(HttpHeaders.LOCATION)) {
+			val location = checkNotNull(response.headers()["location"]) {
 				"Redirect response missing location"
 			}
 			if (location != nextUrl) {
-				throw RequestException("location should not be $location", response)
+				throw RequestException("location should not be $location", response.raw())
 			}
 
-			val loginDoc = response.body!!.toJsoup()
 			val redirectDoc = apiService.requestSuspend(Constants.BASE_URL + location).toJsoup()
 
 			return if (CommonParser.isLogin(redirectDoc)) {
 				val successResult = CommonParser.loginResult(redirectDoc)
 				Result.Success(successResult)
 			} else {
+				val loginDoc = response.body()!!.toJsoup()
 				val errorResult = LoginParser.parseLoginError(loginDoc)
 				Error(Exception(errorResult.problem, null))
 			}

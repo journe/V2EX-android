@@ -1,5 +1,8 @@
 package com.journey.android.v2ex.utils
 
+import android.widget.Toast
+import com.journey.android.v2ex.R
+import com.journey.android.v2ex.base.BaseApplication
 import com.journey.android.v2ex.libs.SpKey
 import com.journey.android.v2ex.libs.SpUtils
 import com.journey.android.v2ex.model.Avatar
@@ -12,6 +15,8 @@ object UserState {
 	private var mHasAward: Boolean = false
 
 	val islogin = SpUtils.getBoolean(SpKey.IS_LOGIN, false)!!
+
+	val token = SpUtils.getString(SpKey.TOKEN, "54839a53-25a8-4388-9201-b662cddded9e")
 
 	fun init() {
 //        RxBus.post(NewUnreadEvent(0))
@@ -61,6 +66,11 @@ object UserState {
 		SpUtils.put(SpKey.KEY_AVATAR, "")
 		SpUtils.put(SpKey.KEY_USERNAME, "")
 		RetrofitService.cleanCookies()
+		Toast.makeText(
+			BaseApplication.context,
+			BaseApplication.context.resources.getText(R.string.toast_has_sign_out),
+			Toast.LENGTH_SHORT
+		).show()
 
 //		TrackerUtils.setUserId(null)
 //		CrashlyticsUtils.setUserState(false)

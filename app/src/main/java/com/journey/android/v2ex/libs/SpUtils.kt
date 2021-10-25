@@ -68,4 +68,5 @@ object SpKey {
 	const val KEY_USERPASS = "key_userpass"
 	const val KEY_AVATAR = "avatar"
 	const val KEY_NODE_ETAG = "node_etag"
+	const val TOKEN = "token"
 }

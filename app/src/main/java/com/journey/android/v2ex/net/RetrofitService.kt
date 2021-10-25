@@ -9,10 +9,10 @@ import com.journey.android.v2ex.utils.Constants
 import com.journey.android.v2ex.utils.Utils
 import okhttp3.Cache
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -122,7 +122,7 @@ interface RetrofitService {
 	@FormUrlEncoded
 	@Headers("Referer: https://www.v2ex.com/signin")
 	@POST(Constants.SIGNIN)
-	suspend fun postLoginSuspend(@FieldMap hashMap: HashMap<String, String>): Response
+	suspend fun postLoginSuspend(@FieldMap hashMap: HashMap<String, String>): Response<ResponseBody>
 
 	@Streaming
 	@GET

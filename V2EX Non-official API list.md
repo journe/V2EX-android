@@ -1,7 +1,6 @@
-# V2EX Non-official API list
-V2EX非官方API列表，仅供参考，欢迎补充。
+# V2EX API list
 
-# Site
+## Site
 
 ### 取网站信息
 
@@ -27,7 +26,7 @@ V2EX非官方API列表，仅供参考，欢迎补充。
 }
 ```
 
-# Node
+## Node
 
 ### 取所有节点
 
@@ -78,7 +77,7 @@ V2EX非官方API列表，仅供参考，欢迎补充。
 }
 ```
 
-# Topic
+## Topic
 
 ### 取最新主题
 
@@ -212,7 +211,7 @@ V2EX非官方API列表，仅供参考，欢迎补充。
 | node_name | 根据节点名取该节点下所有主题 |
 
 
-# Replies
+## Replies
 
 ### 取主题回复
 
@@ -246,7 +245,7 @@ V2EX非官方API列表，仅供参考，欢迎补充。
 ]
 ```
 
-# Members
+## Members
 
 ### 取用户信息
 
@@ -273,3 +272,86 @@ V2EX非官方API列表，仅供参考，欢迎补充。
     "created" : 1328075793
 }
 ```
+
+# API 2.0 Beta
+
+API 2.0 Beta 是我们正在持续更新中的新接口，会提供一系列通过 [Personal Access Token](https://www.v2ex.com/help/personal-access-token) 访问 V2EX 功能的新方式。
+
+## Authentication / 认证方式
+
+Personal Access Token 可以在 Authorization header 中使用，例子如下：
+
+> ```
+> Authorization: Bearer bd1f2c67-cc7f-48e3-a48a-e5b88b427146
+> ```
+
+## Endpoints
+
+所有 2.0 的 API 接口都位于下面的这个前缀下：
+
+> ```
+> https://www.v2ex.com/api/v2
+> ```
+
+推荐你可以在 VS Code 中安装和使用 [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) 来测试这些 API。
+
+下面是具体的接口访问信息。
+
+## 获取最新的提醒
+
+> ```
+> GET /notifications
+> ```
+
+可选参数：
+
+- `p` - 分页页码，默认为 1
+
+完整例子：
+
+> ```
+> GET https://www.v2ex.com/api/v2/notifications?p=2 Authorization: Bearer bd1f2c67-cc7f-48e3-a48a-e5b88b427146
+> ```
+
+## 获取自己的 Profile
+
+> ```
+> GET /member
+> ```
+
+完整例子：
+
+> ```
+> GET https://www.v2ex.com/api/v2/member Authorization: Bearer bd1f2c67-cc7f-48e3-a48a-e5b88b427146
+> ```
+
+## 查看当前正在使用的令牌的信息
+
+> ```
+> GET /token
+> ```
+
+完整例子：
+
+> ```
+> GET https://www.v2ex.com/api/v2/token Authorization: Bearer bd1f2c67-cc7f-48e3-a48a-e5b88b427146
+> ```
+
+## 创建新的令牌
+
+> ```
+> POST /tokens
+> ```
+
+你可以在系统中最多创建 10 个 Personal Access Token。
+
+输入参数：
+
+- scope - 可选 everything 或者 regular，如果是 regular 类型的 Token 将不能用于进一步创建新的 token
+- expiration - 可支持的值：259200，5184000 或者 15552000，即 30 天，60 天或者 180 天的秒数
+
+完整例子：
+
+> ```
+> GET https://www.v2ex.com/api/v2/tokens Authorization: Bearer bd1f2c67-cc7f-48e3-a48a-e5b88b427146 {"scope": "everything", "expiration": 259200} 
+> ```
