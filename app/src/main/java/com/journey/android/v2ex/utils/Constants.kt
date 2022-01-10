@@ -22,13 +22,17 @@ object Constants {
 	const val REPLIES = "/api/replies/show.json"
 	const val MEMBERS = "/api/members/show.json"
 
+	//V2 API
+	const val PROFILE = "/api/v2/member"
+	const val NOTIFICATIONS = "/api/v2/notifications"
+
 	const val SIGNIN = "/signin"
 	const val MORE = "/more"
 	const val TAB = "$BASE_URL/?tab="
 	const val BALANCE = "/balance"
 
 	const val MISSION_DAILY = "/mission/daily"
-	const val NOTIFICATIONS = "/notifications"
+//	const val NOTIFICATIONS = "/notifications"
 	const val FAVORITE_NODES = "/my/nodes"
 	const val UNREAD_NOTIFICATIONS = "/mission"
 	const val TWO_FACTOR_AUTH = "/2fa"

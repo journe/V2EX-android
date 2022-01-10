@@ -2,10 +2,10 @@ package com.journey.android.v2ex.module.login
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.google.common.net.HttpHeaders
 import com.journey.android.v2ex.libs.extension.toJsoup
 import com.journey.android.v2ex.model.Result
 import com.journey.android.v2ex.model.Result.Error
+import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.model.jsoup.SignInFormData
 import com.journey.android.v2ex.module.login.data.LoginForm
 import com.journey.android.v2ex.module.login.data.LoginResult
@@ -95,6 +95,10 @@ class LoginNetDataSource @Inject constructor(private val apiService: RetrofitSer
 
 	fun getUserInfoByName() {
 
+	}
+
+	suspend fun getProfile(): MemberBean {
+		return apiService.getProfile()
 	}
 
 }

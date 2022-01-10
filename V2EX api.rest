@@ -1,0 +1,4 @@
+### 获取最新的提醒
+GET https://www.v2ex.com/api/v2/notifications?p=1
+### 获取自己的 Profile
+GET https://www.v2ex.com/api/v2/member

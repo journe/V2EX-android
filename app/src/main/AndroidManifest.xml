@@ -27,7 +27,7 @@
     <activity android:name=".module.MemberInfoActivity" />
     <activity android:name=".module.SettingsActivity" />
     <activity android:name=".module.BalanceActivity" />
-    <activity android:name=".module.TestActivity" />
+    <activity android:name=".module.debug.TestActivity" />
   </application>
 
 </manifest>

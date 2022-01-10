@@ -113,6 +113,13 @@ interface RetrofitService {
 	@GET(Constants.MEMBERS)
 	fun getMemberInfo(@Query("username") name: String): Call<MemberBean>
 
+	@GET(Constants.PROFILE)
+	suspend fun getProfile(): MemberBean
+
+	@GET(Constants.NOTIFICATIONS)
+	suspend fun getNotifications(@Query("p") p: Int): MemberBean
+
+
 	@GET(Constants.SIGNIN)
 	fun getLogin(): Call<ResponseBody>
 

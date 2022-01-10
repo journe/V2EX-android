@@ -44,6 +44,14 @@ class PrefStore internal constructor(context: Context) : SharedPreferences.OnSha
           .apply()
     }
 
+  var personalAccessToken: String
+    get() = mPreferences.getString(PERSONAL_ACCESS_TOKEN, "") ?: ""
+    set(value) {
+      mPreferences.edit()
+          .putString(PERSONAL_ACCESS_TOKEN, value)
+          .apply()
+    }
+
   init {
     initPref()
     mPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -106,6 +114,7 @@ class PrefStore internal constructor(context: Context) : SharedPreferences.OnSha
     val PREF_CONTENT_SELECTABLE = "content_selectable"
     val NAME = "username"
     val PASS = "password"
+    val PERSONAL_ACCESS_TOKEN = "personal_access_token"
 
     fun requestBackup() {
       val manager = BackupManager(Utils.getContext())

@@ -73,7 +73,7 @@
   </fragment>
   <activity
       android:id="@+id/nav_test_dest"
-      android:name="com.journey.android.v2ex.module.TestActivity"
+      android:name="com.journey.android.v2ex.module.debug.TestActivity"
       android:label="test"
       tools:layout="@layout/activity_test" />
   <activity

@@ -53,9 +53,6 @@ object UserState {
 		SpUtils.put(SpKey.KEY_AVATAR, avatar.baseUrl)
 		SpUtils.put(SpKey.KEY_USERNAME, username)
 
-
-//		TrackerUtils.setUserId(username)
-//
 //		AppCtx.eventBus.post(LoginEvent(username))
 //		ExecutorUtils.execute { UserUtils.checkDailyAward() }
 	}
