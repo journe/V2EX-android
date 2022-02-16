@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.model.api.NodeBean
 import com.journey.android.v2ex.model.api.TopicShowSubtle
+import com.journey.android.v2ex.model.api.TopicShowTag
 import okhttp3.Cookie
 import java.util.*
 
@@ -80,6 +81,16 @@ class Converters {
 
   @TypeConverter
   fun NodeBeanToString(data: NodeBean?): String? {
+    return Gson().toJson(data)
+  }
+
+  @TypeConverter
+  fun stringToTopicShowTag(value: String?): List<TopicShowTag>? {
+    return Gson().fromJson(value, object : TypeToken<List<TopicShowTag>>() {}.type)
+  }
+
+  @TypeConverter
+  fun TopicShowTagToString(data: List<TopicShowTag>?): String? {
     return Gson().toJson(data)
   }
 }

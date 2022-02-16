@@ -74,16 +74,16 @@ class TopicDetailRepository @Inject constructor(
             val jsoupBean = TopicDetailParser.parseTopicDetail(doc)
             val replies = TopicDetailParser.parseComments(doc)
 
-            val apiBean = it.async { apiService.getTopicsById(topicId).first() }
+//            val apiBean = it.async { apiService.getTopicsById(topicId).first() }
 
             jsoupBean.id = topicId
             jsoupBean.url = Constants.BASE_URL + "/t/$topicId"
             jsoupBean.subtles?.forEach { it.id = topicId }
             replies.forEach { it.topic_id = topicId }
 
-            jsoupBean.created = apiBean.await().created
-            jsoupBean.last_modified = apiBean.await().last_modified
-            jsoupBean.last_touched = apiBean.await().last_touched
+//            jsoupBean.created = apiBean.await().created
+//            jsoupBean.last_modified = apiBean.await().last_modified
+//            jsoupBean.last_touched = apiBean.await().last_touched
 
             jsoupBean.local_touched = Date().time
 

@@ -36,6 +36,7 @@ data class TopicsShowBean(
     var last_touched: Long = 0,
     var local_touched: Long = 0,
     var created_str: String = "",
-    var subtles: MutableList<TopicShowSubtle>? = null
+    var subtles: MutableList<TopicShowSubtle>? = null,
+    var topic_tags: MutableList<TopicShowTag>? = null
 
 )

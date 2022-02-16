@@ -14,10 +14,12 @@ import coil.request.ImageRequest
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentTopicDetailBinding
 import com.journey.android.v2ex.libs.extension.launch
+import com.journey.android.v2ex.model.api.TopicShowSubtle
 import com.journey.android.v2ex.model.api.TopicsShowBean
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicCommentAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderAdapter
 import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderSubtleAdapter
+import com.journey.android.v2ex.module.topic.detail.adapter.TopicHeaderTagAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -39,7 +41,8 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
   override val mViewModel: TopicDetailViewModel by viewModels()
 
   private val topicHeaderAdapter = TopicHeaderAdapter(TopicsShowBean())
-  private val topicHeaderSubtleAdapter = TopicHeaderSubtleAdapter(TopicsShowBean())
+  private val topicHeaderSubtleAdapter = TopicHeaderSubtleAdapter(emptyList())
+  private val topicHeaderTagAdapter = TopicHeaderTagAdapter(emptyList())
   private val topicCommentAdapter = TopicCommentAdapter()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,7 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
     mBinding.topicDetailCommentsList.adapter = ConcatAdapter().apply {
       addAdapter(topicHeaderAdapter)
       addAdapter(topicHeaderSubtleAdapter)
+      addAdapter(topicHeaderTagAdapter)
       addAdapter(topicCommentAdapter)
     }
 
@@ -93,17 +97,19 @@ class TopicDetailFragment : BaseFragment<FragmentTopicDetailBinding, TopicDetail
 
   override fun initObserve() {
 
-    mViewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner, {
+    mViewModel.getTopicsShowBean(safeArgs.topicId).observe(viewLifecycleOwner) {
       if (it != null) {
         mBinding.topicDetailNodeTv.text = it.node.name
         mBinding.topicDetailCreateTimeTv.text = it.created_str
 
         topicHeaderAdapter.topicDetailBean = it
         topicHeaderAdapter.notifyDataSetChanged()
-        topicHeaderSubtleAdapter.topicDetailBean = it
+        topicHeaderSubtleAdapter.list = it.subtles
         topicHeaderSubtleAdapter.notifyDataSetChanged()
+        topicHeaderTagAdapter.list = it.topic_tags
+        topicHeaderTagAdapter.notifyDataSetChanged()
       }
-    })
+    }
 
     launch({
       mViewModel.getTopicReplyPager(safeArgs.topicId)
