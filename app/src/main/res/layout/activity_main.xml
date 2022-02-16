@@ -5,7 +5,6 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:openDrawer="start"
     >
   <LinearLayout
@@ -27,20 +26,31 @@
           />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_constraint"
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-      <fragment
-          android:id="@+id/nav_host_fragment"
-          android:name="androidx.navigation.fragment.NavHostFragment"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          app:defaultNavHost="true"
-          app:navGraph="@navigation/navigation_graph_main"
-          />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation_graph_main"
+        />
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/main_constraint"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:background="@color/colorActionSheetCancelText"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        >-->
+    <!--      <fragment-->
+    <!--          android:id="@+id/nav_host_fragment"-->
+    <!--          android:name="androidx.navigation.fragment.NavHostFragment"-->
+    <!--          android:layout_width="match_parent"-->
+    <!--          android:layout_height="match_parent"-->
+    <!--          app:defaultNavHost="true"-->
+    <!--          app:navGraph="@navigation/navigation_graph_main"-->
+    <!--          />-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
   </LinearLayout>
 
   <com.google.android.material.navigation.NavigationView

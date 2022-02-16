@@ -57,13 +57,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 	override fun ActivityMainBinding.initView() {
 		setSupportActionBar(mBinding.mainToolbar)
 
-		EdgeToEdge.setUpRoot(findViewById(R.id.drawer_layout))
+		EdgeToEdge.setUpRoot(mBinding.drawerLayout)
 		EdgeToEdge.setUpAppBar(mBinding.appBar, mBinding.mainToolbar)
-		EdgeToEdge.setUpScrollingContent(findViewById(R.id.main_constraint))
+		EdgeToEdge.setUpScrollingContent(mBinding.navHostFragment)
 
 		val host: NavHostFragment = supportFragmentManager
 			.findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
 		val navController = host.navController
+//		val navController = mBinding.navHostFragment.findNavController()
 
 		appBarConfiguration = AppBarConfiguration(
 			setOf(

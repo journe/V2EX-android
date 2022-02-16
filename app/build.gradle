@@ -20,6 +20,12 @@ android {
   }
   buildTypes {
 
+    debug {
+      ext.enableCrashlytics = false
+      ext.alwaysUpdateBuildId = false
+      minifyEnabled false
+    }
+
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -44,7 +50,7 @@ kapt {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
 
   //核心 基础库
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
