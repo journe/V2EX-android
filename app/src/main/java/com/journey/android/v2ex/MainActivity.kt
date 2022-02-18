@@ -11,9 +11,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import coil.load
 import com.journey.android.v2ex.base.BaseActivity
 import com.journey.android.v2ex.databinding.ActivityMainBinding
+import com.journey.android.v2ex.libs.SpKey
+import com.journey.android.v2ex.libs.SpUtils
 import com.journey.android.v2ex.libs.extension.gone
+import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.transition.EdgeToEdge
 import com.journey.android.v2ex.router.Router
@@ -90,7 +94,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
 		if (UserState.islogin) {
 			mAwardButton.visible()
-			mUsername.text = UserState.username
+			mUsername.text = SpUtils.getString(SpKey.KEY_USERNAME, "")!!
+			mAvatar.load(SpUtils.getString(SpKey.KEY_AVATAR, "")!!.largeAvatar())
 		}else{
 			mAwardButton.gone()
 			mUsername.text = resources.getString(R.string.action_sign_in)

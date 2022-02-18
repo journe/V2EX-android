@@ -16,12 +16,13 @@ object UserState {
 
 	val islogin = SpUtils.getBoolean(SpKey.IS_LOGIN, false)!!
 
-	val token = SpUtils.getString(SpKey.TOKEN, "54839a53-25a8-4388-9201-b662cddded9e")
+	val token = SpUtils.getString(SpKey.TOKEN, "")
 
 	fun init() {
 //        RxBus.post(NewUnreadEvent(0))
 
 		username = SpUtils.getString(SpKey.KEY_USERNAME, "")!!
+		username = SpUtils.getString(SpKey.KEY_AVATAR, "")!!
 
 //		RxBus.subscribe<DailyAwardEvent> {
 //			mHasAward = it.mHasAward

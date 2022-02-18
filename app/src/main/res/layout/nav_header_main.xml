@@ -27,6 +27,7 @@
       android:layout_height="wrap_content"
       android:paddingTop="@dimen/nav_header_vertical_spacing"
       android:text="@string/action_sign_in"
+      android:textStyle="bold"
       android:textAppearance="@style/TextAppearance.AppCompat.Body1"
       app:layout_constraintEnd_toEndOf="@+id/avatar_img"
       app:layout_constraintStart_toStartOf="@+id/avatar_img"
@@ -42,13 +43,15 @@
       android:drawablePadding="4dp"
       android:gravity="center_vertical"
       android:paddingTop="8dp"
+      android:paddingEnd="4dp"
       android:paddingBottom="8dp"
       android:text="@string/tv_daily_bonus"
       android:textColor="#fff"
       android:textStyle="bold|italic"
       app:drawableStartCompat="@drawable/ic_card_giftcard_white_24dp"
-      app:layout_constraintBaseline_toBaselineOf="@+id/username_tv"
+      app:layout_constraintBottom_toBottomOf="@+id/username_tv"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/avatar_img"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

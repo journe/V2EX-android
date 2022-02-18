@@ -34,7 +34,10 @@ object CommonParser {
 	@JvmStatic
 	fun loginResult(doc: Document): LoginResult {
 		val content = doc.body()
-			.selectFirst("img.avatar mobile")
+			.select("header")
+			.select("div")
+			.select("button")
+			.select("img")
 		return LoginResult(
 			avatar = Avatar.Builder().setUrl(content.attr("src")).build(),
 			username = content.attr("alt")

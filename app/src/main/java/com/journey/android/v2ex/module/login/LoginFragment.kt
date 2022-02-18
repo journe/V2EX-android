@@ -96,9 +96,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 	}
 
 	override fun initObserve() {
-		mViewModel.captchaBitmap.observe(viewLifecycleOwner, {
+		mViewModel.captchaBitmap.observe(viewLifecycleOwner) {
 			mBinding.loginCaptchaIv.load(it)
-		})
+		}
 
 		mViewModel.errorMessage.observe(viewLifecycleOwner) {
 			if (it.isNotEmpty()) {
@@ -113,7 +113,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 			mViewModel.getCaptcha(captchaUrl)
 		}
 
-		mViewModel.loginFormState.observe(viewLifecycleOwner, {
+		mViewModel.loginFormState.observe(viewLifecycleOwner) {
 			val loginState = it
 			// disable login button unless both username / password is valid
 			mBinding.signInButton.isEnabled = loginState.isDataValid
@@ -124,10 +124,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 			if (loginState.passwordError != null) {
 				mBinding.loginPassword.error = getString(loginState.passwordError)
 			}
-		})
+		}
 
 		//登录结果处理
-		mViewModel.loginResult.observe(viewLifecycleOwner, {
+		mViewModel.loginResult.observe(viewLifecycleOwner) {
 			showProgress(false)
 			when (it) {
 				is Result.Success -> {
@@ -144,7 +144,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 						.create().setDimAmount(0.6f).show()
 				}
 			}
-		})
+		}
 
 		mViewModel.loadingState.observe(viewLifecycleOwner) {
 			showProgress(it)

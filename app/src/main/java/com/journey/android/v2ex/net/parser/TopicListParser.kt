@@ -17,80 +17,77 @@ import org.jsoup.nodes.Document
  *   *: 这个符号将匹配所有元素
  */
 object TopicListParser {
-  private val PATTERN_NUMBERS = "\\d+".toRegex()
+	private val PATTERN_NUMBERS = "\\d+".toRegex()
 
-  /**
-   * <tr>
-   *  <td width="24" valign="top" align="center"><a href="/member/zshstc">
-   *    <img src="//cdn.v2ex.com/avatar/c5b0/3cd6/193770_normal.png?m=1538493394" class="avatar" border="0" align="default" style="max-width: 24px; max-height: 24px;"></a>
-   *  </td>
-   *  <td width="10"></td>
-   *  <td width="auto" valign="middle">
-   *    <span class="small fade">
-   *      <a class="node" href="/go/macos">macOS</a> &nbsp;•&nbsp;
-   *      <strong>
-   *        <a href="/member/zshstc">zshstc</a>
-   *      </strong>
-   *    </span>
-   *   <div class="sep5"></div>
-   *   <span class="item_title"><a href="/t/530863#reply14">请教下 Mac OS 下如何隐藏多余的 wifi?</a></span>
-   *   <div class="sep5"></div>
-   *   <span class="small fade">2 天前 &nbsp;•&nbsp; 最后回复 <strong><a href="/member/NeoChen">NeoChen</a></strong></span>
-   *  </td>
-   *  <td width="70" align="right" valign="middle"> <a href="/t/530863#reply14" class="count_livid">14</a> </td>
-   * </tr>
-   */
+	/**
+	 * <tr>
+	 *  <td width="24" valign="top" align="center"><a href="/member/zshstc">
+	 *    <img src="//cdn.v2ex.com/avatar/c5b0/3cd6/193770_normal.png?m=1538493394" class="avatar" border="0" align="default" style="max-width: 24px; max-height: 24px;"></a>
+	 *  </td>
+	 *  <td width="10"></td>
+	 *  <td width="auto" valign="middle">
+	 *    <span class="small fade">
+	 *      <a class="node" href="/go/macos">macOS</a> &nbsp;•&nbsp;
+	 *      <strong>
+	 *        <a href="/member/zshstc">zshstc</a>
+	 *      </strong>
+	 *    </span>
+	 *   <div class="sep5"></div>
+	 *   <span class="item_title"><a href="/t/530863#reply14">请教下 Mac OS 下如何隐藏多余的 wifi?</a></span>
+	 *   <div class="sep5"></div>
+	 *   <span class="small fade">2 天前 &nbsp;•&nbsp; 最后回复 <strong><a href="/member/NeoChen">NeoChen</a></strong></span>
+	 *  </td>
+	 *  <td width="70" align="right" valign="middle"> <a href="/t/530863#reply14" class="count_livid">14</a> </td>
+	 * </tr>
+	 */
 
-  @JvmStatic
-  fun parseTopicList(doc: Document): List<TopicsListItemBean> {
-    val content = doc.body()
-      .selectFirst("#Wrapper")
-      .selectFirst(".content")
-      .selectFirst(".box")
-      .select(".cell.item")
-      .select("table")
-      .select("tbody")
-      .select("tr")
-    val topicList: MutableList<TopicsListItemBean> = mutableListOf()
-    for (element in content) {
+	@JvmStatic
+	fun parseTopicList(doc: Document): List<TopicsListItemBean> {
+		val content = doc.body()
+			.selectFirst("#Wrapper")
+			.selectFirst(".content")
+			.selectFirst(".box")
+			.select(".cell.item")
+			.select("table")
+			.select("tbody")
+			.select("tr")
+		val topicList: MutableList<TopicsListItemBean> = mutableListOf()
+		for (element in content) {
 //      Logger.d(element.toString())
-      val td = element.select("td")
-      val topicListBean = TopicsListItemBean().apply {
-        memberName = td[0].select("a")
-          .attr("href")
-          .substringAfterLast("/")
-        memberAvatar = td[0].select("a")
-          .select("img")
-          .attr("src")
-        url = td[2].select(".item_title")
-          .select("a")
-          .attr("href")
-        id = PATTERN_NUMBERS.find(url!!)!!.value.toInt()
-        title = td[2].select(".item_title")
-          .select("a")
-          .text()
-        nodeName = td[2].selectFirst(".small.fade")
-          .select(".node")
-          .text()
-        replies = if (td[3].select("a")
-            .text()
-            .isEmpty()
-        ) {
-          0
-        } else {
-          td[3].select("a")
-            .text()
-            .toInt()
-        }
+			val td = element.select("td")
+			val topicListBean = TopicsListItemBean().apply {
+				memberName = td[0].select("a")
+					.attr("href")
+					.substringAfterLast("/")
+				memberAvatar = td[0].select("a")
+					.select("img")
+					.attr("src")
+				url = td[2].select(".item_title")
+					.select("a")
+					.attr("href")
+				id = PATTERN_NUMBERS.find(url!!)!!.value.toInt()
+				title = td[2].select(".item_title")
+					.select("a")
+					.text()
+				nodeName = td[2].selectFirst(".small.fade")
+					.select(".node")
+					.text()
+				replies = if (td[3].selectFirst(".count_livid") == null) {
+					0
+				} else {
+					td[3].selectFirst(".count_livid")
+						.text()
+						.toInt()
+				}
 
-        var strList: List<String> = td[2].select(".small.fade")[1]
-          .text()
-          .split(" • ")
-        last_modified_str = strList[0]
-      }
+				var strList: List<String> = td[2].select(".small.fade")[1]
+					.text()
+					.split(" • ")
+				last_modified_str = strList[0]
+			}
 
-      topicList.add(topicListBean)
-    }
-    return topicList
-  }
+			topicList.add(topicListBean)
+		}
+		return topicList
+	}
 }
