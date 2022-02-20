@@ -34,6 +34,9 @@ class TestActivity : BaseActivity<ActivityTestBinding, TestViewModel>() {
 		button4.setOnClickListener {
 			startActivity(Intent(this@TestActivity, BalanceActivity::class.java))
 		}
+		allnodes.setOnClickListener {
+			mViewModel.getAllNodes()
+		}
 	}
 
 	override fun initObserve() {

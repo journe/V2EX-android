@@ -3,6 +3,7 @@ package com.journey.android.v2ex.module.debug
 import com.journey.android.v2ex.base.BaseViewModel
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.module.login.LoginRepository
+import com.journey.android.v2ex.module.node.NodeListRepository
 import com.journey.android.v2ex.room.AppDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TestViewModel @Inject constructor(
 	private val loginRepository: LoginRepository,
+	private val nodeListRepository: NodeListRepository,
 	val db: AppDatabase
 ) : BaseViewModel() {
 	fun deleteCache() {
@@ -23,5 +25,12 @@ class TestViewModel @Inject constructor(
 		launch({
 			loginRepository.getProfile()
 		})
+	}
+
+	fun getAllNodes() {
+		launch({
+			nodeListRepository.requestDataLocal()
+		})
+
 	}
 }

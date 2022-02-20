@@ -1,5 +1,6 @@
 package com.journey.android.v2ex.model.api
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
@@ -20,7 +21,7 @@ import androidx.room.PrimaryKey
  * root : false
  * parent_node_name : v2ex
  */
-
+@Entity
 data class NodeBean(
   @PrimaryKey
   var id: Int = 0,

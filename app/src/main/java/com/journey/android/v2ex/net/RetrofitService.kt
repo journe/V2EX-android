@@ -80,7 +80,7 @@ interface RetrofitService {
 	fun getSiteStats(): Call<SiteStatsBean>
 
 	@GET(Constants.NODES_ALL)
-	fun getNodesAll(): Call<ArrayList<NodeBean>>
+	suspend fun getNodesAll(): ArrayList<NodeBean>
 
 	@GET(Constants.NODES_SHOW)
 	fun getNodesShow(@Query("id") id: Int): Call<NodeBean>
