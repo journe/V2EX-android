@@ -29,7 +29,7 @@ class TestViewModel @Inject constructor(
 
 	fun getAllNodes() {
 		launch({
-			nodeListRepository.requestDataLocal()
+//			nodeListRepository.requestDataLocal()
 		})
 
 	}

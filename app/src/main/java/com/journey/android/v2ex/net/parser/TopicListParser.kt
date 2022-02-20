@@ -2,6 +2,7 @@ package com.journey.android.v2ex.net.parser
 
 import com.journey.android.v2ex.model.api.TopicsListItemBean
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * Selector选择器概述
@@ -43,17 +44,30 @@ object TopicListParser {
 
 	@JvmStatic
 	fun parseTopicList(doc: Document): List<TopicsListItemBean> {
-		val content = doc.body()
+		val topicList: MutableList<TopicsListItemBean> = mutableListOf()
+		val boxes = doc.body()
 			.selectFirst("#Wrapper")
 			.selectFirst(".content")
-			.selectFirst(".box")
+			.select(".box")
+		if (boxes.count() == 3) {
+			genTopicList(boxes[1], topicList)
+		} else {
+			genTopicList(boxes[0], topicList)
+		}
+		return topicList
+	}
+
+	private fun genTopicList(
+		box: Element,
+		topicList: MutableList<TopicsListItemBean>
+	) {
+		val content = box
 			.select(".cell.item")
 			.select("table")
 			.select("tbody")
 			.select("tr")
-		val topicList: MutableList<TopicsListItemBean> = mutableListOf()
+
 		for (element in content) {
-//      Logger.d(element.toString())
 			val td = element.select("td")
 			val topicListBean = TopicsListItemBean().apply {
 				memberName = td[0].select("a")
@@ -88,6 +102,6 @@ object TopicListParser {
 
 			topicList.add(topicListBean)
 		}
-		return topicList
 	}
+
 }

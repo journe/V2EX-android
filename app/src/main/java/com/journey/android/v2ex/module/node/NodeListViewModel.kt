@@ -12,11 +12,8 @@ class NodeListViewModel @Inject constructor(
 	private val repository: NodeListRepository
 ) : BaseViewModel() {
 
-	fun request() {
-		launch({
-			repository.requestDataLocal()
-		})
-	}
+
+	fun request() = repository.requestDataLocal().cachedIn(viewModelScope)
 
 	fun refresh() {
 		launch({

@@ -18,9 +18,11 @@
         android:id="@+id/node_list_recycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="4"
-        tools:listitem="@layout/activity_node_list_item"
+        tools:listitem="@layout/fragment_node_list_item"
         />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

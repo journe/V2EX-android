@@ -1,9 +1,13 @@
 package com.journey.android.v2ex.module.node
 
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionManager
 import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentNodeListBinding
+import com.journey.android.v2ex.libs.extension.launch
+import com.journey.android.v2ex.libs.transition.Stagger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class NodeListFragment : BaseFragment<FragmentNodeListBinding, NodeListViewModel>() {
@@ -12,14 +16,26 @@ class NodeListFragment : BaseFragment<FragmentNodeListBinding, NodeListViewModel
 		mBinding.nodeListRefresh.setOnRefreshListener {
 			mViewModel.refresh()
 		}
+
+		val adapter = NodeListAdapter()
+		mBinding.nodeListRecycle.adapter = adapter
+		val stagger = Stagger()
+		launch({
+			mViewModel.request()
+				.collectLatest {
+					mBinding.nodeListRefresh.isRefreshing = false
+					TransitionManager.beginDelayedTransition(mBinding.nodeListRecycle, stagger)
+					adapter.submitData(it)
+				}
+		})
+
 	}
 
 	override fun initObserve() {
 	}
 
 	override fun initRequestData() {
-		mViewModel.request()
-		mViewModel.refresh()
+//		mViewModel.refresh()
 	}
 
 	private fun doGetNodes() {

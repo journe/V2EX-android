@@ -1,8 +1,8 @@
 package com.journey.android.v2ex.module.node
 
-import androidx.paging.PagingSource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.journey.android.v2ex.base.BaseRepository
-import com.journey.android.v2ex.model.api.NodeBean
 import com.journey.android.v2ex.net.RetrofitService
 import com.journey.android.v2ex.room.AppDatabase
 import javax.inject.Inject
@@ -14,9 +14,11 @@ class NodeListRepository @Inject constructor(
 	private val apiService: RetrofitService
 ) : BaseRepository() {
 
-	suspend fun requestDataLocal(): PagingSource<Int, NodeBean> {
-		return db.nodeListDao().pagingSource()
-	}
+
+	fun requestDataLocal() =
+		Pager(PagingConfig(pageSize = 20)) {
+			db.nodeListDao().pagingSource()
+		}.flow
 
 	suspend fun refresh() {
 		val list = apiService.getNodesAll()
