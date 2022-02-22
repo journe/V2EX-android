@@ -20,6 +20,7 @@ import com.journey.android.v2ex.libs.extension.gone
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.libs.extension.visible
 import com.journey.android.v2ex.libs.transition.EdgeToEdge
+import com.journey.android.v2ex.module.topic.MainFragmentDirections
 import com.journey.android.v2ex.router.Router
 import com.journey.android.v2ex.utils.UserState
 import com.zzhoujay.richtext.RichText
@@ -75,6 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 				R.id.main_dest,
 				R.id.nodeList_dest,
 				R.id.settings_dest,
+				R.id.profile_dest,
 				R.id.history_dest
 			),//顶层导航设置
 			mBinding.drawerLayout
@@ -84,8 +86,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
 		val headerView = mBinding.navView.getHeaderView(0)
 		headerView.setOnClickListener {
-			navController.navigate(R.id.login_dest)
-			mBinding.drawerLayout.closeDrawers()
+
+			if (UserState.islogin) {
+				navController.navigate(MainFragmentDirections.profile(UserState.username))
+				mBinding.drawerLayout.closeDrawers()
+			} else {
+				navController.navigate(R.id.login_dest)
+				mBinding.drawerLayout.closeDrawers()
+			}
+
 		}
 
 		val mAvatar: ImageView = headerView.findViewById(R.id.avatar_img)
@@ -96,7 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 			mAwardButton.visible()
 			mUsername.text = SpUtils.getString(SpKey.KEY_USERNAME, "")!!
 			mAvatar.load(SpUtils.getString(SpKey.KEY_AVATAR, "")!!.largeAvatar())
-		}else{
+		} else {
 			mAwardButton.gone()
 			mUsername.text = resources.getString(R.string.action_sign_in)
 		}

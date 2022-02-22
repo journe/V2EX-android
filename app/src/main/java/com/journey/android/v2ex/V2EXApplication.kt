@@ -8,6 +8,7 @@ import com.journey.android.v2ex.base.BaseApplication
 import com.journey.android.v2ex.libs.ProcessLifecycleObserver
 import com.journey.android.v2ex.libs.SpKey
 import com.journey.android.v2ex.libs.SpUtils
+import com.journey.android.v2ex.utils.UserState
 import com.journey.android.v2ex.utils.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -42,6 +43,8 @@ class V2EXApplication : BaseApplication(), ImageLoaderFactory {
 		Utils.init(this)
 
 		SpUtils.initMMKV(this)
+
+		UserState.init()
 	}
 
 	override fun newImageLoader(): ImageLoader {

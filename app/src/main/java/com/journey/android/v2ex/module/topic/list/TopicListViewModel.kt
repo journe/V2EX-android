@@ -9,22 +9,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopicListViewModel @Inject constructor(
-  private val repository: TopicListRepository
+	private val repository: TopicListRepository
 ) : BaseViewModel() {
 
-  fun request(tabName: String) {
-    launch({
-      repository.requestData(tabName)
-    })
+	fun requestByNode(tabName: String) {
+		launch({
+			repository.requestByNode(tabName)
+		})
 
-  }
+	}
 
-  fun getTopicListBean(tabName: String) = repository.getList(tabName).cachedIn(viewModelScope)
+	fun getTopicListBeanByNode(tabName: String) =
+		repository.getDataSourceByTab(tabName).cachedIn(viewModelScope)
 
-  fun refresh(tabName: String) {
-    launch({
-      repository.refresh(tabName)
-    })
+	fun refreshByNode(tabName: String) {
+		launch({
+			repository.refreshByNode(tabName)
+		})
+	}
 
-  }
+	fun requestByUser(username: String) {
+		launch({
+			repository.requestByUser(username)
+		})
+
+	}
+
+	fun getTopicListBeanByUser(username: String) =
+		repository.getDataSourceByUser(username).cachedIn(viewModelScope)
+
+	fun refreshByUser(username: String) {
+		launch({
+			repository.refreshByNode(username)
+		})
+	}
+
+
 }

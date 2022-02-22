@@ -38,8 +38,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
 	private fun loginSuccess(model: LoginResult) {
 		val welcome = getString(R.string.toast_login_success)
-		val displayName = model.username
-		ToastUtils.showLongToast("$welcome $displayName")
+		val displayName = welcome + model.username
+		toast(displayName)
 	}
 
 	/**

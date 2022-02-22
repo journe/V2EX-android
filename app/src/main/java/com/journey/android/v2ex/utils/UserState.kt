@@ -22,7 +22,7 @@ object UserState {
 //        RxBus.post(NewUnreadEvent(0))
 
 		username = SpUtils.getString(SpKey.KEY_USERNAME, "")!!
-		username = SpUtils.getString(SpKey.KEY_AVATAR, "")!!
+//		username = SpUtils.getString(SpKey.KEY_AVATAR, "")!!
 
 //		RxBus.subscribe<DailyAwardEvent> {
 //			mHasAward = it.mHasAward

@@ -95,7 +95,7 @@ interface RetrofitService {
 	suspend fun getTopicsById(@Query("id") id: Int): List<TopicsShowBean>
 
 	@GET(Constants.TOPICS_SHOW)
-	fun getTopicsByUser(@Query("username") username: String): Call<ArrayList<TopicsShowBean>>
+	suspend fun getTopicsByUser(@Query("username") username: String): List<TopicsListItemBean>
 
 	@GET(Constants.TOPICS_SHOW)
 	fun getTopicsByNode(@Query("node_id") nodeId: Int): Call<ArrayList<TopicsListItemBean>>
@@ -111,7 +111,7 @@ interface RetrofitService {
 	fun getMemberInfoByID(@Query("id") id: Int): Call<MemberBean>
 
 	@GET(Constants.MEMBERS)
-	fun getMemberInfo(@Query("username") name: String): Call<MemberBean>
+	suspend fun getMemberInfo(@Query("username") name: String): MemberBean
 
 	@GET(Constants.PROFILE)
 	suspend fun getProfile(): MemberBean

@@ -46,17 +46,17 @@ class MemberInfoActivity : AppCompatActivity() {
     }
 
     private fun getMemberInfo() {
-        val call = apiService.getMemberInfo(mUserName)
-        call.enqueue(object : Callback<MemberBean> {
-            override fun onFailure(call: Call<MemberBean>?, t: Throwable?) {
-                Logger.d(t?.message)
-            }
-
-            override fun onResponse(call: Call<MemberBean>?, response: Response<MemberBean>?) {
-                mMemberBean = response!!.body()!!
-                initView()
-            }
-        })
+//        val call = apiService.getMemberInfo(mUserName)
+//        call.enqueue(object : Callback<MemberBean> {
+//            override fun onFailure(call: Call<MemberBean>?, t: Throwable?) {
+//                Logger.d(t?.message)
+//            }
+//
+//            override fun onResponse(call: Call<MemberBean>?, response: Response<MemberBean>?) {
+//                mMemberBean = response!!.body()!!
+//                initView()
+//            }
+//        })
     }
 
 

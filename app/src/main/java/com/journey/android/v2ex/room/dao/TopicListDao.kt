@@ -16,6 +16,9 @@ interface TopicListDao : BaseDao<TopicsListItemBean> {
     @Query("SELECT * FROM TopicsListItemBean WHERE tab=:tab ORDER BY indexInResponse ASC")
     fun pagingSource(tab: String): PagingSource<Int, TopicsListItemBean>
 
+    @Query("SELECT * FROM TopicsListItemBean WHERE memberName=:name ORDER BY created DESC")
+    fun userPagingSource(name: String): PagingSource<Int, TopicsListItemBean>
+
     @Query("SELECT COUNT(id) FROM TopicsListItemBean WHERE tab=:tab ")
     fun topicCount(tab: String): Int
 

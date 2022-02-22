@@ -73,7 +73,12 @@ class TopicListAdapter :
         } else {
             holder.starIv.invisible()
         }
-        holder.avatar.load(itemBean.memberAvatar.largeAvatar())
+        if (itemBean.memberAvatar.isEmpty()) {
+            holder.avatar.load(itemBean.member?.avatar_large)
+        }else{
+            holder.avatar.load(itemBean.memberAvatar.largeAvatar())
+        }
+
     }
 
     companion object {

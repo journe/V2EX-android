@@ -9,7 +9,6 @@ import com.journey.android.v2ex.base.BaseFragment
 import com.journey.android.v2ex.databinding.FragmentTopicListBinding
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
-import com.journey.android.v2ex.net.RetrofitService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -47,7 +46,7 @@ class TopicListFragment(private val nodeName: String) :
       )
     val adapter = TopicListAdapter()
     mBinding.topicListRefreshview.setOnRefreshListener {
-      mViewModel.refresh(nodeName)
+      mViewModel.refreshByNode(nodeName)
     }
     mBinding.topicListRecycleview.adapter = adapter
     // We animate item additions on our side, so disable it in RecyclerView.
@@ -60,7 +59,7 @@ class TopicListFragment(private val nodeName: String) :
     }
     val stagger = Stagger()
     launch({
-      mViewModel.getTopicListBean(nodeName)
+      mViewModel.getTopicListBeanByNode(nodeName)
         .collectLatest {
           mBinding.topicListRefreshview.isRefreshing = false
           TransitionManager.beginDelayedTransition(mBinding.topicListRefreshview, stagger)
@@ -74,6 +73,6 @@ class TopicListFragment(private val nodeName: String) :
   }
 
   override fun initRequestData() {
-    mViewModel.request(nodeName)
+    mViewModel.requestByNode(nodeName)
   }
 }

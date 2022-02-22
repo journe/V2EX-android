@@ -21,6 +21,9 @@
     <action
         android:id="@+id/action_main_dest_to_settingsActivity"
         app:destination="@id/settings_dest" />
+    <action
+        android:id="@+id/profile"
+        app:destination="@id/profile_dest" />
   </fragment>
 
   <fragment
@@ -88,5 +91,14 @@
     <action
         android:id="@+id/action_history_dest_to_topicDetail_dest"
         app:destination="@id/topicDetail_dest" />
+  </fragment>
+  <fragment
+      android:id="@+id/profile_dest"
+      android:name="com.journey.android.v2ex.module.profile.ProfileFragment"
+      android:label="@string/pref_title_user_info"
+      tools:layout="@layout/fragment_profile" >
+    <argument
+        android:name="username"
+        app:argType="string" />
   </fragment>
 </navigation>
