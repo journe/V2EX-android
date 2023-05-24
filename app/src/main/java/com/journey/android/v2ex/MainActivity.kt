@@ -61,7 +61,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 	override fun ActivityMainBinding.initView() {
 		setSupportActionBar(mBinding.mainToolbar)
 
-		EdgeToEdge.setUpRoot(mBinding.drawerLayout)
+		EdgeToEdge.setUpRoot(mBinding.root)
 		EdgeToEdge.setUpAppBar(mBinding.appBar, mBinding.mainToolbar)
 		EdgeToEdge.setUpScrollingContent(mBinding.navHostFragment)
 
@@ -77,7 +77,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 				R.id.settings_dest,
 				R.id.history_dest
 			),//顶层导航设置
-			mBinding.drawerLayout
+			mBinding.root
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		mBinding.navView.setupWithNavController(navController)
@@ -85,7 +85,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 		val headerView = mBinding.navView.getHeaderView(0)
 		headerView.setOnClickListener {
 			navController.navigate(R.id.login_dest)
-			mBinding.drawerLayout.closeDrawers()
+			mBinding.root.closeDrawers()
 		}
 
 		val mAvatar: ImageView = headerView.findViewById(R.id.avatar_img)
