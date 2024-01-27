@@ -62,7 +62,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 	override fun ActivityMainBinding.initView() {
 		setSupportActionBar(mBinding.mainToolbar)
 
-		EdgeToEdge.setUpRoot(mBinding.drawerLayout)
+		EdgeToEdge.setUpRoot(mBinding.root)
 		EdgeToEdge.setUpAppBar(mBinding.appBar, mBinding.mainToolbar)
 		EdgeToEdge.setUpScrollingContent(mBinding.navHostFragment)
 
@@ -79,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 				R.id.profile_dest,
 				R.id.history_dest
 			),//顶层导航设置
-			mBinding.drawerLayout
+			mBinding.root
 		)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 		mBinding.navView.setupWithNavController(navController)

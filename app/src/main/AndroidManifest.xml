@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.journey.android.v2ex">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
 
-  <application
-      android:name=".V2EXApplication"
-      android:allowBackup="true"
-      android:fullBackupContent="true"
-      android:icon="@mipmap/ic_launcher"
-      android:label="@string/app_name"
-      android:supportsRtl="true"
-      android:theme="@style/AppTheme"
-      android:usesCleartextTraffic="true">
-    <activity android:name=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <action android:name="android.intent.action.VIEW" />
+    <application
+        android:name=".V2EXApplication"
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-      <nav-graph android:value="@navigation/navigation_graph_main" />
-    </activity>
-    <activity android:name=".module.MemberInfoActivity" />
-    <activity android:name=".module.SettingsActivity" />
-    <activity android:name=".module.BalanceActivity" />
-    <activity android:name=".module.debug.TestActivity" />
-  </application>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <nav-graph android:value="@navigation/navigation_graph_main" />
+        </activity>
+        <activity android:name=".module.MemberInfoActivity" />
+        <activity android:name=".module.SettingsActivity" />
+        <activity android:name=".module.BalanceActivity" />
+        <activity android:name=".module.debug.TestActivity" />
+    </application>
 
 </manifest>

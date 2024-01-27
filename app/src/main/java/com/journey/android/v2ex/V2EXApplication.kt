@@ -52,7 +52,6 @@ class V2EXApplication : BaseApplication(), ImageLoaderFactory {
 			.crossfade(true)
 			.okHttpClient {
 				OkHttpClient.Builder()
-					.cache(CoilUtils.createDefaultCache(applicationContext))
 					.build()
 			}
 			.build()
