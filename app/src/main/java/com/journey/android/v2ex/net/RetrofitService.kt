@@ -100,6 +100,7 @@ interface RetrofitService {
 	@GET(Constants.TOPICS_SHOW)
 	fun getTopicsByNode(@Query("node_id") nodeId: Int): Call<ArrayList<TopicsListItemBean>>
 
+	//取主题回复
 	@GET(Constants.REPLIES)
 	suspend fun getRepliesSuspend(
 		@Query("topic_id") id: Int,

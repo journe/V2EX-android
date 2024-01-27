@@ -10,15 +10,13 @@ import com.journey.android.v2ex.databinding.FragmentTopicListBinding
 import com.journey.android.v2ex.libs.extension.launch
 import com.journey.android.v2ex.libs.transition.Stagger
 import com.journey.android.v2ex.module.topic.list.TopicListAdapter
-import com.journey.android.v2ex.module.topic.list.TopicListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MemberTopicReplyFragment(private val username: String) :
-	BaseFragment<FragmentTopicListBinding, TopicListViewModel>() {
+	BaseFragment<FragmentTopicListBinding, MemberTopicReplyViewModel>() {
 
-	override val mViewModel: TopicListViewModel by viewModels()
+	override val mViewModel: MemberTopicReplyViewModel by viewModels()
 
 	companion object {
 		fun newInstance(
@@ -47,9 +45,9 @@ class MemberTopicReplyFragment(private val username: String) :
 				)
 			)
 		val adapter = TopicListAdapter()
-		mBinding.topicListRefreshview.setOnRefreshListener {
-			mViewModel.refreshByNode(username)
-		}
+//		mBinding.topicListRefreshview.setOnRefreshListener {
+//			mViewModel.refreshByNode(username)
+//		}
 		mBinding.topicListRecycleview.adapter = adapter
 		// We animate item additions on our side, so disable it in RecyclerView.
 		mBinding.topicListRecycleview.itemAnimator = object : DefaultItemAnimator() {
@@ -60,14 +58,14 @@ class MemberTopicReplyFragment(private val username: String) :
 			}
 		}
 		val stagger = Stagger()
-		launch({
-			mViewModel.getTopicListBeanByNode(username)
-				.collectLatest {
-					mBinding.topicListRefreshview.isRefreshing = false
-					TransitionManager.beginDelayedTransition(mBinding.topicListRefreshview, stagger)
-					adapter.submitData(it)
-				}
-		})
+//		launch({
+//			mViewModel.getTopicListBeanByNode(username)
+//				.collectLatest {
+//					mBinding.topicListRefreshview.isRefreshing = false
+//					TransitionManager.beginDelayedTransition(mBinding.topicListRefreshview, stagger)
+//					adapter.submitData(it)
+//				}
+//		})
 
 	}
 
@@ -75,6 +73,6 @@ class MemberTopicReplyFragment(private val username: String) :
 	}
 
 	override fun initRequestData() {
-		mViewModel.requestByNode(username)
+//		mViewModel.requestByNode(username)
 	}
 }

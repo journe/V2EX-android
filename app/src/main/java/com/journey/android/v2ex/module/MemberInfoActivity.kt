@@ -8,16 +8,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.journey.android.v2ex.R
-import com.journey.android.v2ex.base.BaseActivity
 import com.journey.android.v2ex.libs.extension.largeAvatar
 import com.journey.android.v2ex.model.api.MemberBean
 import com.journey.android.v2ex.net.RetrofitService
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_member_info.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,9 +34,9 @@ class MemberInfoActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        member_info_avatar_iv.load(mMemberBean.avatar_large.largeAvatar())
-        member_info_username_tv.text = mMemberBean.username
-        member_info_tagline_tv.text = mMemberBean.tagline
+//        member_info_avatar_iv.load(mMemberBean.avatar_large.largeAvatar())
+//        member_info_username_tv.text = mMemberBean.username
+//        member_info_tagline_tv.text = mMemberBean.tagline
     }
 
     private fun getMemberInfo() {

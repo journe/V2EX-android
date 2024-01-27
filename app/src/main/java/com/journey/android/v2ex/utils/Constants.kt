@@ -29,6 +29,7 @@ object Constants {
 	const val SIGNIN = "/signin"
 	const val MORE = "/more"
 	const val TAB = "$BASE_URL/?tab="
+	const val MEMBER = "$BASE_URL/member/"
 	const val BALANCE = "/balance"
 
 	const val MISSION_DAILY = "/mission/daily"

@@ -30,8 +30,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
 
 		mBinding.tvUsername.text = username
 
-		toast(username)
-
 		mBinding.tvTagline.visibility = View.GONE
 		mBinding.tvIntro.visibility = View.GONE
 		mBinding.ivLocation.visibility = View.GONE

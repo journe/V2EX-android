@@ -107,7 +107,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.zzhoujay.richtext:richtext:3.0.8'
     implementation 'com.github.chrisbanes:PhotoView:2.2.0'
-    implementation "io.coil-kt:coil:2.1.0"
+    implementation "io.coil-kt:coil:2.2.2"
     implementation 'com.tencent:mmkv-static:1.2.10'
 
     implementation 'com.github.AriesHoo.UIWidget:widget-core:3.2.25'
